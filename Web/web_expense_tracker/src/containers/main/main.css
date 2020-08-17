@@ -25,13 +25,14 @@ html, body {
     padding: 1em;
     width: 60%;
     height: 100%;
-    /* border: 1px solid red; */
+    /* border: 1px solid red */
     margin: 0 auto;
     background-image: url('./bgc-main.png');
     background-size: 80%;
     background-repeat: no-repeat;
     background-position-y: bottom;
     background-position-x: center;
+    position: relative;
 }
 
 .main-button {
@@ -43,3 +44,19 @@ html, body {
     padding: 5px 10px;
     margin: 10px 0;
 }
+
+.main-icons-holder {
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+    width: 11%;
+    display: flex;
+    /* border: 1px solid tomato; */
+    justify-content: space-between;
+}
+
+.main-icons {
+    font-size: 1.5em;
+    color: #878787;
+}
+
