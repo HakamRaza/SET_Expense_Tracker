@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categories;
+use App\Models\Transaction;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -90,13 +92,15 @@ class APIController extends Controller
             'password' => request('password')
         ]);
 
-        // $list = new Lists();
-        // $list->user_id = auth()->user()->id;
-        // $list->list_name = "General";
-        // $list->save();
+        $now = Carbon::now();
+        $month = $now->month;
+        $year = $now->year;
+        $budgetDate = $month . '/' . $year;
 
-        Categories::create(["user_id" => auth()->user()->id, "title" => "Food", "budget" => 1000.00]);
-        Categories::create(["user_id" => auth()->user()->id, "title" => "Bills", "budget" => 1000.00]);
+        $newBudget = array($budgetDate => 1000.00);
+
+        Categories::create(["user_id" => auth()->user()->id, "category_title" => "Food", "budget" => $newBudget]);
+        Categories::create(["user_id" => auth()->user()->id, "category_title" => "Bills", "budget" => $newBudget]);
 
         $status = "success";
         return response()->json([
@@ -109,17 +113,51 @@ class APIController extends Controller
 
     /**
      *
-     * Transactions API functions - createTransaction, editTransaction, deleteTransaction
+     * Transactions API functions - getTransactions, createTransaction, editTransaction, deleteTransaction
      *
      */
+
+    function getTransactions(Request $request)
+    {
+        $user_id = auth()->user()->id;
+        $user_cats = Categories::where('user_id', '=', $user_id)->get();
+        // $catName = request('catName');
+
+        // if ($catName) {
+        //     $list = Categories::where('category_title', '=', request('catName'))
+        //         ->where('user_id', '=', $user_id)
+        //         ->first();
+
+        //     if (!$list) {
+        //         return response()->json([
+        //             'error' => 'List does not belong to this user',
+        //             'list_id' => $list->id,
+        //             'user_id' => $user_id
+        //         ], 422);
+        //     }
+        // }
+
+        $data = Transaction::join('categories', 'category_id', '=', 'categories.id')
+            ->select('transactions.*', 'categories.category_title')
+            ->where('transactions.user_id', '=', $user_id)
+            // ->when($listName, function ($query, $listName) {
+            //     return $query->where('lists.list_name', $listName);
+            // })
+            ->orderBy('transactions.date', 'desc')
+            ->get();
+
+        $status = 'success';
+        return response()->json(compact('status', 'data', 'user_cats'));
+    }
+
     function createTransaction(Request $request)
     {
         $this->validate($request, [
-            'title' => 'string|max:255',
+            'transaction_title' => 'string|max:255',
             'amount' => "regex:/^\d+(\.\d{1,2})?$/"
         ]);
 
-        if (!$request->title) {
+        if (!$request->transaction_title) {
             return response()->json([
                 'status' => 'failed',
                 'error' => 'No title given for new transaction'
@@ -134,16 +172,25 @@ class APIController extends Controller
         }
 
         if (!$request->category_id) {
-            return response()->json()([
+            return response()->json([
                 'status' => 'failed',
                 'error' => 'No category specified for new transaction'
             ], 422);
         }
 
+        $catExists = Categories::where('id', '=', $request->category_id)->where('user_id', '=', auth()->user()->id)->first();
+
+        if (!$catExists) {
+            return response()->json([
+                'status' => 'failed',
+                'error' => 'Category does not belong to this user'
+            ]);
+        }
+
         $transaction = new Transaction();
         $transaction->user_id = auth()->user()->id;
         $transaction->category_id = $request->category_id;
-        $transaction->title = $request->title;
+        $transaction->transaction_title = $request->transaction_title;
         $transaction->amount = $request->amount;
         $transaction->date = $request->date;
         $transaction->save();
@@ -164,11 +211,11 @@ class APIController extends Controller
     function createCategory(Request $request)
     {
         $this->validate($request, [
-            'title' => 'string|max:255',
+            'category_title' => 'string|max:255',
             'budget' => "regex:/^\d+(\.\d{1,2})?$/"
         ]);
 
-        if (!$request->title) {
+        if (!$request->category_title) {
             return response()->json([
                 'status' => 'failed',
                 'error' => 'No title given for new category'
@@ -182,10 +229,16 @@ class APIController extends Controller
             ], 422);
         }
 
-        $category = new Transaction();
+        $now = Carbon::now();
+        $month = $now->month;
+        $year = $now->year;
+        $budgetDate = $month . '/' . $year;
+
+        $newBudget = array($budgetDate => $request->budget);
+        $category = new Categories();
         $category->user_id = auth()->user()->id;
-        $category->title = $request->title;
-        $category->budget = $request->budget;
+        $category->category_title = $request->category_title;
+        $category->budget = $newBudget;
         $category->save();
 
         return response()->json([

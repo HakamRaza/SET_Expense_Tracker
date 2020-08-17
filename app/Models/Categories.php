@@ -12,4 +12,8 @@ class Categories extends Model
     protected $fillable = [
         'user_id', 'title', 'budget',
     ];
+
+    protected $casts = [
+        'budget' => 'array'
+    ];
 }

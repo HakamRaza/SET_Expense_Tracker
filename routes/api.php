@@ -23,4 +23,6 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('register', 'APIController@register')->name('register');
 });
 
+Route::get('get_transactions', 'APIController@getTransactions')->name('get_transactions');
 Route::post('new_transaction', 'APIController@createTransaction')->name('new_transaction');
+Route::post('new_category', 'APIController@createCategory')->name('new_category');
