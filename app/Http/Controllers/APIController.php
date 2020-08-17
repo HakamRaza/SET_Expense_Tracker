@@ -113,7 +113,7 @@ class APIController extends Controller
 
     /**
      *
-     * Transactions API functions - getTransactions, createTransaction, editTransaction, deleteTransaction
+     * Transactions API functions - getTransactions, createTransaction, updateTransaction, deleteTransaction
      *
      */
 
@@ -202,10 +202,43 @@ class APIController extends Controller
         ], 201);
     }
 
+    function updateTransaction(Request $request)
+    {
+
+        $this->validate($request, [
+            'transactionID' => 'required',
+        ]);
+
+        $transaction = Transaction::where('id', '=', request('transactionID'))
+            ->where('user_id', '=', auth()->user()->id)
+            ->first();
+
+        if (!$transaction) return response()->json(['error' => "Transaction not found", 'transactionID' => request('transactionID')]);
+
+        $transaction->transaction_title = isset($request->newTitle) ? $request->newTitle : $transaction->transaction_title;
+        $transaction->amount = isset($request->newAmount) ? $request->newAmount : $transaction->amount;
+        $transaction->date = isset($request->newDate) ? $request->newDate : $transaction->date;
+
+        try {
+            $transaction->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Transaction details updated successfully',
+                'transaction' => $transaction
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Transaction details failed to update',
+                'transaction' => $transaction,
+                'error' => $e->getMessage()
+            ], 422);
+        }
+    }
+
 
     /**
      *
-     * Categories API functions - createCategory, editCategory, deleteCategory
+     * Categories API functions - createCategory, updateCategory, deleteCategory
      *
      */
     function createCategory(Request $request)
@@ -246,5 +279,46 @@ class APIController extends Controller
             'message' => 'Category added successfully',
             'category' => $category,
         ], 201);
+    }
+
+    function updateCategory(Request $request)
+    {
+
+        $this->validate($request, [
+            'categoryID' => 'required',
+        ]);
+
+        $category = Categories::where('id', '=', request('categoryID'))
+            ->where('user_id', '=', auth()->user()->id)
+            ->first();
+
+        if (!$category) return response()->json(['error' => "Category not found", 'categoryID' => request('categoryID')]);
+
+        $category->category_title = isset($request->newTitle) ? $request->newTitle : $category->category_title;
+
+        if (isset($request->newBudget)) {
+            $buffBudget = $category->budget;
+            $now = Carbon::now();
+            $month = $now->month;
+            $year = $now->year;
+            $currDate = $month . '/' . $year;
+            $buffBudget[$currDate] = $request->newBudget;
+            $category->budget = $buffBudget;
+        }
+
+        try {
+            $category->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Category details updated successfully',
+                'category' => $category
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Category details failed to update',
+                'category' => $category,
+                'error' => $e->getMessage()
+            ], 422);
+        }
     }
 }
