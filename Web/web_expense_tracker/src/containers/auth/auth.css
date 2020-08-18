@@ -1,0 +1,43 @@
+* {
+    margin:0;
+    padding:0;
+}
+
+html, body {
+    scroll-behavior: smooth;
+}
+
+.auth {
+    padding: 3em 1em;
+}
+
+.auth-card {
+    padding: 1em;
+    height: auto;
+    margin: 0 auto;
+
+    position: relative;
+    border: 1px solid red;
+}
+
+.auth-button {
+    height: 35px;
+    width: 100px;
+    border-radius: 5px;
+    background-color: #18A0FB;
+    color: whitesmoke;
+    padding: 5px 10px;
+    margin: 10px 0;
+}
+
+.auth-bgp {
+    width: 100%;
+    min-height: 200px;
+    max-height: 400px;
+
+    background-image: url('./bgc-login.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-y: top;
+    background-position-x: center;
+}
