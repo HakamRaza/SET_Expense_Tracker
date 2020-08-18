@@ -2,6 +2,7 @@ import React from "react";
 import './header.css';
 import { FaAlignJustify } from "react-icons/fa";
 import { IconContext } from "react-icons";
+import {Link} from 'react-router-dom';
 
 
 export default class Header extends React.Component {
@@ -33,8 +34,8 @@ export default class Header extends React.Component {
                 </ul>
             
                 <div>
-                    <button className="header-register">Register </button>
-                    <button className="header-login">Login </button>
+                    <Link to={"/register"}><button className="header-register">Register </button></Link>
+                    <Link to={"/login"}><button className="header-login">Login </button></Link>
                 </div>
             </div>
         );
