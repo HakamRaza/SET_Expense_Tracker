@@ -235,6 +235,24 @@ class APIController extends Controller
         }
     }
 
+    function deleteTransaction()
+    {
+        $transaction = Transaction::where('id', '=', request('transactionID'))->first();
+        if (!$transaction) {
+            return response()->json([
+                'error' => 'Error retrieving transaction'
+            ], 422);
+        }
+
+        $transaction->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Transaction deleted successfully',
+            'transaction' => $transaction
+        ], 201);
+    }
+
 
     /**
      *
@@ -320,5 +338,23 @@ class APIController extends Controller
                 'error' => $e->getMessage()
             ], 422);
         }
+    }
+
+    function deleteCategory()
+    {
+        $category = Categories::where('id', '=', request('categoryID'))->first();
+        if (!$category) {
+            return response()->json([
+                'error' => 'Error retrieving category'
+            ], 422);
+        }
+
+        $category->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Category deleted successfully',
+            'category' => $category
+        ], 201);
     }
 }
