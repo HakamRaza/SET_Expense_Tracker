@@ -33,6 +33,14 @@
     padding: 10px;
 }
 
+.header-list li:hover {
+    cursor: pointer;
+    background-color: #18A0FB;
+    color: whitesmoke;
+    border-bottom: 2px solid gray;
+    font-style: underline;
+}
+
 .header-register {
     height: 35px;
     width: 80px;
