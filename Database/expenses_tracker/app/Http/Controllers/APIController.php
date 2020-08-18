@@ -32,7 +32,7 @@ class APIController extends Controller
     function login(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required',
+            'email' => 'required|email',
             'password' => 'required'
         ]);
 
@@ -70,7 +70,7 @@ class APIController extends Controller
     function register(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|regex:/^([^0-9]*)$/|max:255',
+            // 'name' => 'required|regex:/^([^0-9]*)$/|max:255',
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -78,11 +78,11 @@ class APIController extends Controller
         $existing = User::where('email', '=', request('email'))->first();
 
         if ($existing) {
-            return response()->json(['error' => 'A user with this email already exists.'], 422);
+            return response()->json(['status' => 'failed', 'error' => 'A user with this email already exists.'], 422);
         }
 
         $user = new User();
-        $user->name = request('name');
+        // $user->name = request('name');
         $user->email = request('email');
         $user->password = \bcrypt(request('password'));
         $user->save();
@@ -100,7 +100,7 @@ class APIController extends Controller
         $newBudget = array($budgetDate => 1000.00);
 
         Categories::create(["user_id" => auth()->user()->id, "category_title" => "Food", "budget" => $newBudget]);
-        Categories::create(["user_id" => auth()->user()->id, "category_title" => "Bills", "budget" => $newBudget]);
+        Categories::create(["user_id" => auth()->user()->id, "category_title" => "Others", "budget" => $newBudget]);
 
         $status = "success";
         return response()->json([
@@ -154,7 +154,7 @@ class APIController extends Controller
     {
         $this->validate($request, [
             'transaction_title' => 'string|max:255',
-            'amount' => "regex:/^\d+(\.\d{1,2})?$/"
+            'amount' => "regex:/^-?\d+(\.\d{1,2})?$/"
         ]);
 
         if (!$request->transaction_title) {
@@ -192,7 +192,7 @@ class APIController extends Controller
         $transaction->category_id = $request->category_id;
         $transaction->transaction_title = $request->transaction_title;
         $transaction->amount = $request->amount;
-        $transaction->date = $request->date;
+        $transaction->date = $request->date ? $request->date : Carbon::now()->toDateString();
         $transaction->save();
 
         return response()->json([
@@ -213,7 +213,14 @@ class APIController extends Controller
             ->where('user_id', '=', auth()->user()->id)
             ->first();
 
-        if (!$transaction) return response()->json(['error' => "Transaction not found", 'transactionID' => request('transactionID')]);
+        if (!$transaction) return response()->json(['status' => 'failed', 'error' => "Transaction not found", 'transactionID' => request('transactionID')]);
+
+        if (!$request->newTitle && !$request->newAmount && !$request->newDate) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'No new input given'
+            ]);
+        }
 
         $transaction->transaction_title = isset($request->newTitle) ? $request->newTitle : $transaction->transaction_title;
         $transaction->amount = isset($request->newAmount) ? $request->newAmount : $transaction->amount;
@@ -228,6 +235,7 @@ class APIController extends Controller
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
+                'status' => 'failed',
                 'message' => 'Transaction details failed to update',
                 'transaction' => $transaction,
                 'error' => $e->getMessage()
@@ -240,8 +248,14 @@ class APIController extends Controller
         $transaction = Transaction::where('id', '=', request('transactionID'))->first();
         if (!$transaction) {
             return response()->json([
+                'status' => 'failed',
                 'error' => 'Error retrieving transaction'
             ], 422);
+        } else if ($transaction->user_id !== auth()->user()->id) {
+            return response()->json([
+                'status' => 'failed',
+                'error' => 'Transaction does not belong to this user'
+            ]);
         }
 
         $transaction->delete();
@@ -310,7 +324,18 @@ class APIController extends Controller
             ->where('user_id', '=', auth()->user()->id)
             ->first();
 
-        if (!$category) return response()->json(['error' => "Category not found", 'categoryID' => request('categoryID')]);
+        if (!$category) return response()->json([
+            'status' => 'failed',
+            'error' => "Category not found",
+            'categoryID' => request('categoryID')
+        ]);
+
+        if (!$request->newTitle && !$request->newBudget) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'No new input given'
+            ]);
+        }
 
         $category->category_title = isset($request->newTitle) ? $request->newTitle : $category->category_title;
 
@@ -333,6 +358,7 @@ class APIController extends Controller
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
+                'status' => 'failed',
                 'message' => 'Category details failed to update',
                 'category' => $category,
                 'error' => $e->getMessage()
@@ -347,6 +373,11 @@ class APIController extends Controller
             return response()->json([
                 'error' => 'Error retrieving category'
             ], 422);
+        } else if ($category->user_id !== auth()->user()->id) {
+            return response()->json([
+                'status' => 'failed',
+                'error' => 'Category does not belong to this user'
+            ]);
         }
 
         $category->delete();

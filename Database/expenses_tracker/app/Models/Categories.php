@@ -10,7 +10,7 @@ class Categories extends Model
     protected $table = "categories";
 
     protected $fillable = [
-        'user_id', 'title', 'budget',
+        'user_id', 'category_title', 'budget',
     ];
 
     protected $casts = [
