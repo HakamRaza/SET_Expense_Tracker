@@ -1,6 +1,6 @@
 import React from 'react';
 import './auth.css';
-import { IoIosMail, IoMdKey} from "react-icons/io";
+import { IoIosMail, IoMdKey, IoIosEye, IoIosEyeOff} from "react-icons/io";
 import { IconContext } from "react-icons";
 
 class Login extends React.Component{
@@ -10,6 +10,7 @@ class Login extends React.Component{
         this.state={
             email:"",
             password:"",
+            showPass:false,
         }
     }
 
@@ -31,6 +32,13 @@ class Login extends React.Component{
                                 <label htmlFor="pass">Password :</label>
                                 <IconContext.Provider value={{ className: 'auth-icons' }}><IoMdKey /></IconContext.Provider>
                                 <input type = "password" placeholder ="Password" id="pass" onChange = {(password) => this.setState({password: password.target.value})}></input>
+                                
+                                {this.state.showPass ? (
+                                    <IconContext.Provider value={{ className: 'auth-icons-pass' }}><IoIosEyeOff onClick={()=>{this.setState({showPass : !this.state.showPass})}}/></IconContext.Provider>
+                                    ):(
+                                    <IconContext.Provider value={{ className: 'auth-icons-pass' }}><IoIosEye onClick={()=>{this.setState({showPass : !this.state.showPass})}}/></IconContext.Provider>
+                                )}
+                                
                             </div>
                         </div>
                         <button className="auth-button">Submit</button>
