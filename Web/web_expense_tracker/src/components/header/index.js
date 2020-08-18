@@ -34,8 +34,8 @@ export default class Header extends React.Component {
                 </ul>
             
                 <div>
-                    <Link to={"/register"}><button className="header-register">Register </button></Link>
                     <Link to={"/login"}><button className="header-login">Login </button></Link>
+                    <Link to={"/register"}><button className="header-register">Register </button></Link>
                 </div>
             </div>
         );

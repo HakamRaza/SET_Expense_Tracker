@@ -82,6 +82,7 @@
 }
 
 .header-register {
+    cursor: pointer;
     height: 35px;
     width: 80px;
     border-radius: 5px;
@@ -93,11 +94,12 @@
 }
 
 .header-login {
+    cursor: pointer;
     height: 35px;
     width: 80px;
     border-radius: 5px;
-    background-color: #18A0FB;
-    color: whitesmoke;
+    background-color: white;
+    color: #18A0FB;
     float: right;
     padding: 5px 10px;
     margin: 0 10px;
