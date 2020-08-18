@@ -18,7 +18,7 @@ export default class Header extends React.Component {
                     </IconContext.Provider>
 
                     <ul className="header-list-mobile">
-                        <li>Home</li>
+                        <Link to={"/home"}><li>Home</li></Link>
                         <li>About</li>
                         <li>Products</li>
                         <li>Contacts</li>
@@ -27,7 +27,7 @@ export default class Header extends React.Component {
 
                 <div className="header-logo"></div>
                 <ul className="header-list">
-                    <li><u>Home</u></li>
+                    <Link to={"/home"}><li><u>Home</u></li></Link>
                     <li><u>About</u></li>
                     <li><u>Products</u></li>
                     <li><u>Contacts</u></li>
