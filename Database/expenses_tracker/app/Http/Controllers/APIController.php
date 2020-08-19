@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+use function PHPSTORM_META\map;
 use function PHPSTORM_META\type;
 
 class APIController extends Controller
@@ -57,10 +58,8 @@ class APIController extends Controller
 
         if ($lastLogin !== null && (($lastLogin->year == ($now->year) && $lastLogin->month < ($now->month)) || ($lastLogin->year < ($now->year)))) {
             $categories = Categories::where('user_id', '=', $user->id)->get();
-            // return $categories;
             foreach ($categories as $category) {
                 $buffBudget = $category->budget;
-                // $now = Carbon::now();
                 $latestMonth = array_key_last($buffBudget);
                 $month = $now->month;
                 $year = $now->year;
@@ -80,22 +79,12 @@ class APIController extends Controller
             'user' => $user
         ];
 
-        // $existing = Lists::where('user_id', '=', $user->id)->first();
-
-        // if (!$existing) {
-        //     $list = new Lists();
-        //     $list->user_id = auth()->user()->id;
-        //     $list->list_name = "General";
-        //     $list->save();
-        // }
-
         return response()->json(compact('status', 'token', 'results'));
     }
 
     function register(Request $request)
     {
         $this->validate($request, [
-            // 'name' => 'required|regex:/^([^0-9]*)$/|max:255',
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -107,7 +96,6 @@ class APIController extends Controller
         }
 
         $user = new User();
-        // $user->name = request('name');
         $user->email = request('email');
         $user->password = \bcrypt(request('password'));
         $user->save();
@@ -122,7 +110,7 @@ class APIController extends Controller
         $year = $now->year;
         $budgetDate = $month . '/' . $year;
 
-        $newBudget = array($budgetDate => 1000.00);
+        $newBudget = array($budgetDate => (float)1000.00);
 
         Categories::create(["user_id" => auth()->user()->id, "category_title" => "Food", "budget" => $newBudget]);
         Categories::create(["user_id" => auth()->user()->id, "category_title" => "Others", "budget" => $newBudget]);
@@ -319,6 +307,23 @@ class APIController extends Controller
             ], 422);
         }
 
+        $count = Categories::where('user_id', auth()->user()->id)->count();
+        if ($count === 10) {
+            return response()->json([
+                'status' => 'failed_max',
+                'error' => 'User already has 10 categories'
+            ]);
+        }
+
+        $existing = Categories::where('category_title', $request->category_title)->first();
+
+        if ($existing) {
+            return response()->json([
+                'status' => 'failed_existing',
+                'error' => 'Category already exists'
+            ]);
+        }
+
         $now = Carbon::now();
         $month = $now->month;
         $year = $now->year;
@@ -329,6 +334,9 @@ class APIController extends Controller
         $category->user_id = auth()->user()->id;
         $category->category_title = $request->category_title;
         $category->budget = $newBudget;
+        if ($request->color) {
+            $category->color = $request->color;
+        }
         $category->save();
 
         return response()->json([
@@ -414,6 +422,12 @@ class APIController extends Controller
         ], 201);
     }
 
+    /**
+     *
+     * Graph API (for Victory library) - getCategoriesPie, getOverviewGraph
+     *
+     */
+
     function checkBudget()
     {
         // $categories = Categories::where('budget->8/2020', '<>', null)->sum('budget->8/2020');
@@ -421,5 +435,9 @@ class APIController extends Controller
         // return ($category->created_at)->gt(Carbon::createFromFormat('m/Y', array_key_last($category->budget)));
         // return Carbon::createFromFormat('m/Y', array_key_last($category->budget))->endOfMonth();
         return $category->budget[array_key_last($category->budget)];
+    }
+
+    function getCategoriesPie(Request $request)
+    {
     }
 }
