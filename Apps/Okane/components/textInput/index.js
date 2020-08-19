@@ -1,6 +1,7 @@
 import React from "react";
 import {View , Image, Text, TextInput, StyleSheet, TouchableOpacity, TextInputComponent} from "react-native";
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 
 const images = { 
     eye_open: require("assets/images/eye.svg"),               
@@ -31,9 +32,10 @@ class TextInputField extends React.Component{
                 {this.props.showHide && (
                     <TouchableOpacity
                     onPress={()=> this.setState({viewPassword: !this.state.viewPassword})}
+                    style={{flexDirection:"row", marginLeft:20}}
                     >
-                        {/* <Image style={{color:"black", width:10, height:10 }} source={this.state.viewPassword? images.eye_off: images.eye_open}/> */}
-                        <Text>{this.state.viewPassword? "show":"hide"}</Text>
+                        <FontAwesome name={this.state.viewPassword? "eye":"eye-slash"} size={15}  />
+                        <Text style={{marginLeft:10}}>{this.state.viewPassword? "Show":"Hide"}</Text>
                     </TouchableOpacity>
                 )}
             </View>
