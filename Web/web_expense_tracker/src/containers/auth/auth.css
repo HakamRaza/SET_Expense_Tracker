@@ -10,14 +10,15 @@ html, body {
 }
 
 .auth {
+    margin: 0 auto;
     padding: 3em 1em;
     font-family: 'Montserrat', sans-serif;
 }
 
 .auth-card {
-    padding: 1em;
+    padding-top: 1em;
     color: #18A0FB;
-    border: 1px solid red;
+    /* border: 1px solid red; */
 }
 
 .auth-card p {
@@ -27,7 +28,7 @@ html, body {
 
 .auth-bgp {
     margin: 20px auto;
-    width: 300px;
+    width: 320px;
     min-height: 200px;
     max-height: 400px;
 
@@ -35,11 +36,12 @@ html, body {
     justify-items: center;
     align-items: center;
 
-    /* background-image: url('./bgc-login.png');
-    background-size: contain;
+    border: 2px solid #18a0fbdb;
+    border-radius: 5px;
+    background: url('./bgc-login-form.png');
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
-    background-position: center; */
-    /* background-color: blue; */
 }
 
 .auth-form {
@@ -71,6 +73,7 @@ html, body {
     border-radius: 5px;
     background-color: #18A0FB;
     color: whitesmoke;
+    margin-bottom: 1em;
 }
 
 .auth-icons {
@@ -93,10 +96,13 @@ html, body {
 }
 
 
-@media (min-device-width: 768px){
-    
-}
-
-@media (min-device-width: 1000px) {
-   
+@media (min-device-width: 1000px){
+    .auth {
+        height: 700px;
+        max-width: 80%;
+        background-image: url('./bgc-login-bg.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: left;
+    }
 }

@@ -14,6 +14,17 @@ class Login extends React.Component{
         }
     }
 
+    _submitLogin(){
+        const {email, password} = this.state;
+
+        const formData = {
+            email,
+            password,
+        }
+
+        console.log("login", formData);
+    }
+
     render(){
         return(
             <div className="auth">
@@ -31,7 +42,12 @@ class Login extends React.Component{
                             <div className="auth-form">
                                 <label htmlFor="pass">Password :</label>
                                 <IconContext.Provider value={{ className: 'auth-icons' }}><IoMdKey /></IconContext.Provider>
-                                <input type = "password" placeholder ="Password" id="pass" onChange = {(password) => this.setState({password: password.target.value})}></input>
+
+                                {this.state.showPass ? (
+                                    <input type = "text" value={this.state.password} placeholder ="Password" id="pass" onChange = {(password) => this.setState({password: password.target.value})}></input>
+                                    ):(
+                                    <input type = "password" value={this.state.password} placeholder ="Password" id="pass" onChange = {(password) => this.setState({password: password.target.value})}></input>
+                                )}
                                 
                                 {this.state.showPass ? (
                                     <IconContext.Provider value={{ className: 'auth-icons-pass' }}><IoIosEyeOff onClick={()=>{this.setState({showPass : !this.state.showPass})}}/></IconContext.Provider>
@@ -41,7 +57,7 @@ class Login extends React.Component{
                                 
                             </div>
                         </div>
-                        <button className="auth-button">Submit</button>
+                        <button className="auth-button" onClick={()=>(this._submitLogin())}>Submit</button>
                     </div>
 
                 </div>
