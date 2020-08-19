@@ -24,6 +24,7 @@ class Login extends React.Component{
         }
 
         console.log("login", formData);
+        this.props.history.push("/dashboard");
     }
 
     render(){
