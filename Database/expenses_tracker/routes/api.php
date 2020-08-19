@@ -33,3 +33,4 @@ Route::post('update_category', 'APIController@updateCategory')->name('update_cat
 Route::delete('delete_category', 'APIController@deleteCategory')->name('delete_category');
 
 Route::get('checkBudget', 'APIController@checkBudget');
+Route::post('get_pie', 'APIController@getCategoriesPie')->name('get_pie');

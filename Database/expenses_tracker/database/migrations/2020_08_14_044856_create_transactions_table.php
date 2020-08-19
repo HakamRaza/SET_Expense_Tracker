@@ -18,7 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
             $table->string('transaction_title');
-            $table->decimal('amount', 13, 2);
+            $table->decimal('amount', 13, 2)->unsigned();
             $table->date('date');
             $table->timestamps();
         });

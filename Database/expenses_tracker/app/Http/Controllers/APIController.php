@@ -439,5 +439,42 @@ class APIController extends Controller
 
     function getCategoriesPie(Request $request)
     {
+        $this->validate($request, [
+            'month' => 'required',
+            'year' => 'required',
+        ]);
+
+        $user_id = auth()->user()->id;
+        $data = Transaction::join('categories', 'category_id', '=', 'categories.id')
+            ->select(Transaction::raw('categories.id, categories.category_title, SUM(transactions.amount) as catTotal'))
+            ->where('transactions.user_id', '=', $user_id)
+            ->whereMonth('transactions.date', $request->month)
+            ->whereYear('transactions.date', $request->year)
+            ->groupBy('categories.id')
+            ->get();
+
+        if ($data->isEmpty()) {
+            return response()->json([
+                'status' => 'success_empty',
+                'pieData' => $data,
+            ]);
+        }
+
+        // return $data;
+        $pieData = [];
+        foreach ($data as $cat) {
+            $currCat = [
+                'x' => $cat->id,
+                'y' => (float)$cat->catTotal,
+                'label' => $cat->category_title
+            ];
+
+            $pieData[] = $currCat;
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'pieData' => $pieData
+        ]);
     }
 }
