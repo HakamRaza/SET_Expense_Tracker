@@ -6,23 +6,27 @@ import './dashboard.css';
 export default class Dashboard extends React.Component{
     render(){
         return(
-            <div className="dash-container">
+            <dvi>
                 <Drawer />
-                <div className="dash-lngr">
-                    <p>Graph here</p>
-                </div>
-                <div className="dash-sum">
-                    <p>Summary here</p>
-                </div>
-                <div className="dash-categ">
-                    <p>Categories summary here</p>
+                <div className="dash-container">
+                    
+                    <div className="dash-lngr">
+                        <p>Graph here</p>
+                    </div>
+                    <div className="dash-sum">
+                        <p>Summary here</p>
+                    </div>
+                    <div className="dash-categ">
+                        <p>Categories summary here</p>
 
-                </div>
-                <div className="dash-latest-trans">
-                    <p>Latest transaction here</p>
+                    </div>
+                    <div className="dash-latest-trans">
+                        <p>Latest transaction here</p>
 
+                    </div>
                 </div>
-            </div>
+
+            </dvi>
         );
     }
 }
