@@ -11,7 +11,7 @@ function App() {
   return (
     <div>
       <Router>
-        <Header/>
+        {/* <Header/> */}
         <Switch>
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
