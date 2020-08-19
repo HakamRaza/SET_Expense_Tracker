@@ -31,3 +31,5 @@ Route::delete('delete_transaction', 'APIController@deleteTransaction')->name('de
 Route::post('new_category', 'APIController@createCategory')->name('new_category');
 Route::post('update_category', 'APIController@updateCategory')->name('update_category');
 Route::delete('delete_category', 'APIController@deleteCategory')->name('delete_category');
+
+Route::get('checkBudget', 'APIController@checkBudget');

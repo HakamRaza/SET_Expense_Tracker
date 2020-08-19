@@ -6,9 +6,12 @@ use App\Models\Categories;
 use App\Models\Transaction;
 use App\User;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
+use function PHPSTORM_META\type;
 
 class APIController extends Controller
 {
@@ -48,6 +51,28 @@ class APIController extends Controller
         }
 
         $user = auth()->user();
+
+        $lastLogin = $user->last_login;
+        $now = Carbon::now();
+
+        if ($lastLogin !== null && (($lastLogin->year == ($now->year) && $lastLogin->month < ($now->month)) || ($lastLogin->year < ($now->year)))) {
+            $categories = Categories::where('user_id', '=', $user->id)->get();
+            // return $categories;
+            foreach ($categories as $category) {
+                $buffBudget = $category->budget;
+                // $now = Carbon::now();
+                $latestMonth = array_key_last($buffBudget);
+                $month = $now->month;
+                $year = $now->year;
+                $currDate = $month . '/' . $year;
+                $buffBudget[$currDate] = (float)$buffBudget[$latestMonth];
+                $category->budget = $buffBudget;
+                $category->save();
+            }
+        }
+
+        $user->last_login = $now;
+        $user->save();
 
         $status = 'success';
 
@@ -299,7 +324,7 @@ class APIController extends Controller
         $year = $now->year;
         $budgetDate = $month . '/' . $year;
 
-        $newBudget = array($budgetDate => $request->budget);
+        $newBudget = array($budgetDate => (float)$request->budget);
         $category = new Categories();
         $category->user_id = auth()->user()->id;
         $category->category_title = $request->category_title;
@@ -345,7 +370,7 @@ class APIController extends Controller
             $month = $now->month;
             $year = $now->year;
             $currDate = $month . '/' . $year;
-            $buffBudget[$currDate] = $request->newBudget;
+            $buffBudget[$currDate] = (float)$request->newBudget;
             $category->budget = $buffBudget;
         }
 
@@ -387,5 +412,14 @@ class APIController extends Controller
             'message' => 'Category deleted successfully',
             'category' => $category
         ], 201);
+    }
+
+    function checkBudget()
+    {
+        // $categories = Categories::where('budget->8/2020', '<>', null)->sum('budget->8/2020');
+        $category = Categories::first();
+        // return ($category->created_at)->gt(Carbon::createFromFormat('m/Y', array_key_last($category->budget)));
+        // return Carbon::createFromFormat('m/Y', array_key_last($category->budget))->endOfMonth();
+        return $category->budget[array_key_last($category->budget)];
     }
 }
