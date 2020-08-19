@@ -477,4 +477,66 @@ class APIController extends Controller
             'pieData' => $pieData
         ]);
     }
+
+    function getOverviewGraph()
+    {
+        $user_id = auth()->user()->id;
+
+        $budgets = Categories::select('budget')->where('user_id', $user_id)->get();
+        $currDate = Carbon::now()->day;
+        $totalBudget = 0;
+        foreach ($budgets as $cat) {
+            $totalBudget += $cat->budget[array_key_last($cat->budget)];
+        }
+
+        $budgetData = [];
+        for ($x = 1; $x <= $currDate; $x++) {
+            $budgetData[] = [
+                'x' => $x,
+                'y' => $totalBudget
+            ];
+        }
+
+        $expenses = Transaction::select(Transaction::raw('DAY(date) as day, SUM(amount) as expense'))
+            ->groupBy('date')
+            ->get();
+
+        $expIndex = 0;
+        $dailyExpenseData = [];
+        $totalExpenseData = [];
+        $currTotal = 0;
+        for ($x = 1; $x <= $currDate; $x++) {
+            if ($expenses[$expIndex]) {
+                $currExpense = $expenses[$expIndex];
+            }
+
+            if ($x === $currExpense->day) {
+                $dailyExpenseData[] = [
+                    'x' => $x,
+                    'y' => (float)$currExpense->expense,
+                ];
+
+                $currTotal += $currExpense->expense;
+
+                $expIndex++;
+            } else {
+                $dailyExpenseData[] = [
+                    'x' => $x,
+                    'y' => 0,
+                ];
+            }
+
+            $totalExpenseData[] = [
+                'x' => $x,
+                'y' => (float)$currTotal,
+            ];
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'budgetData' => $budgetData,
+            'dailyExpenseData' => $dailyExpenseData,
+            'totalExpenseData' => $totalExpenseData,
+        ]);
+    }
 }
