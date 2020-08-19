@@ -1,0 +1,39 @@
+.sc-container {
+    height: 4em;
+    width: 100%;
+    padding: 0.5em;
+    margin: 10px 0;
+    background-color: whitesmoke;
+    border: 1px solid green;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.sc-percent {
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-weight: bold;
+    
+}
+
+.sc-container-loader {
+    height: 4em;
+    width: 80%;
+    background-color: greenyellow;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+
+.sc-text {
+    width: 100%;
+    padding: 0.5em;
+    position: absolute;
+    z-index: 2;
+    /* background-color: blue; */
+}
+

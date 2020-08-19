@@ -1,38 +1,53 @@
 .dash-container {
+    height: 1200px;
     padding: 1em;
     box-sizing: border-box;
 
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr;
-    grid-gap: 1rem;
+    /* grid-gap: 1rem; */
+
+    /* grid-template-areas: 
+    'graph graph latran'
+    'graph graph latran'
+    'expsum categ latran'
+    'expsum categ latran'; */
+
+    grid-template-areas:
+    'graph graph graph'
+    'expsum expsum expsum'
+    'categ categ categ'
+    'latran latran latran'
+    ;
+
 }
 
 .dash-lngr {
-    grid-column: 1 / 4;
-    padding: 1em;
+    width: 100%;
+    /* height: 300px; */
+    /* grid-column: 1 / 4; */
     /* grid-column-end: span 2; */
-    height: 300px;
+    /* height: 300px; */
+    grid-area: graph;
+    padding: 1em;
     background-color:skyblue;
 }
 
 .dash-sum {
-    grid-column: 1 / 4;
+    grid-area: expsum;
     padding: 1em;
-    height: 300px;
     background-color:lightcoral;
 }
 
 .dash-categ {
-    grid-column: 1 / 4;
+    grid-area: categ;
     padding: 1em;
-    height: 300px;
     background-color:lightgreen;
 }
 
 .dash-latest-trans {
-    grid-column: 1 / 4;
+    grid-area: latran;
     padding: 1em;
-    height: 300px;
     background-color:lightpink;
 }
