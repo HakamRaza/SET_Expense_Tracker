@@ -2,6 +2,7 @@ import React from 'react';
 import { FaAlignJustify, FaUserSlash} from "react-icons/fa";
 import { IconContext } from "react-icons";
 import './drawer.css';
+import {Link} from 'react-router-dom';
 
 export default class Drawer extends React.Component{
     constructor(props){
@@ -14,6 +15,7 @@ export default class Drawer extends React.Component{
 
     _onLogout(){
         console.log("logout user");
+        // this.props.history.push("/login");
     }
 
     render(){
@@ -40,13 +42,14 @@ export default class Drawer extends React.Component{
                         </div>
                     )}
                 </div>
-
+                
+                <Link to={"/login"}>
                 <div className="drawer-logout" onClick={()=>this._onLogout()}>
                     <IconContext.Provider value={{ className: 'drawer-icon-logout'}}>
                         <FaUserSlash/>
                     </IconContext.Provider>
                     <p>Logout</p>
-                </div>
+                </div></Link>
             </div>
 
         );
