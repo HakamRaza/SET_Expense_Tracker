@@ -4,6 +4,7 @@ import './dashboard.css';
 import SumCard from '../../components/sumCard';
 import SumCardBar from '../../components/sumCardBar';
 import {VictoryChart, VictoryLine, VictoryLabel} from 'victory';
+import CategoriesCard from '../../components/categoriesCard';
 
 const sumData =[
     {
@@ -225,7 +226,7 @@ export default class Dashboard extends React.Component{
 
                     <div className="dash-lngr">
                         <p>Graph:</p>
-                                                
+
                         <VictoryChart>
                             <VictoryLine
                             interpolation="natural"
@@ -255,7 +256,6 @@ export default class Dashboard extends React.Component{
                             data={budgetlineData}/>
                         </VictoryChart>
 
-
                     </div>
 
                     <div className="dash-sum">
@@ -268,28 +268,10 @@ export default class Dashboard extends React.Component{
                     </div>
 
                     <div className="dash-categ">
-                        {/* <p>Categories summary here</p> */}
-
-                        <table style={{maxWidth:"95%"}}>
-                            <tr>
-                                <th colSpan="4">Monthly Categories Overview</th>
-                            </tr>
-                            <tr>
-                                <th>Name</th>
-                                <th>Budget (RM)</th>
-                                <th>Expenses (RM)</th>
-                                <th>Balance (RM)</th>
-                            </tr>
-                            {sumCat.map((item)=>(
-                                <tr>
-                                    <td className="td-name">{item.name}</td>
-                                    <td>{item.month_budget.toFixed(2)}</td>
-                                    <td>{item.month_expense.toFixed(2)}</td>
-                                    <th>{(item.month_budget-item.month_expense).toFixed(2)}</th>
-                                </tr>
-                            ))}
-                        </table>
-
+                    <p><b>Categories Summary :</b></p>
+                        {sumCat.map((item) =>(
+                            <CategoriesCard name={item.name} budget={item.month_budget} expense={item.month_expense} bal ={(item.month_budget-item.month_expense).toFixed(2)}/>
+                        ))}
                     </div>
 
                     <div className="dash-latest-trans">
