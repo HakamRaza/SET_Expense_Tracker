@@ -3,6 +3,7 @@ import Drawer from '../../components/drawer';
 import './dashboard.css';
 import SumCard from '../../components/sumCard';
 import SumCardBar from '../../components/sumCardBar';
+import {VictoryChart, VictoryLine, VictoryLabel} from 'victory';
 
 const sumData =[
     {
@@ -166,7 +167,56 @@ const sumTrans = [
 
 ]
 
+const graphDataDaily = [
+     
+    { x: 1, y: 1 },
+    { x: 2, y: 2 },
+    { x: 3, y: 1 },
+    { x: 4, y: 2 },
+    { x: 5, y: 1 },
+    { x: 6, y: 2 },
+    { x: 7, y: 1 },
+    { x: 8, y: 3 },
+    { x: 9, y: 1 },
+    { x: 10, y: 5 },
+    { x: 11, y: 1 },
+    { x: 12, y: 8 },
+]
+
+const graphDataAcc = [
+     
+    { x: 1, y: 1 },
+    { x: 2, y: 3 },
+    { x: 3, y: 4 },
+    { x: 4, y: 6 },
+    { x: 5, y: 7 },
+    { x: 6, y: 9 },
+    { x: 7, y: 10 },
+    { x: 8, y: 13 },
+    { x: 9, y: 15 },
+    { x: 10, y: 19 },
+    { x: 11, y: 24 },
+    { x: 12, y: 30 },
+]
+
+const budgetlineData = [
+     
+    { x: 1, y: 10 },
+    { x: 2, y: 10 },
+    { x: 3, y: 10 },
+    { x: 4, y: 10 },
+    { x: 5, y: 10 },
+    { x: 6, y: 10 },
+    { x: 7, y: 10 },
+    { x: 8, y: 10 },
+    { x: 9, y: 10 },
+    { x: 10, y: 10 },
+    { x: 11, y: 10 },
+    { x: 12, y: 10 },
+]
+
 export default class Dashboard extends React.Component{
+    
     render(){
         return(
             <dvi>
@@ -174,7 +224,38 @@ export default class Dashboard extends React.Component{
                 <div className="dash-container">
 
                     <div className="dash-lngr">
-                        <p>Graph here</p>
+                        <p>Graph:</p>
+                                                
+                        <VictoryChart>
+                            <VictoryLine
+                            interpolation="natural"
+                            text={"Daily Expenses (RM)"}
+                            style={{
+                                data: { stroke: "green" }
+                            }}
+                            
+                            data={graphDataDaily}/>
+
+                            <VictoryLine
+                            interpolation="natural"
+
+                            style={{
+                                data: { stroke: "blue" }
+                            }}
+
+                            data={graphDataAcc}/>
+
+                            <VictoryLine
+                            interpolation="natural"
+
+                            style={{
+                                data: { stroke: "red" }
+                            }}
+
+                            data={budgetlineData}/>
+                        </VictoryChart>
+
+
                     </div>
 
                     <div className="dash-sum">
