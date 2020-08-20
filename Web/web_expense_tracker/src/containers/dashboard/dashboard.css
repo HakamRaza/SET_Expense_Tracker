@@ -5,8 +5,9 @@
 
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    /* grid-gap: 1rem; */
+    grid-template-rows: 2fr 1fr 2fr 2fr;
+    grid-gap: 1rem;
+    font-size: small;
 
     /* grid-template-areas: 
     'graph graph latran'
@@ -37,17 +38,49 @@
 .dash-sum {
     grid-area: expsum;
     padding: 1em;
-    background-color:lightcoral;
+    /* background-color:lightcoral; */
+    border: 1px solid lightcoral;
+    border-radius: 10px;
 }
 
 .dash-categ {
     grid-area: categ;
     padding: 1em;
-    background-color:lightgreen;
+    /* background-color:lightgreen; */
+    overflow: scroll;
+    border: 1px solid lightgreen;
+    border-radius: 10px;
+
+    display: grid;
+    justify-items: center;
+    justify-content: center;
 }
 
 .dash-latest-trans {
     grid-area: latran;
     padding: 1em;
     background-color:lightpink;
+}
+
+table, th, td {
+    border: 1px solid grey;
+    border-collapse: collapse;
+  }
+
+th, td {
+    padding: 0.5em;
+}
+
+th {
+    min-width: 20%;
+    text-align: center;
+}
+
+td {
+    text-align: right;
+}
+
+.td-name {
+    min-width: 40%;
+    text-align: left;
 }
