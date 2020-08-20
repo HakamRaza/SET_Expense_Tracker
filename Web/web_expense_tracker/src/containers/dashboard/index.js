@@ -5,6 +5,8 @@ import SumCard from '../../components/sumCard';
 import SumCardBar from '../../components/sumCardBar';
 import {VictoryChart, VictoryLine, VictoryLabel} from 'victory';
 import CategoriesCard from '../../components/categoriesCard';
+import TransactionCard from '../../components/transactionCard';
+import Sidebar from '../../components/sidebar';
 
 const sumData =[
     {
@@ -269,34 +271,22 @@ export default class Dashboard extends React.Component{
 
                     <div className="dash-categ">
                     <p><b>Categories Summary :</b></p>
-                        {sumCat.map((item) =>(
-                            <CategoriesCard name={item.name} budget={item.month_budget} expense={item.month_expense} bal ={(item.month_budget-item.month_expense).toFixed(2)}/>
-                        ))}
+                        <div className="dash-categ2">
+                            {sumCat.map((item) =>(
+                                <CategoriesCard name={item.name} budget={item.month_budget} expense={item.month_expense} bal ={(item.month_budget-item.month_expense).toFixed(2)}/>
+                            ))}
+                        </div>
                     </div>
 
                     <div className="dash-latest-trans">
-                        {/* <p>Latest transaction here</p> */}
+                        <p><b>Latest Transactions :</b></p>
+                            {/* <TransactionCard style={{backgroundColor:"transparent"}} date='Date' categ='Categories' desc='Description' total=''/> */}
 
-                        <table>
-                            <tr>
-                                <th colSpan="3">Latest Transaction</th>
-                            </tr>
-                            <tr>
-                                <th>Date</th>
-                                <th>Categories</th>
-                                {/* <th>Description</th> */}
-                                <th>Expenses (RM)</th>
-                            </tr>
-                            {sumTrans.map((item)=>(
-                                <tr>
-                                    <td>{item.date}</td>
-                                    <td>{item.categories}</td>
-                                    {/* <td className="td-name">{(item.desc).slice(0, 5)}...</td> */}
-                                    <th>{item.total.toFixed(2)}</th>
-                                </tr>
-                            ))}
-                        </table>
+                        {sumTrans.map((item)=>(
+                            <TransactionCard date={item.date} categ={item.categories} desc={item.desc} total={item.total.toFixed(2)}/>
+                        ))}
                     </div>
+                    <Sidebar className="dash-sidebar"/>
                 </div>
 
             </dvi>

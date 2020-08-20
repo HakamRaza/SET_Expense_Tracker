@@ -19,3 +19,15 @@
     background-color: greenyellow;
     height: 100%;
 }
+
+@media (min-device-width: 700px){
+    .categ-card-cont {
+        height: 7.5em;
+        width: 100%;
+        padding: 0.4em 1em;
+        background-color:lightcoral;
+        margin-top: 10px;
+        border: 1px solid tomato;
+        border-radius: 10px;
+    }    
+}
