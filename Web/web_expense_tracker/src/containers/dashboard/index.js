@@ -120,6 +120,49 @@ const sumTrans = [
         total: 89,
     },
 
+    {
+        date:"19-08-2020",
+        categories: "Food",
+        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
+        total: 89,
+    },
+
+    {
+        date:"19-08-2020",
+        categories: "Food",
+        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
+        total: 89,
+    },
+
+    {
+        date:"19-08-2020",
+        categories: "Food",
+        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
+        total: 89,
+    },
+
+    {
+        date:"19-08-2020",
+        categories: "Food",
+        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
+        total: 89,
+    },
+
+    {
+        date:"19-08-2020",
+        categories: "Food",
+        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
+        total: 89,
+    },
+
+    {
+        date:"19-08-2020",
+        categories: "Food",
+        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
+        total: 89,
+    },
+    
+    
 
 ]
 
@@ -146,7 +189,7 @@ export default class Dashboard extends React.Component{
                     <div className="dash-categ">
                         {/* <p>Categories summary here</p> */}
 
-                        <table>
+                        <table style={{maxWidth:"95%"}}>
                             <tr>
                                 <th colSpan="4">Monthly Categories Overview</th>
                             </tr>
@@ -161,17 +204,35 @@ export default class Dashboard extends React.Component{
                                     <td className="td-name">{item.name}</td>
                                     <td>{item.month_budget.toFixed(2)}</td>
                                     <td>{item.month_expense.toFixed(2)}</td>
-                                    <td>{(item.month_budget-item.month_expense).toFixed(2)}</td>
+                                    <th>{(item.month_budget-item.month_expense).toFixed(2)}</th>
                                 </tr>
                             ))}
                         </table>
 
                     </div>
+
                     <div className="dash-latest-trans">
-                        <p>Latest transaction here</p>
+                        {/* <p>Latest transaction here</p> */}
 
-
-
+                        <table>
+                            <tr>
+                                <th colSpan="3">Latest Transaction</th>
+                            </tr>
+                            <tr>
+                                <th>Date</th>
+                                <th>Categories</th>
+                                {/* <th>Description</th> */}
+                                <th>Expenses (RM)</th>
+                            </tr>
+                            {sumTrans.map((item)=>(
+                                <tr>
+                                    <td>{item.date}</td>
+                                    <td>{item.categories}</td>
+                                    {/* <td className="td-name">{(item.desc).slice(0, 5)}...</td> */}
+                                    <th>{item.total.toFixed(2)}</th>
+                                </tr>
+                            ))}
+                        </table>
                     </div>
                 </div>
 
