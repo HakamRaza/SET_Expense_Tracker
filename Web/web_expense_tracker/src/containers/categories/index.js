@@ -2,6 +2,7 @@ import React from 'react';
 import Drawer from '../../components/drawer';
 import Sidebar from '../../components/sidebar';
 import './categories.css';
+import Modal from '../../components/modal';
 
 const sumCat = [
     {
@@ -110,6 +111,8 @@ export default class Category extends React.Component{
                     </div>
 
                 </div>
+
+                {this.state.showAddMore && (<Modal onclick={()=>this.setState({showAddMore:false})}/>)}
 
             </div>
         );
