@@ -86,7 +86,6 @@ export default class Category extends React.Component{
             <div>
                 <Drawer/>
                 {/* <p>This is Category Page</p> */}
-
                 <div className="cat-cont">
                     <Sidebar/>
                     
@@ -103,17 +102,12 @@ export default class Category extends React.Component{
                                 <p>{item.color}</p>
                             </div>
                         ))}
-                        
                         <div className="cat-card-add" onClick={()=>{this._addCategories()}}>
                             <p> + Click Here to Add More</p>
                         </div>
-
                     </div>
-
                 </div>
-
                 {this.state.showAddMore && (<Modal onclick={()=>this.setState({showAddMore:false})}/>)}
-
             </div>
         );
     }

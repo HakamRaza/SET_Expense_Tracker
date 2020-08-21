@@ -4,6 +4,7 @@ import './modal.css';
 const color=['lightgreen', 'lightblue', 'lightpink','lightgray', 'lightcyan']
 
 export default class Modal extends React.Component {
+
     render(){
         return(
             <div className="modal-bg">
@@ -18,7 +19,6 @@ export default class Modal extends React.Component {
                         {color.map(item=>(<div className='color-cont' style={{backgroundColor:item}}></div>))}
                     </div>
                     <button>ADD</button>
-                    
                 </div>
             </div>
         );
