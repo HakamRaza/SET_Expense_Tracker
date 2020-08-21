@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import * as V from 'victory-native';
 import { View, StyleSheet, Text} from 'react-native';
 
 // import { Provider } from "react-redux";

@@ -2,15 +2,19 @@ import React from "react";
 import {View, Text, TouchableOpacity} from "react-native";
 
 class BudgetBarOverview extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
     render(){
         return(
             <View style={[styles.budgetBarOverviewHolder, {backgroundColor:"lime"}]}>
             {/* // <View style={[styles.BudgetBarOverviewHolder, {backgroundColor:{this.props.barBackgroundColor}}]}> */}
                 <View style={styles.barContentUpper}>
-                    <Text style={styles.barTitleLeft}>Budget</Text>
-                    <Text style={styles.barTitleRight}>RM 443.25 left</Text>
+                    <Text style={styles.barTitleLeft}>{this.props.barTitle}</Text>
+                    <Text style={styles.barTitleRight}>RM{this.props.barAmountLeft}left</Text>
                 </View>
-                <Text style={styles.barAmount}>RM 456.75 of RM900.00</Text>
+                <Text style={styles.barAmount}>RM{this.props.AccExpenses} of RM{this.props.budget}</Text>
             </View>
         )
     }

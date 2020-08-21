@@ -2,12 +2,16 @@ import React from "react";
 import {View, Text, TouchableOpacity} from "react-native";
 
 class StatsBar extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
     render(){
         return(
             <View style={[styles.statsBarHolder, {backgroundColor:"yellow"}]}>
             {/* // <View style={[styles.statsBarHolder, {backgroundColor:{this.props.barBackgroundColor}}]}> */}
-                <Text style={styles.barTitle}>Savings</Text>
-                <Text style={styles.barAmount}>RM24583.00</Text>
+                <Text style={styles.barTitle}>{this.props.barTitle}</Text>
+                <Text style={styles.barAmount}>RM{this.props.barAmount}</Text>
             </View>
         )
     }
