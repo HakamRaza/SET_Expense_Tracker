@@ -490,7 +490,7 @@ class APIController extends Controller
             $totalBudget += $cat->budget[array_key_last($cat->budget)];
         }
 
-        $budgetData = [];
+        $budgetData = [['x' => '0', 'y' => $totalBudget]];
         for ($x = $startOfMonth; $x <= $currDate; $x->add('day', 1)) {
             $budgetData[] = [
                 'x' => $x->format('d/m'),
@@ -504,8 +504,8 @@ class APIController extends Controller
 
         // return count($expenses);
         $expIndex = 0;
-        $dailyExpenseData = [];
-        $totalExpenseData = [];
+        $dailyExpenseData = [['x' => '0', 'y' => 0]];
+        $totalExpenseData = [['x' => '0', 'y' => 0]];
         $currTotal = 0;
         $startOfMonth = Carbon::now()->startOfMonth();
         for ($x = $startOfMonth; $x <= $currDate; $x->add('day', 1)) {
