@@ -13,7 +13,7 @@ const sumCat = [
     {
         name:"Drinks & Boba Tea Whatever",
         month_budget: 300,
-        color: "green",
+        color: "bisque",
     },
 
     {
@@ -45,28 +45,70 @@ const sumCat = [
         month_budget: 900,
         color: "lightgreen",
     },
+
+    {
+        name:"Drinks & Boba Tea Whatever",
+        month_budget: 300,
+        color: "lightgreen",
+    },
+
+    {
+        name:"House Bills",
+        month_budget: 100,
+        color:"lightblue",
+    },
+
+    {
+        name:"Savings",
+        month_budget: 900,
+        color: "lightgreen",
+    },
 ]
 
 export default class Category extends React.Component{
+    constructor(){
+        super();
+
+        this.state={
+            showAddMore: false,
+        }
+    }
+
+    _addCategories(){
+        console.log("Add more Categories");
+        this.setState({showAddMore:true});
+
+    }
+
     render(){
         return(
             <div>
                 <Drawer/>
-                <p>This is Category Page</p>
-                <Sidebar/>
-                <div className="cat-card-cont">
-                    {sumCat.map(item=>(
-                        <div className="cat-card" style={{backgroundColor:item.color}}>
-                            <p>Category :</p>
-                            <p>{item.name}</p>
+                {/* <p>This is Category Page</p> */}
 
-                            <p>Budget Allocation :</p>
-                            <p>{item.month_budget}</p>
+                <div className="cat-cont">
+                    <Sidebar/>
+                    
+                    <div className="cat-card-cont">
+                        {sumCat.map(item=>(
+                            <div className="cat-card" style={{backgroundColor:item.color}}>
+                                <p>Category :</p>
+                                <p>{item.name}</p>
 
-                            <p>Color Selection :</p>
-                            <p>{item.color}</p>
+                                <p>Budget Allocation :</p>
+                                <p>{item.month_budget}</p>
+
+                                <p>Color Selection :</p>
+                                <p>{item.color}</p>
+                            </div>
+                        ))}
+                        
+                        <div className="cat-card-add" onClick={()=>{this._addCategories()}}>
+                            <p> + Click Here to Add More</p>
                         </div>
-                    ))}
+
+                    </div>
+
                 </div>
 
             </div>
