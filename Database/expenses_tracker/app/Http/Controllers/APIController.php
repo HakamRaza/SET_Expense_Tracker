@@ -542,4 +542,53 @@ class APIController extends Controller
             'totalExpenseData' => $totalExpenseData,
         ]);
     }
+
+    /**
+     *
+     * Calculation API - getCategoryBars
+     *
+     */
+    function getCategoryBars(Request $request)
+    {
+        $this->validate($request, [
+            'month' => 'required',
+            'year' => 'required',
+        ]);
+
+        $user_id = auth()->user()->id;
+        $data = Categories::join('transactions', 'transactions.category_id', '=', 'categories.id')
+            ->select(Categories::raw('categories.id, categories.category_title, SUM(transactions.amount) as catTotal, categories.budget, categories.color'))
+            ->where('transactions.user_id', '=', $user_id)
+            ->whereMonth('transactions.date', $request->month)
+            ->whereYear('transactions.date', $request->year)
+            ->groupBy('categories.id')
+            ->get();
+
+        if ($data->isEmpty()) {
+            return response()->json([
+                'status' => 'success_empty',
+                'pieData' => $data,
+            ]);
+        }
+
+        // return $data;
+        $barsData = [];
+        $period = $request->month . "/" . $request->year;
+        foreach ($data as $cat) {
+            // return $cat->budget[0];
+            $currCat = [
+                'title' => $cat->category_title,
+                'totalExpense' => (float)$cat->catTotal,
+                'budget' => (float)$cat->budget[$period],
+                'color' => $cat->color,
+            ];
+
+            $barsData[] = $currCat;
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'barsData' => $barsData
+        ]);
+    }
 }

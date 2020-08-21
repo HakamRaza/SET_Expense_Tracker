@@ -35,3 +35,5 @@ Route::delete('delete_category', 'APIController@deleteCategory')->name('delete_c
 Route::get('checkBudget', 'APIController@checkBudget');
 Route::post('get_pie', 'APIController@getCategoriesPie')->name('get_pie');
 Route::get('get_overview', 'APIController@getOverviewGraph')->name('get_overview');
+
+Route::post('get_bars', 'APIController@getCategoryBars')->name('get_bars');
