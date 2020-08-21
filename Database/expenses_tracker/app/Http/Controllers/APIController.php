@@ -483,36 +483,39 @@ class APIController extends Controller
         $user_id = auth()->user()->id;
 
         $budgets = Categories::select('budget')->where('user_id', $user_id)->get();
-        $currDate = Carbon::now()->day;
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $currDate = Carbon::now();
         $totalBudget = 0;
         foreach ($budgets as $cat) {
             $totalBudget += $cat->budget[array_key_last($cat->budget)];
         }
 
         $budgetData = [];
-        for ($x = 1; $x <= $currDate; $x++) {
+        for ($x = $startOfMonth; $x <= $currDate; $x->add('day', 1)) {
             $budgetData[] = [
-                'x' => $x,
+                'x' => $x->format('d/m'),
                 'y' => $totalBudget
             ];
         }
 
-        $expenses = Transaction::select(Transaction::raw('DAY(date) as day, SUM(amount) as expense'))
+        $expenses = Transaction::select(Transaction::raw('date, DAY(date) as day, SUM(amount) as expense'))
             ->groupBy('date')
             ->get();
 
+        // return count($expenses);
         $expIndex = 0;
         $dailyExpenseData = [];
         $totalExpenseData = [];
         $currTotal = 0;
-        for ($x = 1; $x <= $currDate; $x++) {
-            if ($expenses[$expIndex]) {
+        $startOfMonth = Carbon::now()->startOfMonth();
+        for ($x = $startOfMonth; $x <= $currDate; $x->add('day', 1)) {
+            if ($expIndex < count($expenses) && $expenses[$expIndex]) {
                 $currExpense = $expenses[$expIndex];
             }
 
-            if ($x === $currExpense->day) {
+            if ($x->day === $currExpense->day) {
                 $dailyExpenseData[] = [
-                    'x' => $x,
+                    'x' => $x->format('d/m'),
                     'y' => (float)$currExpense->expense,
                 ];
 
@@ -521,13 +524,13 @@ class APIController extends Controller
                 $expIndex++;
             } else {
                 $dailyExpenseData[] = [
-                    'x' => $x,
+                    'x' => $x->format('d/m'),
                     'y' => 0,
                 ];
             }
 
             $totalExpenseData[] = [
-                'x' => $x,
+                'x' => $x->format('d/m'),
                 'y' => (float)$currTotal,
             ];
         }
