@@ -1,48 +1,49 @@
 import React from 'react';
 import Drawer from '../../components/drawer';
 import Sidebar from '../../components/sidebar';
+import './categories.css';
 
 const sumCat = [
     {
         name:"Food",
         month_budget: 800,
-        month_expense: 400,
+        color: "red",
     },
 
     {
         name:"Drinks & Boba Tea Whatever",
         month_budget: 300,
-        month_expense: 150,
+        color: "green",
     },
 
     {
         name:"House Bills",
         month_budget: 100,
-        month_expense: 0,
+        color: "lightblue",
     },
 
     {
         name:"Savings",
         month_budget: 900,
-        month_expense: 302.04,
+        color: "lightblue",
     },
 
     {
         name:"Drinks & Boba Tea Whatever",
         month_budget: 300,
-        month_expense: 150,
+        color: "lightgreen",
     },
 
     {
         name:"House Bills",
         month_budget: 100,
-        month_expense: 0,
+        color:"lightblue",
     },
 
     {
         name:"Savings",
         month_budget: 900,
-        month_expense: 302.04,
+        color: "lightgreen",
     },
 ]
 
@@ -53,6 +54,21 @@ export default class Category extends React.Component{
                 <Drawer/>
                 <p>This is Category Page</p>
                 <Sidebar/>
+                <div className="cat-card-cont">
+                    {sumCat.map(item=>(
+                        <div className="cat-card" style={{backgroundColor:item.color}}>
+                            <p>Category :</p>
+                            <p>{item.name}</p>
+
+                            <p>Budget Allocation :</p>
+                            <p>{item.month_budget}</p>
+
+                            <p>Color Selection :</p>
+                            <p>{item.color}</p>
+                        </div>
+                    ))}
+                </div>
+
             </div>
         );
     }

@@ -1,0 +1,20 @@
+.cat-card-cont {
+    display: grid;
+    justify-items: center;
+    grid-template: auto;
+}
+
+.cat-card {
+    min-width: 280px;
+    height: 150px;
+    border: 1px solid grey;
+    margin-top: 1em;
+    padding: 1em;
+}
+
+@media (min-device-width: 768px){
+    .cat-card-cont {
+        grid-template-columns: auto auto auto;
+    }
+
+}

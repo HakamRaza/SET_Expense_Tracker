@@ -69,15 +69,10 @@
     /* background-color:lightpink; */
 }
 
-.dash-sidebar {
-    grid-area: sidebar;
-    display: none;
-}
-
 @media (min-device-width: 700px){
     .dash-container {
         grid-template-columns: 1fr 1fr; 
-        grid-template-rows: auto 300px 300px;
+        grid-template-rows: 300px 300px 300px;
     
         grid-template-areas:
         'graph expsum'
@@ -99,7 +94,7 @@
 @media (min-device-width: 1000px){
     .dash-container {
         grid-template-columns: 0.3fr 1fr 0.5fr; 
-        grid-template-rows: 1fr 0.5fr 1fr;
+        grid-template-rows: 1fr auto 1fr;
     
         grid-template-areas:
         'sidebar graph categ'
@@ -114,8 +109,9 @@
         grid-gap: 1em;
     }
 
-    .dash-sidebar {
-        display: block;
+    .dash-sum2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 1em;
     }
-
 }

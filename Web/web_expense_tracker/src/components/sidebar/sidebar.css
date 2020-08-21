@@ -1,9 +1,19 @@
 .dsb {
     background-color: grey;
+    display: none;
 }
 
 .dsb-col {
+    height: 2em;
     background-color: lightblue;
     margin: 10px 1em 0 1em;
     padding: 5px;
+}
+
+@media (min-device-width: 1000px){
+    
+    .dsb {
+        display: block;
+    }
+
 }

@@ -262,11 +262,11 @@ export default class Dashboard extends React.Component{
 
                     <div className="dash-sum">
                         <p><b>Monthly Overview :</b></p>
-
-                        <SumCardBar title={sumData[0].type} left={sumData[0].left} total={sumData[0].total} percent={(sumData[0].left/ sumData[0].total*100)}/>
-                        <SumCard title={sumData[1].type} total={sumData[1].total}  />
-                        <SumCard title={sumData[2].type} total={sumData[2].total}  />
-
+                        <div className="dash-sum2">
+                            <SumCardBar title={sumData[0].type} left={sumData[0].left} total={sumData[0].total} percent={(sumData[0].left/ sumData[0].total*100)}/>
+                            <SumCard title={sumData[1].type} total={sumData[1].total}  />
+                            <SumCard title={sumData[2].type} total={sumData[2].total}  />
+                        </div>
                     </div>
 
                     <div className="dash-categ">
@@ -286,7 +286,7 @@ export default class Dashboard extends React.Component{
                             <TransactionCard date={item.date} categ={item.categories} desc={item.desc} total={item.total.toFixed(2)}/>
                         ))}
                     </div>
-                    <Sidebar className="dash-sidebar"/>
+                    <Sidebar/>
                 </div>
 
             </dvi>
