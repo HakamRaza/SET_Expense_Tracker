@@ -222,7 +222,7 @@ export default class Dashboard extends React.Component{
     
     render(){
         return(
-            <dvi>
+            <dvi style={{maxWidth:1000, backgroundColor:"red"}}>
                 <Drawer />
                 <div className="dash-container">
 

@@ -8,6 +8,9 @@
     grid-template-rows: auto auto 300px 300px;
     grid-gap: 1rem;
     font-size: small;
+    border: 1px solid tomato;
+    max-width: 1100px;
+    margin: 0 auto;
 
     /* grid-template-areas: 
     'graph graph latran'
