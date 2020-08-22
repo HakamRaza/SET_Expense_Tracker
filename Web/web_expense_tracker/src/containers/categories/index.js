@@ -3,68 +3,7 @@ import Drawer from '../../components/drawer';
 import Sidebar from '../../components/sidebar';
 import './categories.css';
 import Modal from '../../components/modal';
-
-const sumCat = [
-    {
-        name:"Food",
-        month_budget: 800,
-        color: "red",
-    },
-
-    {
-        name:"Drinks & Boba Tea Whatever",
-        month_budget: 300,
-        color: "bisque",
-    },
-
-    {
-        name:"House Bills",
-        month_budget: 100,
-        color: "lightblue",
-    },
-
-    {
-        name:"Savings",
-        month_budget: 900,
-        color: "lightblue",
-    },
-
-    {
-        name:"Drinks & Boba Tea Whatever",
-        month_budget: 300,
-        color: "lightgreen",
-    },
-
-    {
-        name:"House Bills",
-        month_budget: 100,
-        color:"lightblue",
-    },
-
-    {
-        name:"Savings",
-        month_budget: 900,
-        color: "lightgreen",
-    },
-
-    {
-        name:"Drinks & Boba Tea Whatever",
-        month_budget: 300,
-        color: "lightgreen",
-    },
-
-    {
-        name:"House Bills",
-        month_budget: 100,
-        color:"lightblue",
-    },
-
-    {
-        name:"Savings",
-        month_budget: 900,
-        color: "lightgreen",
-    },
-]
+import apiData from '../../apiData';
 
 export default class Category extends React.Component{
     constructor(){
@@ -78,10 +17,12 @@ export default class Category extends React.Component{
     _addCategories(){
         console.log("Add more Categories");
         this.setState({showAddMore:true});
-
+        
     }
-
+    
     render(){
+        // console.log(apiData[0].GetCategoryBar.barsData);
+
         return(
             <div>
                 <Drawer/>
@@ -90,13 +31,16 @@ export default class Category extends React.Component{
                     <Sidebar/>
                     
                     <div className="cat-card-cont">
-                        {sumCat.map(item=>(
+                        {apiData[0].GetCategoryBar.barsData.map(item=>(
                             <div className="cat-card" style={{backgroundColor:item.color}}>
                                 <p>Category :</p>
-                                <p>{item.name}</p>
+                                <p>{item.title}</p>
 
                                 <p>Budget Allocation :</p>
-                                <p>{item.month_budget}</p>
+                                <p>${item.budget.toFixed(2)}</p>
+
+                                <p>Current Transaction :</p>
+                                <p>${item.totalExpense.toFixed(2)}</p>
 
                                 <p>Color Selection :</p>
                                 <p>{item.color}</p>
