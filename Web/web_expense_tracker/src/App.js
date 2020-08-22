@@ -7,6 +7,7 @@ import Register from 'containers/auth/Register';
 import Dashboard from 'containers/dashboard';
 import Category from './containers/categories';
 import Transactions from './containers/transactions';
+import PieChart from './containers/piechart';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route exact path="/dashboard" component={Dashboard} />
           <Route exact path="/category" component={Category} />
           <Route exact path="/transaction" component={Transactions} />
+          <Route exact path="/monthly-summary" component={PieChart} />
           <Route exact path="/home" component={Main} />
           <Route path="/" component={Main} />
           <Route />
