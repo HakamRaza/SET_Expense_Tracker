@@ -1,8 +1,12 @@
 import React from "react";
-import {ScrollView, View, Text, TouchableOpacity} from "react-native";
+import {ScrollView, View, Text, TouchableOpacity, Modal, StyleSheet} from "react-native";
 import MonthPicker from 'react-native-month-year-picker';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
+import {VictoryChart} from 'victory-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+
 
 
 import StatsBar from "components/statsBar";
@@ -26,14 +30,26 @@ class Overview extends React.Component{
             image: null,
             selectedImage:'',
             selectedImage2:'',
-            status:''
+            status:'',
+            modalVisible:""
         }
+    }
+
+    setModalVisible = (visible) => {
+        this.setState({modalVisible: visible});
     }
 
   
     render(){
+        const {modalVisible} = this.state;
         return(
-            <View>    
+            <View>
+               
+                {/* <Modal visible={modalOpen} animationType="slide">
+                    <View style={StyleSheet.modalContainer}>
+                        <Text> Hello from the modal :)</Text>
+                    </View>
+                </Modal>  */}
                 {/* <DropDownPicker
                     item={[
                         {label: 'Jan', value: 'Jan'},
@@ -77,10 +93,38 @@ class Overview extends React.Component{
                     barAmountLeft="443.25"
                     AccExpenses="456.75"
                     />
+                    
                 </ScrollView>
+                <TouchableOpacity style={styles.addButton}>
+
+                    <Ionicons 
+                    name={"ios-add-circle-outline"} 
+                    size={25} 
+                    color={"red"}
+                    />
+
+                </TouchableOpacity>   
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    addButton: {
+      position: "relative",
+      bottom: 50,
+      left : 50,
+      zIndex: 3,
+      backgroundColor: "lime",
+      width: 30,
+      height: 30,
+      borderRadius: 15,
+      justifyContent: "center",
+      alignItems:"center"
+
+    }
+  });
+
+
 
 export default Overview;

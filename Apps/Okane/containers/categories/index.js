@@ -1,5 +1,7 @@
 import React from "react";
-import {ScrollView, View, Text, StyleSheet} from "react-native";
+import {ScrollView, View, Text, StyleSheet, TouchableOpacity} from "react-native";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import { VictoryPie} from 'victory-native';
 
 import BudgetBarCategories from "components/budgetBar@categories";
@@ -47,6 +49,17 @@ class Categories extends React.Component{
                     budget={300}
                     percentage={(350.75/300) * 350}
                 />
+
+                <TouchableOpacity style={styles.addButton}>
+
+                    <Ionicons 
+                    name={"ios-add-circle-outline"} 
+                    size={25} 
+                    color={"red"}
+                    />
+
+                </TouchableOpacity>   
+
             </ScrollView>
         )
     }
@@ -58,7 +71,21 @@ const styles = StyleSheet.create({
     //   justifyContent: "center",
       alignItems: "center",
       backgroundColor: "#f5fcff"
-    }
+    },
+
+    addButton: {
+        position: "absolute",
+        bottom: 50,
+        right: 20,
+        zIndex: 3,
+        backgroundColor: "lime",
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        justifyContent: "center",
+        alignItems:"center"
+  
+      }
   });
 
-export default Categories;
+export default Categories;  
