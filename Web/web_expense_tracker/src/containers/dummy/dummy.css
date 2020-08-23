@@ -11,10 +11,10 @@ a {
 }
 
 #about-wrap {
-    height: auto;
+    height: 100%;
     min-height: 600px;
     width: 100%;
-    background-color: rgb(187, 228, 238, 0.3);
+    background-color: #318fb5;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -29,7 +29,8 @@ a {
 
 #about-text {
     text-align: left;
-    font-family: 'Arial Narrow';
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
 }
 
 #about-text h1{
@@ -49,37 +50,27 @@ a {
     margin-bottom: 20px;
 }
 
-#contact-cont {
+#contact {
+    height: 100%;
+    padding: 2em 1em;
     max-width: 650px;
     margin:0 auto;
-    min-height:400px;
+}
+    
+.cont-card-holder {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-content: center;
+    align-items: center;
 }
 
-#contact {
-    /* min-height: 400px; */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-    /* border: 1px solid black; */
-    padding: 1em;
-}
-
-#cont1, #cont2{
-    margin: 1em;
-    line-height: 2em;
-    justify-content: center;
-    align-content: center;
-
+.cont-card {
+    height: 12rem;
+    width: 18rem;
+    margin: 1em 1em;
 }
 
 @media (min-width:600px){
-    #contact {
+    .cont-card-holder {
         flex-direction: row;
-        justify-content: space-around;
     }
 }

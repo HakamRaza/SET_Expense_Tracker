@@ -55,6 +55,7 @@ a {
 }
 
 .header-icons-holder p {
+    padding-top: 20px;
     display: none;
 }
 

@@ -5,6 +5,8 @@ import { IconContext } from "react-icons";
 import './main.css';
 import Header from 'components/header';
 import About from '../dummy/About';
+// import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 
 class Main extends React.Component{
     render(){
@@ -18,7 +20,8 @@ class Main extends React.Component{
                             <p>get an in depth analysis of your financial transaction in one place.</p>
                             {/* <Link to={"/home/#about"}><button className="main-button">Learn More</button></Link> */}
                             {/* <a href="/home/#about" className="main-button">Learn More</a> */}
-                            <Button variant="outline-primary">Primary</Button>{' '}
+                            <Button href="/home/#about" variant="outline-primary" size="sm">Learn More</Button>
+                            {/* <Button variant="outline-primary">Primary</Button>{' '} */}
                         </div>
 
                         <div className="main-bgp"></div>
