@@ -19,18 +19,18 @@ export default class Header extends React.Component {
 
                     <ul className="header-list-mobile">
                         <Link to={"/home"}><li>Home</li></Link>
-                        <li>About</li>
-                        <li>Products</li>
-                        <li>Contacts</li>
+                        <Link to={"/about"}><li>About</li></Link>
+                        <Link to={"/about/#contact"}><li>Contact</li></Link>
                     </ul>
                 </div>
 
                 <div className="header-logo"></div>
                 <ul className="header-list">
                     <Link to={"/home"}><li><u>Home</u></li></Link>
-                    <li><u>About</u></li>
-                    <li><u>Products</u></li>
-                    <li><u>Contacts</u></li>
+                    <Link to={"/about"}><li><u>About</u></li></Link>
+                    {/* <Link to={"/about/#contact"}><li><u>Contact</u></li></Link> */}
+                    <a href="/about/#contact"><li><u>Contact</u></li></a>
+                    
                 </ul>
             
                 <div>

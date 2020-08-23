@@ -47,14 +47,7 @@ class Login extends React.Component{
                                 <div className="auth-form">
                                     <label htmlFor="pass">Password :</label>
                                     <IconContext.Provider value={{ className: 'auth-icons' }}><IoMdKey /></IconContext.Provider>
-
-
-                                    {this.state.showPass ? (
-                                        <input type = "text" value={this.state.password} placeholder ="Password" id="pass" onChange = {(password) => this.setState({password: password.target.value})}></input>
-                                        ):(
-                                        <input type = "password" value={this.state.password} placeholder ="Password" id="pass" onChange = {(password) => this.setState({password: password.target.value})}></input>
-                                    )}
-
+                                    <input type = "password" value={this.state.password} placeholder ="Password" id="pass" onChange = {(password) => this.setState({password: password.target.value})}></input>
                                 </div>
 
                                 <div className="auth-form">
@@ -62,23 +55,19 @@ class Login extends React.Component{
                                     <br/>
                                     <IconContext.Provider value={{ className: 'auth-icons' }}><IoMdKey /></IconContext.Provider>
 
-                                    {this.state.showPass ? (
-                                        <input type = "text" value={this.state.password_conf} placeholder ="Retype your Password" id="pass_conf" onChange = {(password_conf) => this.setState({password_conf: password_conf.target.value})}></input>
+                                    <input type ={this.state.showPass? "text":"password"} value={this.state.password_conf} placeholder ="Retype your Password" id="pass_conf" onChange = {(password_conf) => this.setState({password_conf: password_conf.target.value})}></input>
+
+                                    <IconContext.Provider value={{ className: 'auth-icons-pass' }}>
+                                        {this.state.showPass ? (
+                                        <IoIosEye onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>
                                         ):(
-                                        <input type = "password" value={this.state.password_conf} placeholder ="Retype your Password" id="pass_conf" onChange = {(password_conf) => this.setState({password_conf: password_conf.target.value})}></input>
-                                    )}
-                                    
-                                    {this.state.showPass ? (
-                                        <IconContext.Provider value={{ className: 'auth-icons-pass' }}><IoIosEyeOff onClick={()=>{this.setState({showPass : !this.state.showPass})}}/></IconContext.Provider>
-                                        ):(
-                                        <IconContext.Provider value={{ className: 'auth-icons-pass' }}><IoIosEye onClick={()=>{this.setState({showPass : !this.state.showPass})}}/></IconContext.Provider>
-                                    )}
-                                    
+                                        <IoIosEyeOff onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>
+                                    )}</IconContext.Provider>
+                                     
                                 </div>
                             </div>
                             <button className="auth-button" onClick={()=>(this._submitRegister())}>Submit</button>
                         </div>
-
                     </div>
                 </div>
             </div>

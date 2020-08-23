@@ -47,18 +47,14 @@ class Login extends React.Component{
                                     <label htmlFor="pass">Password :</label>
                                     <IconContext.Provider value={{ className: 'auth-icons' }}><IoMdKey /></IconContext.Provider>
 
-                                    {this.state.showPass ? (
-                                        <input type = "text" value={this.state.password} placeholder ="Password" id="pass" onChange = {(password) => this.setState({password: password.target.value})}></input>
+                                    <input type = {this.state.showPass ? "text" : "password"} value={this.state.password} placeholder ="Password" id="pass" onChange = {(password) => this.setState({password: password.target.value})}></input>
+                                 
+                                    <IconContext.Provider value={{ className: 'auth-icons-pass' }}>
+                                        {this.state.showPass ? (
+                                        <IoIosEye onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>
                                         ):(
-                                        <input type = "password" value={this.state.password} placeholder ="Password" id="pass" onChange = {(password) => this.setState({password: password.target.value})}></input>
-                                    )}
-                                    
-                                    {this.state.showPass ? (
-                                        <IconContext.Provider value={{ className: 'auth-icons-pass' }}><IoIosEyeOff onClick={()=>{this.setState({showPass : !this.state.showPass})}}/></IconContext.Provider>
-                                        ):(
-                                        <IconContext.Provider value={{ className: 'auth-icons-pass' }}><IoIosEye onClick={()=>{this.setState({showPass : !this.state.showPass})}}/></IconContext.Provider>
-                                    )}
-                                    
+                                        <IoIosEyeOff onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>
+                                        )}</IconContext.Provider>
                                 </div>
                             </div>
                             <button className="auth-button" onClick={()=>(this._submitLogin())}>Submit</button>
