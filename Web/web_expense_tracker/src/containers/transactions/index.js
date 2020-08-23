@@ -90,7 +90,7 @@ export default class Transactions extends React.Component{
         return(
             <div>
                 <Drawer />
-                <Sidebar/>
+                {/* <Sidebar/> */}
                 <p>This is Transaction Page</p>
                 <FilterBar/>
                 <p><b>Latest Transactions :</b></p>

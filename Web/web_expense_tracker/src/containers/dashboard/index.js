@@ -6,7 +6,7 @@ import SumCardBar from '../../components/sumCardBar';
 import {VictoryChart, VictoryLine, VictoryLabel} from 'victory';
 import CategoriesCard from '../../components/categoriesCard';
 import TransactionCard from '../../components/transactionCard';
-import Sidebar from '../../components/sidebar';
+
 
 const sumData =[
     {
@@ -298,15 +298,15 @@ export default class Dashboard extends React.Component{
                         </div>
                     </div>
 
-                    <div className="dash-latest-trans">
+                    <div className="dash-latest">
                         <p><b>Latest Transactions :</b></p>
                             {/* <TransactionCard style={{backgroundColor:"transparent"}} date='Date' categ='Categories' desc='Description' total=''/> */}
-
-                        {sumTrans.map((item)=>(
-                            <TransactionCard date={item.date} categ={item.categories} desc={item.desc} total={item.total.toFixed(2)}/>
-                        ))}
+                        <div className="dash-latest-trans">
+                            {sumTrans.map((item)=>(
+                                <TransactionCard date={item.date} categ={item.categories} desc={item.desc} total={item.total.toFixed(2)}/>
+                            ))}
+                        </div>
                     </div>
-                    {/* <Sidebar/> */}
                 </div>
 
             </dvi>

@@ -28,7 +28,7 @@ export default class Category extends React.Component{
                 <Drawer/>
                 {/* <p>This is Category Page</p> */}
                 <div className="cat-cont">
-                    <Sidebar/>
+                    {/* <Sidebar/> */}
                     
                     <div className="cat-card-cont">
                         {apiData[0].GetCategoryBar.barsData.map(item=>(

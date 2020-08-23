@@ -1,18 +1,27 @@
 import React from 'react';
 import './transcard.css';
+import Card from 'react-bootstrap/Card';
+
 
 export default class TransactionCard extends React.Component{
     render(){
-        console.log(this.props.percent);
-
         return(
-            <div className="transc-cont">
-                <p className="tc-p01"><b>{this.props.date}</b></p>
-                <p className="tc-p02">{this.props.categ}</p>
-                <p className="tc-p03"><i>{(this.props.desc)}...</i></p>
-                <p className="tc-p04">RM {this.props.total}</p>
+
+            <div>
+                <Card border="secondary" style={{ width: '18rem', marginTop:10}}>
+                    <Card.Body>
+                    <div className="tc-holder1">
+                        <Card.Title>{this.props.categ || ""}</Card.Title>
+                        <Card.Title style={{color:"red", fontSize:18}}>- $ {this.props.total || ""}</Card.Title>
+                    </div>
+                    <Card.Text>{this.props.desc || "..."}</Card.Text>
+
+                    <div className="tc-holder3">
+                        <Card.Text><i>{this.props.date || "DD-MM-YYYY"}</i></Card.Text>
+                    </div>
+                    </Card.Body>
+                </Card>
             </div>
         );
     }
-
 }
