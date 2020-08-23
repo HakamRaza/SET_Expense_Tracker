@@ -27,7 +27,7 @@ a {
 .header-logo {
     width: 60px;
     height: 40px;
-    background-image: url('okane-logo.png');
+    background-image: url('../../images/okane-logo.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
