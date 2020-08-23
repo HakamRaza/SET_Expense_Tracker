@@ -1,9 +1,7 @@
-.sc-container {
-    height: 4em;
-    width: 100%;
-    padding: 0.5em;
-    margin: 10px 0;
-    background-color: whitesmoke;
-    border: 2px solid green;
-    border-radius: 15px;
+.sumc-icons {
+    position: absolute;
+    top: 25%;
+    right: 8%;
+    font-size: 60px;
+    color: #005086;
 }

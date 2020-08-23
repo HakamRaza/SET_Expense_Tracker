@@ -10,13 +10,13 @@ import Sidebar from '../../components/sidebar';
 
 const sumData =[
     {
-        type:"Monthly Budget",
+        type:"Remaining Budget",
         left: 5000,
         total: 9000,
     },
 
     {
-        type:"Monthly Expenses",
+        type:"Current Expenses",
         total: 5000,
     },
 
@@ -31,60 +31,79 @@ const sumCat = [
         name:"Food",
         month_budget: 800,
         month_expense: 400,
+        color:"lightblue",
     },
 
     {
-        name:"Drinks & Boba Tea Whatever",
+        name:"Drinks & Boba",
         month_budget: 300,
         month_expense: 150,
+        color:"lightgreen",
+
     },
 
     {
         name:"House Bills",
         month_budget: 100,
         month_expense: 0,
+        color:"lightblue",
+
     },
 
     {
         name:"Savings",
         month_budget: 900,
         month_expense: 302.04,
+        color:"lightcoral",
+
     },
 
     {
-        name:"Drinks & Boba Tea Whatever",
+        name:"Drinks & Boba",
         month_budget: 300,
         month_expense: 150,
+        color:"lightgreen",
+
     },
 
     {
         name:"House Bills",
         month_budget: 100,
         month_expense: 0,
+        color:"lightcoral",
+
     },
 
     {
         name:"Savings",
         month_budget: 900,
         month_expense: 302.04,
+        color:"lightsalmon",
+
     },
 
     {
-        name:"Drinks & Boba Tea Whatever",
+        name:"Drinks & Boba",
         month_budget: 300,
         month_expense: 150,
+        color:"yellow",
+
     },
 
     {
         name:"House Bills",
         month_budget: 100,
         month_expense: 0,
+        color:"limegreen",
+
     },
 
     {
         name:"Savings",
         month_budget: 900,
         month_expense: 302.04,
+        color:"limegreen",
+
     },
 ]
 
@@ -224,6 +243,7 @@ export default class Dashboard extends React.Component{
         return(
             <dvi style={{maxWidth:1000, backgroundColor:"red"}}>
                 <Drawer />
+
                 <div className="dash-container">
 
                     <div className="dash-lngr">
@@ -264,8 +284,8 @@ export default class Dashboard extends React.Component{
                         <p><b>Monthly Overview :</b></p>
                         <div className="dash-sum2">
                             <SumCardBar title={sumData[0].type} left={sumData[0].left} total={sumData[0].total} percent={(sumData[0].left/ sumData[0].total*100)}/>
-                            <SumCard title={sumData[1].type} total={sumData[1].total}  />
-                            <SumCard title={sumData[2].type} total={sumData[2].total}  />
+                            <SumCard type='1' title={sumData[1].type} total={sumData[1].total}  />
+                            <SumCard type='2'title={sumData[2].type} total={sumData[2].total}  />
                         </div>
                     </div>
 
@@ -273,7 +293,7 @@ export default class Dashboard extends React.Component{
                     <p><b>Categories Summary :</b></p>
                         <div className="dash-categ2">
                             {sumCat.map((item) =>(
-                                <CategoriesCard name={item.name} budget={item.month_budget} expense={item.month_expense} bal ={(item.month_budget-item.month_expense).toFixed(2)}/>
+                                <CategoriesCard color={item.color} name={item.name} budget={item.month_budget} expense={item.month_expense} bal ={(item.month_budget-item.month_expense).toFixed(2)}/>
                             ))}
                         </div>
                     </div>
@@ -286,7 +306,7 @@ export default class Dashboard extends React.Component{
                             <TransactionCard date={item.date} categ={item.categories} desc={item.desc} total={item.total.toFixed(2)}/>
                         ))}
                     </div>
-                    <Sidebar/>
+                    {/* <Sidebar/> */}
                 </div>
 
             </dvi>
