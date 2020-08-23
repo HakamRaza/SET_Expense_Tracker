@@ -4,13 +4,14 @@ import {Link} from 'react-router-dom';
 import { IconContext } from "react-icons";
 import './main.css';
 import Header from 'components/header';
+import About from '../dummy/About';
 
 class Main extends React.Component{
     render(){
         return(
             <div>
                 <Header/>
-                <div className="main">
+                <div id="home" className="main">
                     <div className="main-card">
                         <div className="main-text">
                             <h2>Expenses Tracking Made Easy</h2>
@@ -35,6 +36,7 @@ class Main extends React.Component{
                         </div>
                     </div>
                 </div>
+                <About/>
             </div>
         )
     }

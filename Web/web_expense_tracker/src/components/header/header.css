@@ -4,52 +4,24 @@
     box-sizing: border-box;
 }
 
+a {
+    color: inherit;
+    border: none;
+    outline: none;
+    text-decoration: none;
+}
+
 .header {
-    height: 60px;
+    height: 65px;
     width: 100%;
     padding: 10px;
-    /* border-bottom: 2px solid rgba(0, 0, 0, 0.3); */
     font-size: 15px;
-}
-
-.header-mobile {
     position: fixed;
-    top: 1em;
-    left: 1em;
-    z-index: 10;
-    border: 1px solid tomato;
-}
-
-.header-mobile-icons {
-    font-size: 1.5em;
-}
-
-.header-mobile-icons:hover {
-    box-shadow: 0px 0px 10px #18A0FB;
-}
-
-
-.header-list-mobile {
-    list-style-type: none;
-    display: none;
+    top: 0;
+    left: 0;
     background-color: white;
+    border-bottom: 2px solid #318fb5;
 }
-
-.header-list-mobile li {
-    padding: 10px 30px 10px 20px;
-    border: 1px solid skyblue;
-}
-
-.header-list-mobile li:hover {
-    background-color: #18A0FB;
-    color: whitesmoke;
-}
-
-
-.header-mobile:focus > .header-list-mobile  {
-    display: block;
-}
-
 
 .header-logo {
     width: 60px;
@@ -58,63 +30,53 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    float: left;
-    display: none;
+}
+
+.header-icons {
+    font-size: 1.8em;
+    margin: 10px 5px;
 }
 
 .header-list {
     list-style-type: none;
-    float: left;
+    display: flex;
+    flex-direction: row;
+}
+
+.header-icons-holder {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: #318fb5;
+    padding: 0 3px;
+    transition: all 0.2s;
+}
+
+.header-icons-holder p {
     display: none;
 }
 
-.header-list li {
-    display: inline-block;
-    padding: 10px;
+.header-list a {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: small;
 }
 
-.header-list li:hover {
-    cursor: pointer;
-    background-color: #18A0FB;
-    color: whitesmoke;
-    border-bottom: 2px solid gray;
+.header-icons-holder:hover {
+    color: #318fb5;
+    transform: scale(1.1);
 }
 
-.header-register {
-    cursor: pointer;
-    height: 35px;
-    width: 80px;
-    border-radius: 5px;
-    background-color: #18A0FB;
-    color: whitesmoke;
-    float: right;
-    padding: 5px 10px;
-    margin: 0 10px;
-}
-
-.header-login {
-    cursor: pointer;
-    height: 35px;
-    width: 80px;
-    border-radius: 5px;
-    background-color: white;
-    color: #18A0FB;
-    float: right;
-    padding: 5px 10px;
-    margin: 0 10px;
-}
-
-@media (min-device-width: 768px){
-    .header-logo {
-        display: block;
-    }
-    
-    .header-list {
+@media (min-width: 600px) {
+    .header-icons-holder p {
         display: block;
     }
 
-    .header-mobile {
-        display: none;
+    .header-icons-holder {
+        color: #b0cac7;
     }
 
+    .header-icons-holder {
+        padding: 0 10px;
+    }
 }

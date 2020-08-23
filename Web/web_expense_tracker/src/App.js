@@ -8,8 +8,8 @@ import Dashboard from 'containers/dashboard';
 import Category from './containers/categories';
 import Transactions from './containers/transactions';
 import PieChart from './containers/piechart';
-import About from './containers/dummy/About';
-import Contact from './containers/dummy/Contact';
+// import About from './containers/dummy/About';
+// import Contact from './containers/dummy/Contact';
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
           <Route exact path="/category" component={Category} />
           <Route exact path="/transaction" component={Transactions} />
           <Route exact path="/monthly-summary" component={PieChart} />
-          <Route exact path="/about" component={About} />
+          {/* <Route exact path="/about" component={About} /> */}
           {/* <Route exact path="/about/#contact" component={Contact} /> */}
           <Route exact path="/home" component={Main} />
           <Route path="/" component={Main} />

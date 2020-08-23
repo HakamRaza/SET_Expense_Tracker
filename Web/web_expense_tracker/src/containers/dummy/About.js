@@ -6,8 +6,8 @@ import Contact from './Contact';
 export default class About extends React.Component {
     render(){
         return(
-            <div>
-                <Header/>
+            <div id="about">
+                {/* <Header/> */}
                 <div id="about-wrap">
                     <div id="about-item">
                         <div id="about-text" >
