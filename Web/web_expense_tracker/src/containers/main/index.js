@@ -1,11 +1,9 @@
 import React from 'react';
-import { FaInstagram, FaTwitterSquare, FaFacebookSquare } from "react-icons/fa";
-import {Link} from 'react-router-dom';
-import { IconContext } from "react-icons";
 import './main.css';
+import { FaInstagram, FaTwitterSquare, FaFacebookSquare } from "react-icons/fa";
+import { IconContext } from "react-icons";
 import Header from 'components/header';
 import About from '../dummy/About';
-// import { Button } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 
 class Main extends React.Component{

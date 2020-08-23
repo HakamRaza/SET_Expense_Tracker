@@ -2,7 +2,7 @@ import React from "react";
 import './header.css';
 import { IconContext } from "react-icons";
 import {Link} from 'react-router-dom';
-import { IoIosHome, IoIosPhotos, IoIosSend, IoIosPerson, IoIosPersonAdd } from "react-icons/io";
+import { IoIosHome, IoIosPhotos, IoIosSend, IoIosContact, IoMdFingerPrint } from "react-icons/io";
 
 export default class Header extends React.Component {
     render(){
@@ -18,8 +18,8 @@ export default class Header extends React.Component {
                             <a href="/home/#home"><li><div className="header-icons-holder" ><IoIosHome/><p><u>Home</u></p></div></li></a>
                             <a href="/home/#about"><li><div className="header-icons-holder" ><IoIosPhotos/><p><u>About</u></p></div></li></a>
                             <a href="/home/#contact"><li><div className="header-icons-holder" ><IoIosSend/><p><u>Contact</u></p></div></li></a>
-                            <Link to={"/login"}><li><div className="header-icons-holder" ><IoIosPerson/><p><u>Login</u></p></div></li></Link>
-                            <Link to={"/register"}><li><div className="header-icons-holder" ><IoIosPersonAdd/><p><u>Register</u></p></div></li></Link>
+                            <Link to={"/login"}><li><div className="header-icons-holder" ><IoIosContact/><p><u>Login</u></p></div></li></Link>
+                            <Link to={"/register"}><li><div className="header-icons-holder" ><IoMdFingerPrint/><p><u>Register</u></p></div></li></Link>
 
                             </IconContext.Provider>
                         </ul>

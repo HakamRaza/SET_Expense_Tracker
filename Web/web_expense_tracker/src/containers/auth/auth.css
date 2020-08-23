@@ -1,127 +1,83 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
-* {
-    margin:0;
-    padding:0;
-}
-
-html, body {
-    scroll-behavior: smooth;
-}
-
-.auth, .auth-reg {
+.auth {
+    padding: 7em 1em 0 1em;
     margin: 0 auto;
-    padding: 3em 1em;
     font-family: 'Montserrat', sans-serif;
+    max-width: 1000px;
+    height: 100%;
 }
 
-.auth-card {
-    padding-top: 1em;
+.auth-card, .reg-card {
     color: #18A0FB;
-    /* border: 1px solid red; */
+}
+
+.reg-card p {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 2em;
 }
 
 .auth-card p {
     text-align: center;
     font-size: 1.5em;
+    margin-bottom: 2em;
 }
 
 .auth-bgp, .auth-bgp-reg {
     padding: 1em 0;
     margin: 20px auto;
-    width: 320px;
+    min-width: 300px;
+    max-width: 380px;
     min-height: 200px;
     max-height: 400px;
 
-    display: grid;
-    justify-items: center;
-    align-items: center;
-
-    border: 2px solid #18a0fbdb;
-    border-radius: 5px;
-    background: url('./bgc-login-form.png');
-    background-position: center;
-    background-repeat: no-repeat;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #318fb5;
 }
 
 .auth-bgp {
     background-size: cover;
+    padding: 1em 1em;
+    font-size: 1em;
 }
 
-.auth-bgp {
-    background-size: contain;
-}
-
-.auth-form {
-    font-size: 0.8em;
-    padding: 0.5em 0.8em;
-    color: black;
-
+.auth-input {
     position: relative;
 }
 
-.auth-form input{
-    margin: 10px 0;
-    width: 92%;
-    height: 3em;
-    padding: 0 1em 0 3em;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid #18A0FB;
-}
-
-.auth-form input:focus{
-    background-color: white;
-}
-
-
-.auth-button {
-    height: 35px;
-    width: 100px;
-    border-radius: 5px;
-    background-color: #18A0FB;
-    color: whitesmoke;
-    /* margin-bottom: 1em; */
-}
 
 .auth-icons {
-    font-size: 1.5em;
-    color: #878787;
-
+    font-size: 1.2em;
+    color: #318fb5;
     position: absolute;
-    top: 49%;
-    left: 1em;
+    top: 40px;
+    left: 7px;
 }
 
 .auth-icons-pass {
-    cursor: pointer;
-    font-size: 1.5em;
-    color: #000000ad;
-
+    font-size: 1.2em;
+    color: #318fb5;
     position: absolute;
-    top: 49%;
-    right: 0;
+    top: 68px;
+    right: 0px;
 }
 
 
+
 @media (min-device-width: 1000px){
-    .auth {
-        height: 700px;
-        max-width: 80%;
+    .auth-card {
+        height: 400px;
         background-image: url('./bgc-login-bg.png');
         background-size: contain;
         background-repeat: no-repeat;
-        background-position: left;
     }
-
-    .auth-reg {
-        height: 700px;
-        max-width: 80%;
+    
+    .reg-card {
+        height: 400px;
         background-image: url('./bgc-register-bg.png');
         background-size: contain;
         background-repeat: no-repeat;
-        background-position: left;
     }
-
 
 }

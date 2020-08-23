@@ -1,9 +1,7 @@
 import React from 'react';
-import Header from '../../components/header';
 import './dummy.css';
 import Contact from './Contact';
 import Accordion from 'react-bootstrap/Accordion';
-import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import Card from 'react-bootstrap/Card'
 
 // const decoratedOnClick = useAccordionToggle(eventKey, onClick);

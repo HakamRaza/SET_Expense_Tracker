@@ -4,6 +4,8 @@ import Header from 'components/header';
 
 import { IoIosMail, IoMdKey, IoIosEye, IoIosEyeOff} from "react-icons/io";
 import { IconContext } from "react-icons";
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 class Login extends React.Component{
     constructor(props){
@@ -33,32 +35,42 @@ class Login extends React.Component{
             <div>
                 <Header/>
                 <div className="auth">
+                    
                     <div className="auth-card">
                         <p>Login Into Your Dashboard</p>
 
                         <div className="auth-bgp">
                             <div>
-                                <div className="auth-form">
-                                    <label htmlFor="email">Email :</label>
-                                    <IconContext.Provider value={{ className: 'auth-icons' }}><IoIosMail /></IconContext.Provider>
-                                    <input type = "text" placeholder ="Email" id="email" onChange={(email)=> this.setState({email: email.target.value})}></input>
-                                </div>
+                                <Form>
+                                    <div className="auth-input">
+                                        <Form.Group controlId="formBasicEmail">
+                                            <IconContext.Provider value={{ className: 'auth-icons' }}><IoIosMail /></IconContext.Provider>
 
-                                <div className="auth-form">
-                                    <label htmlFor="pass">Password :</label>
-                                    <IconContext.Provider value={{ className: 'auth-icons' }}><IoMdKey /></IconContext.Provider>
+                                            <Form.Label>Email address</Form.Label>
+                                            <Form.Control style={{fontSize:"0.8em", paddingLeft:36}} type="email" placeholder="Enter email" onChange={(email)=> this.setState({email: email.target.value})}/>
+                                        </Form.Group>
+                                    </div>
 
-                                    <input type = {this.state.showPass ? "text" : "password"} value={this.state.password} placeholder ="Password" id="pass" onChange = {(password) => this.setState({password: password.target.value})}></input>
-                                 
-                                    <IconContext.Provider value={{ className: 'auth-icons-pass' }}>
-                                        {this.state.showPass ? (
-                                        <IoIosEye onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>
-                                        ):(
-                                        <IoIosEyeOff onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>
-                                        )}</IconContext.Provider>
-                                </div>
+                                    <div className="auth-input">
+                                        <Form.Group controlId="formBasicPassword">
+                                            <IconContext.Provider value={{ className: 'auth-icons' }}><IoMdKey /></IconContext.Provider>
+
+                                            <Form.Label>Password</Form.Label>
+                                            <Form.Control style={{fontSize:"0.8em", paddingLeft:36}} type={this.state.showPass? "text" : "password"} placeholder="Password" onChange = {(password) => this.setState({password: password.target.value})}/>
+                                        </Form.Group>
+
+                                        <div>
+                                            <IconContext.Provider value={{ className: 'auth-icons-pass' }}>
+                                                {this.state.showPass ? (
+                                                <IoIosEye onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>
+                                                ):(
+                                                <IoIosEyeOff onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>
+                                            )}</IconContext.Provider>
+                                        </div>
+                                    </div>
+                                    <Button variant="primary" type="submit" onClick={()=>(this._submitLogin())}>Submit</Button>
+                                </Form>
                             </div>
-                            <button className="auth-button" onClick={()=>(this._submitLogin())}>Submit</button>
                         </div>
                     </div>
                 </div>
