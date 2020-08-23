@@ -16,7 +16,9 @@ class Main extends React.Component{
                         <div className="main-text">
                             <h2>Expenses Tracking Made Easy</h2>
                             <p>get an in depth analysis of your financial transaction in one place.</p>
-                            <Link to={"/learn-more"}><button className="main-button">Learn More</button></Link>
+                            {/* <Link to={"/home/#about"}><button className="main-button">Learn More</button></Link> */}
+                            {/* <a href="/home/#about" className="main-button">Learn More</a> */}
+                            <Button variant="outline-primary">Primary</Button>{' '}
                         </div>
 
                         <div className="main-bgp"></div>
