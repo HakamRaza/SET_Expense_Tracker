@@ -203,7 +203,7 @@ const apiData =[{
             "title": "Others",
             "totalExpense": 7.3,
             "budget": 100,
-            "color": null
+            "color": "green"
         }
         ]
     },

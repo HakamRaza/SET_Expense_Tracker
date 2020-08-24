@@ -5,18 +5,23 @@
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: 20;
+    /* position: relative; */
 }
 
 .modal-form {
     padding: 1em;
     position: absolute;
-    top:35%;
-    left: 30%;
-    width: 30%;
-    height: 30%;
+    /* transform-origin: center; */
+    top:37%;
+    left: 50%;
+    right: 50%;
+    width: 400px;
+    height: auto;
     background-color: beige;
 }
 
+/* 
 .modal-form p {
     line-height: 2em;
 }
@@ -38,4 +43,4 @@
 .color-holder {
     display: flex;
     flex-direction: row;
-}
+} */

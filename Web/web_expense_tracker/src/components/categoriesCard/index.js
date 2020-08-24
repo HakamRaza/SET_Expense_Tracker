@@ -1,7 +1,7 @@
 import React from 'react';
 import './categcard.css';
 import Card from 'react-bootstrap/Card';
-import { VictoryPie} from 'victory';
+// import { VictoryPie} from 'victory';
 
 export default class CategoriesCard extends React.Component{
     render(){
