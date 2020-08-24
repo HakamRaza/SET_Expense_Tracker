@@ -15,9 +15,9 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
-            $table->string('transaction_title');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('cascade');
+            $table->string('description');
             $table->decimal('amount', 13, 2)->unsigned();
             $table->date('date');
             $table->timestamps();

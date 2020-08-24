@@ -8,6 +8,7 @@ use App\User;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -30,7 +31,7 @@ class APIController extends Controller
 
     /**
      *
-     * User API Functions - Login, Register
+     * User API Functions - Login, Register, Logout
      *
      */
     function login(Request $request)
@@ -105,10 +106,12 @@ class APIController extends Controller
             'password' => request('password')
         ]);
 
-        $now = Carbon::now();
-        $month = $now->month;
-        $year = $now->year;
-        $budgetDate = $month . '/' . $year;
+        // $now = Carbon::now();
+        // $month = $now->month;
+        // $year = $now->year;
+        // $budgetDate = $month . '/' . $year;
+
+        $budgetDate = Carbon::now()->format('m/Y');
 
         $newBudget = array($budgetDate => (float)1000.00);
 
@@ -124,6 +127,16 @@ class APIController extends Controller
         ], 201);
     }
 
+    function logout()
+    {
+        auth()->logout();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'logout'
+        ], 200);
+    }
+
     /**
      *
      * Transactions API functions - getTransactions, createTransaction, updateTransaction, deleteTransaction
@@ -134,6 +147,10 @@ class APIController extends Controller
     {
         $user_id = auth()->user()->id;
         $user_cats = Categories::where('user_id', '=', $user_id)->get();
+
+        $startDate = Carbon::createFromDate($request->startYear, $request->startMonth, $request->startDay);
+        return $startDate;
+
         // $catName = request('catName');
 
         // if ($catName) {
@@ -151,14 +168,23 @@ class APIController extends Controller
         // }
 
         $data = Transaction::join('categories', 'category_id', '=', 'categories.id')
-            ->select('transactions.*', 'categories.category_title')
+            ->select('categories.category_title', 'transactions.description', 'transactions.amount', 'transactions.date')
             ->where('transactions.user_id', '=', $user_id)
-            // ->when($listName, function ($query, $listName) {
+            // ->when(, function ($query, $listName) {
             //     return $query->where('lists.list_name', $listName);
             // })
             ->orderBy('transactions.date', 'desc')
             ->get();
 
+        // $current = Task::join('lists', 'list_id', '=', 'lists.id')
+        //     ->select('tasks.*', 'lists.list_name')
+        //     ->where('tasks.user_id', '=', $user_id)
+        //     ->where('tasks.task_status', '=', 1)
+        //     ->when($listName, function ($query, $listName) {
+        //         return $query->where('lists.list_name', $listName);
+        //     })
+        //     ->orderBy('tasks.deadline')
+        //     ->get();
         $status = 'success';
         return response()->json(compact('status', 'data', 'user_cats'));
     }
@@ -166,11 +192,11 @@ class APIController extends Controller
     function createTransaction(Request $request)
     {
         $this->validate($request, [
-            'transaction_title' => 'string|max:255',
+            'description' => 'string|max:255',
             'amount' => "regex:/^-?\d+(\.\d{1,2})?$/"
         ]);
 
-        if (!$request->transaction_title) {
+        if (!$request->description) {
             return response()->json([
                 'status' => 'failed',
                 'error' => 'No title given for new transaction'
@@ -203,7 +229,7 @@ class APIController extends Controller
         $transaction = new Transaction();
         $transaction->user_id = auth()->user()->id;
         $transaction->category_id = $request->category_id;
-        $transaction->transaction_title = $request->transaction_title;
+        $transaction->description = $request->description;
         $transaction->amount = $request->amount;
         $transaction->date = $request->date ? $request->date : Carbon::now()->toDateString();
         $transaction->save();
@@ -228,14 +254,14 @@ class APIController extends Controller
 
         if (!$transaction) return response()->json(['status' => 'failed', 'error' => "Transaction not found", 'transactionID' => request('transactionID')]);
 
-        if (!$request->newTitle && !$request->newAmount && !$request->newDate) {
+        if (!$request->newDesc && !$request->newAmount && !$request->newDate) {
             return response()->json([
                 'status' => 'failed',
                 'message' => 'No new input given'
             ]);
         }
 
-        $transaction->transaction_title = isset($request->newTitle) ? $request->newTitle : $transaction->transaction_title;
+        $transaction->description = isset($request->newDesc) ? $request->newDesc : $transaction->description;
         $transaction->amount = isset($request->newAmount) ? $request->newAmount : $transaction->amount;
         $transaction->date = isset($request->newDate) ? $request->newDate : $transaction->date;
 
@@ -283,9 +309,31 @@ class APIController extends Controller
 
     /**
      *
-     * Categories API functions - createCategory, updateCategory, deleteCategory
+     * Categories API functions - getCategories, createCategory, updateCategory, deleteCategory
      *
      */
+    function getCategories()
+    {
+        $user_id = auth()->user()->id;
+        $user_cats = Categories::select('category_title')->where('user_id', '=', $user_id)->get();
+
+        if (count($user_cats) === 0) {
+            return response()->json([
+                'status' => 'success_empty',
+                'categoryList' => $user_cats
+            ]);
+        } else {
+            $categoryList = [];
+            foreach ($user_cats as $cat) {
+                $categoryList[] = $cat->category_title;
+            }
+            return response()->json([
+                'status' => 'success',
+                'categoryList' => $categoryList
+            ]);
+        }
+    }
+
     function createCategory(Request $request)
     {
         $this->validate($request, [
@@ -324,10 +372,11 @@ class APIController extends Controller
             ]);
         }
 
-        $now = Carbon::now();
-        $month = $now->month;
-        $year = $now->year;
-        $budgetDate = $month . '/' . $year;
+        // $now = Carbon::now();
+        // $month = $now->month;
+        // $year = $now->year;
+        // $budgetDate = $month . '/' . $year;
+        $budgetDate = Carbon::now()->format('m/Y');
 
         $newBudget = array($budgetDate => (float)$request->budget);
         $category = new Categories();
@@ -430,7 +479,6 @@ class APIController extends Controller
 
     function checkBudget()
     {
-        // $categories = Categories::where('budget->8/2020', '<>', null)->sum('budget->8/2020');
         $category = Categories::first();
         // return ($category->created_at)->gt(Carbon::createFromFormat('m/Y', array_key_last($category->budget)));
         // return Carbon::createFromFormat('m/Y', array_key_last($category->budget))->endOfMonth();
@@ -478,74 +526,104 @@ class APIController extends Controller
         ]);
     }
 
-    function getOverviewGraph()
+    function getOverviewData(Request $request)
     {
+        // $this->validate($request, [
+        //     'month' => 'required',
+        //     'year' => 'required',
+        // ]);
+
+        $period = Carbon::now();
+        if ($request->month && $request->year) {
+            $period = Carbon::createFromDate($request->year, $request->month);
+        }
+
         $user_id = auth()->user()->id;
 
         $budgets = Categories::select('budget')->where('user_id', $user_id)->get();
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $currDate = Carbon::now();
+        $startOfMonth = $period->copy()->startOfMonth();
+        $endOfMonth = $period->copy()->endOfMonth();
+        // $currDate = Carbon::now();
         $totalBudget = 0;
+
         foreach ($budgets as $cat) {
-            $totalBudget += $cat->budget[array_key_last($cat->budget)];
+
+            if (array_key_exists($period->format('m/Y'), $cat->budget)) {
+                $totalBudget += $cat->budget[$period->format('m/Y')];
+            }
         }
 
+        // return [$startOfMonth, $endOfMonth];
         $budgetData = [['x' => '0', 'y' => $totalBudget]];
-        for ($x = $startOfMonth; $x <= $currDate; $x->add('day', 1)) {
+        for ($x = $startOfMonth; $x <= $endOfMonth; $x->add('day', 1)) {
             $budgetData[] = [
                 'x' => $x->format('d/m'),
                 'y' => $totalBudget
             ];
         }
+        // return response()->json()->compact(['totalBudget', 'budgetData']);
 
-        $expenses = Transaction::select(Transaction::raw('date, DAY(date) as day, SUM(amount) as expense'))
+        $monthExpenses = Transaction::select(Transaction::raw('date, DAY(date) as day, SUM(amount) as expense'))
+            ->whereMonth('transactions.date', $request->month)
+            ->whereYear('transactions.date', $request->year)
             ->groupBy('date')
             ->get();
 
-        // return count($expenses);
+        // return count($monthExpenses);
         $expIndex = 0;
         $dailyExpenseData = [['x' => '0', 'y' => 0]];
         $totalExpenseData = [['x' => '0', 'y' => 0]];
         $currTotal = 0;
-        $startOfMonth = Carbon::now()->startOfMonth();
-        for ($x = $startOfMonth; $x <= $currDate; $x->add('day', 1)) {
-            if ($expIndex < count($expenses) && $expenses[$expIndex]) {
-                $currExpense = $expenses[$expIndex];
-            }
+        $startOfMonth = $period->copy()->startOfMonth();
+        $endOfMonth = $period->copy()->endOfMonth();
+        if (count($monthExpenses) > 0) {
+            for ($x = $startOfMonth; $x <= $endOfMonth; $x->add('day', 1)) {
+                if ($expIndex < count($monthExpenses) && $monthExpenses[$expIndex]) {
+                    $currExpense = $monthExpenses[$expIndex];
+                }
 
-            if ($x->day === $currExpense->day) {
-                $dailyExpenseData[] = [
+                if ($x->day === $currExpense->day) {
+                    $dailyExpenseData[] = [
+                        'x' => $x->format('d/m'),
+                        'y' => (float)$currExpense->expense,
+                    ];
+
+                    $currTotal += $currExpense->expense;
+
+                    $expIndex++;
+                } else {
+                    $dailyExpenseData[] = [
+                        'x' => $x->format('d/m'),
+                        'y' => 0,
+                    ];
+                }
+
+                $totalExpenseData[] = [
                     'x' => $x->format('d/m'),
-                    'y' => (float)$currExpense->expense,
-                ];
-
-                $currTotal += $currExpense->expense;
-
-                $expIndex++;
-            } else {
-                $dailyExpenseData[] = [
-                    'x' => $x->format('d/m'),
-                    'y' => 0,
+                    'y' => (float)$currTotal,
                 ];
             }
-
-            $totalExpenseData[] = [
-                'x' => $x->format('d/m'),
-                'y' => (float)$currTotal,
-            ];
         }
+
+        $allExpenses = Transaction::where('user_id', $user_id)
+            ->sum('amount');
+
+        $totalSavings = $totalBudget - $allExpenses;
 
         return response()->json([
             'status' => 'success',
-            'budgetData' => $budgetData,
-            'dailyExpenseData' => $dailyExpenseData,
-            'totalExpenseData' => $totalExpenseData,
+            'graphBudget' => $budgetData,
+            'graphDailyExpense' => $dailyExpenseData,
+            'graphTotalExpense' => $totalExpenseData,
+            'budgetData' => $totalBudget,
+            'expensesData' => end($totalExpenseData)['y'],
+            'totalSavings' => $totalSavings,
         ]);
     }
 
     /**
      *
-     * Calculation API - getCategoryBars
+     * Calculation API - getCategoryBars, getSummaryData
      *
      */
     function getCategoryBars(Request $request)
