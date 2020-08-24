@@ -17,7 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('category_title');
-            $table->json('budget');
+            $table->json('budget')->nullable();
             $table->string('color')->nullable();
             $table->timestamps();
         });
