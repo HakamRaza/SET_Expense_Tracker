@@ -31,7 +31,7 @@ export default class PieChart extends React.Component{
                 <Drawer />
 
                 <h3>Monthly Overview</h3>
-                
+
                 <div>
                     <Form.Group controlId="exampleForm.ControlSelect1">
                         <Form.Label>Select Month :</Form.Label>
@@ -68,7 +68,7 @@ export default class PieChart extends React.Component{
 
                 </div>
 
-                <div className="dash-sum2">
+                <div className="pipg-sum2">
                     <SumCardBar title={sumData[0].type} left={sumData[0].left} total={sumData[0].total} percent={(sumData[0].left/ sumData[0].total*100)}/>
                     <SumCard type='1' title={sumData[1].type} total={sumData[1].total}  />
                     <SumCard type='2'title={sumData[2].type} total={sumData[2].total}  />

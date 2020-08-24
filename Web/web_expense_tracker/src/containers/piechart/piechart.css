@@ -14,20 +14,20 @@
     height: 100%;
 }
 
-.dash-sum2 {
+.pipg-sum2 {
     display: grid;
     justify-items: center;
     grid-gap: 1em;
 }
 
 @media (min-device-width: 600px){
-    .dash-sum2 {
+    .pipg-sum2 {
         grid-template-columns: 1fr 1fr;
     }
 }
 
 @media (min-device-width: 900px){
-    .dash-sum2 {
+    .pipg-sum2 {
         grid-template-columns: 1fr 1fr 1fr;
     }
 }
