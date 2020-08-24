@@ -1,11 +1,15 @@
 import React from 'react';
 import './auth.css';
 import Header from 'components/header';
+import Actions from '../../actions';
+import { connect } from "react-redux";
 
 import { IoIosMail, IoMdKey, IoIosEye, IoIosEyeOff} from "react-icons/io";
 import { IconContext } from "react-icons";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
+import Spinner from 'react-bootstrap/Spinner'
 
 class Login extends React.Component{
     constructor(props){
@@ -15,19 +19,54 @@ class Login extends React.Component{
             email:"",
             password:"",
             showPass:false,
+            showAlert:false,
+            alertMsg:"",
+            alertVar:"",
+            onLoading:false,
+        }
+    }
+
+    componentDidUpdate(prevProps){
+        const { getLoginData } = this.props;
+        
+        if(prevProps.getLoginData.isLoading && !getLoginData.isLoading){
+            this.setState({onLoading:false});
+            
+            if(getLoginData.data.status === "success") {
+                this.props.history.push("/dashboard");
+                
+            } else if (getLoginData.error !== null){
+                this.setState({
+                    showAlert: true,
+                    alertMsg: getLoginData.error.error,
+                    alertVar:"danger",
+                });
+                
+                // this.props.history.push("/login");
+            }
         }
     }
 
     _submitLogin(){
         const {email, password} = this.state;
 
-        const formData = {
-            email,
-            password,
+        if(email !="" && password !==""){
+            const formData = {
+                email,
+                password,
+            }
+
+            this.props.onLogin(formData);
+            this.setState({onLoading:true});
+
+        } else {
+            this.setState({
+                showAlert: true,
+                alertMsg:"Please Fill All Forms",
+                alertVar:"warning",
+            })
         }
 
-        console.log("login", formData);
-        this.props.history.push("/dashboard");
     }
 
     render(){
@@ -35,7 +74,6 @@ class Login extends React.Component{
             <div>
                 <Header/>
                 <div className="auth">
-                    
                     <div className="auth-card">
                         <p>Login Into Your Dashboard</p>
 
@@ -45,7 +83,6 @@ class Login extends React.Component{
                                     <div className="auth-input">
                                         <Form.Group controlId="formBasicEmail">
                                             <IconContext.Provider value={{ className: 'auth-icons' }}><IoIosMail /></IconContext.Provider>
-
                                             <Form.Label>Email address</Form.Label>
                                             <Form.Control style={{fontSize:"0.8em", paddingLeft:36}} type="email" placeholder="Enter email" onChange={(email)=> this.setState({email: email.target.value})}/>
                                         </Form.Group>
@@ -54,29 +91,36 @@ class Login extends React.Component{
                                     <div className="auth-input">
                                         <Form.Group controlId="formBasicPassword">
                                             <IconContext.Provider value={{ className: 'auth-icons' }}><IoMdKey /></IconContext.Provider>
-
                                             <Form.Label>Password</Form.Label>
                                             <Form.Control style={{fontSize:"0.8em", paddingLeft:36}} type={this.state.showPass? "text" : "password"} placeholder="Password" onChange = {(password) => this.setState({password: password.target.value})}/>
                                         </Form.Group>
 
                                         <div>
                                             <IconContext.Provider value={{ className: 'auth-icons-pass' }}>
-                                                {this.state.showPass ? (
-                                                <IoIosEye onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>
-                                                ):(
-                                                <IoIosEyeOff onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>
+                                                {this.state.showPass ? (<IoIosEye onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>):(<IoIosEyeOff onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>
                                             )}</IconContext.Provider>
                                         </div>
                                     </div>
-                                    <Button variant="primary" type="submit" onClick={()=>(this._submitLogin())}>Submit</Button>
+
+                                    {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/> Login ...</span>): (<Button variant="primary" onClick={()=>(this._submitLogin())}>Submit</Button>)}
+
                                 </Form>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {this.state.showAlert && (
+                    <Alert variant={this.state.alertVar} onClose={() => this.setState({showAlert:false})} dismissible>
+                    <p>{this.state.alertMsg}</p></Alert>
+                )}
+
             </div>
         );
     }
 }
 
-export default Login;
+const mapStateToProps = store => ({getLoginData: Actions.getLoginData(store)});
+const mapDispatchToProps = {onLogin: Actions.login};
+
+export default connect(mapStateToProps,mapDispatchToProps)(Login);
