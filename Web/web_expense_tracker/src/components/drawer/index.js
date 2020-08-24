@@ -24,7 +24,7 @@ export default class Drawer extends React.Component{
     render(){
         return(
             <div className="drawer-cont">
-                    <Navbar bg="light" expand='sm'>
+                    <Navbar bg="light" expand='md   '>
                     <Navbar.Brand href="/dashboard">
                         <div className="header-logo">
                             <h2 style={{marginLeft:25, paddingTop:18}}>Okane</h2>
@@ -35,14 +35,9 @@ export default class Drawer extends React.Component{
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="mr-auto">
                             <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-
-                            <NavDropdown title="Settings" id="basic-nav-dropdown">
-                                <NavDropdown.Item href="/transaction">Transaction History</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="/category">Category Settings</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="/monthly-summary">Monthly Overview</NavDropdown.Item>
-                            </NavDropdown>
+                            <Nav.Link href="/transaction">History</Nav.Link>
+                            <Nav.Link href="/category">Category Settings</Nav.Link>
+                            <Nav.Link href="/monthly-summary">Monthly Overview</Nav.Link>
                             </Nav>
                             <Form inline>
                                 <Button variant="danger" type="submit" onClick={()=>(this._onLogout())}>Logout</Button>
