@@ -4,6 +4,9 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, ScrollView, Ima
 import SubmitButton from "components/submit";
 import TextInputField from "components/textInput";
 
+import {connect} from 'react-redux';
+import Actions from "actions";
+
 const images = { 
     header_auth: require("assets/images/Head.png"),
 }
@@ -17,8 +20,64 @@ class Auth extends React.Component{
         }
     }
 
+    componentDidUpdate(prevProps){
+        const {getLoginData, getRegisterData} = this.props;
+        // console.log("login componenetDidUpdate", getLoginData);
+              //true                                //false
+        if (prevProps.getLoginData.isLoading && !getLoginData.isLoading) {
+        //   console.log("prevProps", prevProps.getLoginData.isLoading);
+        //   console.log("latest props", getLoginData.isLoading);
+          this.setState({loading: false});
+  
+          if(Object.keys(getLoginData.data).length !== 0 &&
+            getLoginData.data !== null) {
+            // console.log("TOKEN is ", getLoginData.data);
+            Alert.alert("Success", "Login successful", [
+              {
+                text:'To Overview',
+                onPress:() => this.props.navigation.navigate("Overview"),
+              },
+            ]
+            );
+  
+        } else if(getLoginData.error !== null) { 
+          Alert.alert("Failed", "Login Failed")
+          }
+        }
+  
+        if (prevProps.getRegisterData.isLoading && !getRegisterData.isLoading) {
+          console.log("prevProps", prevProps.getRegisterData.isLoading);
+          console.log("latest props", getRegisterData.isLoading);
+          this.setState({loading: false});
+  
+          if(Object.keys(getRegisterData.data).length !== 0 &&
+            getLoginData.data !== null) {
+            Alert.alert("Success", "Your Account is created", [
+              {
+                text:'To Login',
+                onPress:this.setState({ showLoginForm: true}),
+              },
+            ]
+            
+            );
+  
+        } else if(getRegisterData.error !== null) { 
+          Alert.alert("Failed", "Please In All the necessary field")
+          }
+        }
+      }
+
     loginButtonPressed(){
-        this.props.navigation.navigate("Overview")
+        // this.props.navigation.navigate("Overview");
+        this.setState({loading:true});
+        const data = {
+            email:this.state.email,
+            password:this.state.password,
+            password_confirmation: this.state.password_confirmation
+        };
+        console.log("this is login", data);
+        this.props.onLogin(data);
+
     }
 
     registerButtonPressed(){
@@ -26,7 +85,15 @@ class Auth extends React.Component{
     }
     
     registerPageButtonPressed(){
-        this.setState({ showLoginForm: true});
+        // this.setState({ showLoginForm: true, loading:true});
+        const data = {
+            email:this.state.email,
+            password:this.state.password,
+            password_confirmation: this.state.password_confirmation
+        };
+        // this.setState({loading:true});
+        this.props.onRegister(data);
+
     }
 
 
@@ -63,6 +130,7 @@ class Auth extends React.Component{
                             />
 
                             <SubmitButton
+                                loading={this.state.loading}
                                 buttonTitle="Register"
                                 submitButtonText="Register"
                                 navigate={()=> this.registerButtonPressed()}
@@ -95,11 +163,12 @@ class Auth extends React.Component{
                             inputPlaceHolder="Your Confirm Password"
                             inputType="default"
                             inputSecure={true}
-                            abc={(password)=>this.setState({password})}
+                            abc={(password_confirmation)=>this.setState({password_confirmation})}
                             showHide="true"
                         />
                         <View style={{marginTop: 13}}>
                             <SubmitButton
+                                loading={this.state.loading}
                                 buttonTitle="Register"
                                 submitButtonText="Register"
                                 navigate = {()=>this.registerPageButtonPressed()}
@@ -131,4 +200,14 @@ const styles = StyleSheet.create({
 
 })
 
-export default Auth;
+const mapStateToProps = (store) => ({
+    getLoginData: Actions.getLoginData(store),
+    getRegisterData: Actions.getRegisterData(store),
+});
+
+const mapDispatchToProps = {
+    onLogin: Actions.login,
+    onRegister: Actions.register
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

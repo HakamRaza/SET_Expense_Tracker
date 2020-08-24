@@ -1,28 +1,52 @@
 import React from "react";
-import {ScrollView, View, Text, StyleSheet, TouchableOpacity} from "react-native";
+import {ScrollView, View, Text, StyleSheet, TouchableOpacity, Modal} from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import moment from 'moment';
 
 import { VictoryPie} from 'victory-native';
 
 import BudgetBarCategories from "components/budgetBar@categories";
 
 const data = [
-    { quarter: 1, earnings: 13000 },
-    { quarter: 2, earnings: 16500 },
-    { quarter: 3, earnings: 14250 },
-    { quarter: 4, earnings: 19000 }
+    { x: 1, y: 16.7 ,label: "Food"},
+    { x: 2, y: 7.3 , label: "Food"}
   ];
 
 class Categories extends React.Component{
+
+    constructor (props) {
+        super(props);
+        this.state = {
+            modalVisible: false, 
+            selectedMonth:  moment().format("MMM YYYY"),
+        }
+    }
+
+    setModalVisible = (visible) => {
+        this.setState({ modalVisible: visible });
+      }
+
     render(){
+
+        const { modalVisible } = this.state;
+
         return(
+            <View>
+                <View>
+                    <TouchableOpacity style={styles.monthYearPickerHolder}
+                                // onPress={()=>this.setState({show:true})}
+                                onPress={()=>this.setState({show:true})}
+                            >
+                        <Text style={{fontSize:18}}>{this.state.selectedMonth}</Text>
+                    </TouchableOpacity>
+                </View> 
+
             <ScrollView>
                 <View style={styles.container}>
-                    <Text>This is Categories page</Text>
                     <VictoryPie
                     width={300}
                     height={300}
-                    colorScale={["tomato", "orange", "gold", "cyan", "navy" ]}
+                    colorScale={["tomato", "orange",  ]}
                     />
                 </View>
                 <BudgetBarCategories 
@@ -50,17 +74,17 @@ class Categories extends React.Component{
                     percentage={(350.75/300) * 350}
                 />
 
+            </ScrollView>
                 <TouchableOpacity style={styles.addButton}>
 
                     <Ionicons 
                     name={"ios-add-circle-outline"} 
                     size={25} 
-                    color={"red"}
+                    color={"white"}
                     />
 
-                </TouchableOpacity>   
-
-            </ScrollView>
+                </TouchableOpacity> 
+            </View>
         )
     }
 }
@@ -73,15 +97,27 @@ const styles = StyleSheet.create({
       backgroundColor: "#f5fcff"
     },
 
+    monthYearPickerHolder:{
+        borderWidth:0.5, 
+        borderColor:"black",
+        height:50,
+        width: "100%",
+        backgroundColor:"white",
+        justifyContent:"center",
+        alignItems:"center"
+
+    },
+
+
     addButton: {
         position: "absolute",
         bottom: 50,
-        right: 20,
+        left: 315,
         zIndex: 3,
-        backgroundColor: "lime",
-        width: 30,
-        height: 30,
-        borderRadius: 15,
+        backgroundColor: "rgb(0,163,255)",
+        width: 50,
+        height: 50,
+        borderRadius: 25,
         justifyContent: "center",
         alignItems:"center"
   

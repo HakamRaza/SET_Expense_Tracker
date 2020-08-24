@@ -5,8 +5,8 @@ import { persistStore, persistCombineReducers } from "redux-persist";
 import AsyncStorage from "@react-native-community/async-storage";
 import createSagaMiddleware from "redux-saga";
 
-import reducers from "../reducers/index";
-import sagas from "../sagas/index";
+import reducers from "reducers/index";
+import sagas from "sagas/index";
 
 let store, middlewares;
 const sagaMiddleware = createSagaMiddleware();
@@ -22,6 +22,7 @@ const reducer = persistCombineReducers(config, reducers);
 
 /* global __DEV__ */
 if (process) {
+
   const excludedActions = [];
   const logger = createLogger({
     collapsed: true,

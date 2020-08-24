@@ -3,7 +3,7 @@ import {ScrollView, View, Text, TouchableOpacity, Modal, StyleSheet} from "react
 import MonthPicker from 'react-native-month-year-picker';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {VictoryChart} from 'victory-native';
+import {VictoryChart, VictoryLine} from 'victory-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
@@ -12,6 +12,53 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import StatsBar from "components/statsBar";
 import BudgetBarOverview from "components/budgetBar@overview";
 
+const DailyExpenses = [
+     
+    { x: 1, y: 1 },
+    { x: 2, y: 4 },
+    { x: 3, y: 1 },
+    { x: 4, y: 2 },
+    { x: 5, y: 5 },
+    { x: 6, y: 2 },
+    { x: 7, y: 1 },
+    { x: 8, y:9 },
+    { x: 9, y: 1 },
+    { x: 10, y: 5 },
+    { x: 11, y: 5 },
+    { x: 12, y: 8 },
+]
+
+const AccExpenses = [
+     
+    { x: 1, y: 1 },
+    { x: 2, y: 3 },
+    { x: 3, y: 4 },
+    { x: 4, y: 6 },
+    { x: 5, y: 7 },
+    { x: 6, y: 9 },
+    { x: 7, y: 10 },
+    { x: 8, y: 13 },
+    { x: 9, y: 15 },
+    { x: 10, y: 30 },
+    { x: 11, y: 24 },
+    { x: 12, y: 35 },
+]
+
+const budgetLine = [
+     
+    { x: 1, y:30 },
+    { x: 2, y: 30 },
+    { x: 3, y: 30 },
+    { x: 4, y: 30 },
+    { x: 5, y: 30 },
+    { x: 6, y: 30 },
+    { x: 7, y: 30 },
+    { x: 8, y: 30 },
+    { x: 9, y: 30 },
+    { x: 10, y: 30 },
+    { x: 11, y: 30 },
+    { x: 12, y: 30 },
+]
 
 class Overview extends React.Component{
 
@@ -25,7 +72,7 @@ class Overview extends React.Component{
             mode: 'date',
             show:false,
             show2:false,
-            selectedStartDate: moment().format("DD-MM-YYYY"),
+            selectedMonth: moment().format("MMM YYYY"),
             selectedEndDate: null,
             image: null,
             selectedImage:'',
@@ -43,8 +90,19 @@ class Overview extends React.Component{
     render(){
         const {modalVisible} = this.state;
         return(
-            <View>
-               
+            <View style={{flex:1}}>
+
+                <View>
+                    <TouchableOpacity style={styles.monthYearPickerHolder}
+                                // onPress={()=>this.setState({show:true})}
+                                onPress={()=>this.setState({show:true})}
+                            >
+                        <Text style={{fontSize:18}}>{this.state.selectedMonth}</Text>
+                    </TouchableOpacity>
+                </View> 
+                
+
+
                 {/* <Modal visible={modalOpen} animationType="slide">
                     <View style={StyleSheet.modalContainer}>
                         <Text> Hello from the modal :)</Text>
@@ -79,7 +137,8 @@ class Overview extends React.Component{
 
                 <ScrollView contentContainerStyle={{alignItems:"center"}} >
                 {/* <ScrollView style={{ flex:1, alignItems:"center"}} > */}
-                    <StatsBar
+                
+                <StatsBar
                     barTitle="Savings" 
                     barAmount="24583.00"
                     />
@@ -88,19 +147,66 @@ class Overview extends React.Component{
                     barAmount="945.60"
                     />
                     <BudgetBarOverview
-                    barTitle="Expenses"
+                    barTitle="Budget"
                     budget="900.00"
                     barAmountLeft="443.25"
                     AccExpenses="456.75"
                     />
                     
+                    {/* <VictoryChart
+                    // theme={VictoryTheme.material}
+                    >
+                    <VictoryLine
+                        style={{
+                        data: { stroke: "#c43a31" },
+                        parent: { border: "1px solid #ccc"}
+                        }}
+                        data={[
+                        { x: 1, y: 2 },
+                        { x: 2, y: 3 },
+                        { x: 3, y: 5 },
+                        { x: 4, y: 4 },
+                        { x: 5, y: 7 }
+                        ]}
+                    />
+                    </VictoryChart> */}
+
+                    <VictoryChart>
+                            <VictoryLine
+                            interpolation="natural"
+                            text={"Daily Expenses (RM)"}
+                            style={{
+                                data: { stroke: "green" }
+                            }}
+                            
+                            data={DailyExpenses}/>
+
+                            <VictoryLine
+                            interpolation="natural"
+
+                            style={{
+                                data: { stroke: "blue" }
+                            }}
+
+                            data={AccExpenses}/>
+
+                            <VictoryLine
+                            interpolation="natural"
+
+                            style={{
+                                data: { stroke: "red" }
+                            }}
+
+                            data={budgetLine}/>
+                        </VictoryChart>
+
                 </ScrollView>
                 <TouchableOpacity style={styles.addButton}>
 
                     <Ionicons 
                     name={"ios-add-circle-outline"} 
                     size={25} 
-                    color={"red"}
+                    color={"white"}
                     />
 
                 </TouchableOpacity>   
@@ -110,15 +216,26 @@ class Overview extends React.Component{
 }
 
 const styles = StyleSheet.create({
+    monthYearPickerHolder:{
+        borderWidth:0.5, 
+        borderColor:"black",
+        height:50,
+        width: "100%",
+        backgroundColor:"white",
+        justifyContent:"center",
+        alignItems:"center"
+
+    },
+
     addButton: {
-      position: "relative",
-      bottom: 50,
-      left : 50,
+      position: "absolute",
+      bottom: 20,
+      left: 315,
       zIndex: 3,
-      backgroundColor: "lime",
-      width: 30,
-      height: 30,
-      borderRadius: 15,
+      backgroundColor: "rgb(0,163,255)",
+      width: 50,
+      height: 50,
+      borderRadius: 25,
       justifyContent: "center",
       alignItems:"center"
 

@@ -2,8 +2,8 @@ import { applyMiddleware, createStore, compose, combineReducers } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-import rootSaga from "../sagas/index";
-import rootReducer from "../reducers/index";
+import rootSaga from "sagas/index";
+import rootReducer from "reducers/index";
 
 import middleware, { sagaMiddleware } from "./middleware";
 

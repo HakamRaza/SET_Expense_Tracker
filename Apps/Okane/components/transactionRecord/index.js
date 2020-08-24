@@ -1,5 +1,7 @@
 import React from "react";
-import {View, Text} from "react-native";
+import {View, Text, ScrollView, TouchableOpacity} from "react-native";
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 class TransactionRecord extends React.Component{
     render(){
@@ -17,6 +19,7 @@ class TransactionRecord extends React.Component{
                             <Text style={styles.textBottomSec}>{this.props.dateCreated}</Text>
                         </View>
                     </View>
+                    
                 </View>
         )
     }
@@ -28,7 +31,7 @@ const styles = {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        paddingHorizontal:10,
+        paddingLeft:10,
         width:"80%",
     }, 
 
@@ -37,7 +40,7 @@ const styles = {
         width: "80%",
         justifyContent: "space-between",
         alignItems: "center",
-        paddingHorizontal:10,
+        paddingLeft:10,
     }, 
     
     textUpperSec:{
@@ -47,7 +50,9 @@ const styles = {
 
     textBottomSec: {
         fontSize: 14,
-    }
+    },
+
+
 
 }
 

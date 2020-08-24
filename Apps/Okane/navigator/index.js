@@ -124,18 +124,18 @@ class Navigator extends React.Component {
                                             headerTitleAlign: "left",
                                             headerTitleStyle:{color:"white", fontSize:25},
                                             headerStyle:{backgroundColor: "rgb(0,163,255)", height: 80},
-                                            headerRight: ()=>   <TouchableOpacity
-                                                                    onPress = { ()=> this.setState(!modalVisible)}
-                                                                >
+                                            // headerRight: ()=>   <TouchableOpacity
+                                            //                         onPress = { ()=> this.setState(!modalVisible)}
+                                            //                     >
 
-                                                                    <Ionicons 
-                                                                    name={"ios-add-circle-outline"} 
-                                                                    size={25} 
-                                                                    color={"white"}
-                                                                    />
+                                            //                         {/* <Ionicons  */}
+                                            //                         name={"ios-add-circle-outline"} 
+                                            //                         size={25} 
+                                            //                         color={"white"}
+                                            //                         />
 
-                                                                </TouchableOpacity>,
-                                            headerRightContainerStyle: {marginRight:20},
+                                            //                     </TouchableOpacity>,
+                                            // headerRightContainerStyle: {marginRight:20},
                                             swipeEnabled:false
 
                                         }
@@ -147,16 +147,16 @@ class Navigator extends React.Component {
                                             headerTitleAlign: "left",
                                             headerTitleStyle:{color:"white", fontSize:25},
                                             headerStyle:{backgroundColor: "rgb(0,163,255)", height: 80},
-                                            headerRight: ()=>   <TouchableOpacity>
+                                            // headerRight: ()=>   <TouchableOpacity>
 
-                                                                    <Ionicons 
-                                                                    name={"ios-add-circle-outline"} 
-                                                                    size={25} 
-                                                                    color={"white"}
-                                                                    />
+                                            //                         <Ionicons 
+                                            //                         name={"ios-add-circle-outline"} 
+                                            //                         size={25} 
+                                            //                         color={"white"}
+                                            //                         />
 
-                                                                </TouchableOpacity>,
-                                            headerRightContainerStyle: {marginRight:20}
+                                            //                     </TouchableOpacity>,
+                                            // headerRightContainerStyle: {marginRight:20}
                                         }
                                     }
                                     case 'Transaction':{
@@ -166,16 +166,16 @@ class Navigator extends React.Component {
                                             headerTitleAlign: "left",
                                             headerTitleStyle:{color:"white", fontSize:25},
                                             headerStyle:{backgroundColor: "rgb(0,163,255)", height: 80},
-                                            headerRight: ()=>   <TouchableOpacity>
+                                            // headerRight: ()=>   <TouchableOpacity>
 
-                                                                    <Ionicons 
-                                                                    name={"ios-add-circle-outline"} 
-                                                                    size={25} 
-                                                                    color={"white"}
-                                                                    />
+                                            //                         <Ionicons 
+                                            //                         name={"ios-add-circle-outline"} 
+                                            //                         size={25} 
+                                            //                         color={"white"}
+                                            //                         />
 
-                                                                </TouchableOpacity>,
-                                            headerRightContainerStyle: {marginRight:20}
+                                            //                     </TouchableOpacity>,
+                                            // headerRightContainerStyle: {marginRight:20}
                                         }
                                     }
                                     case 'Settings':{

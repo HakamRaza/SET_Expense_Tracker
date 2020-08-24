@@ -53,7 +53,6 @@ const styles = {
 
     barTitleRight : {
         fontSize: 20,
-        color: "#black"
     },
 
     
