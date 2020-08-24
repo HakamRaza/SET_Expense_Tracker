@@ -2,12 +2,13 @@
 
 use Illuminate\Support\Str;
 
-$url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+$url = getenv('JAWSDB_URL');
+$dbparts = parse_url($url);
 
-$host = $url["host"];
-$username = $url["user"];
-$password = $url["pass"];
-$database = substr($url["path"], 1);
+$hostname = $dbparts['host'];
+$username = $dbparts['user'];
+$password = $dbparts['pass'];
+$database = ltrim($dbparts['path'],'/');
 
 return [
 
@@ -44,7 +45,7 @@ return [
 
         'heroku_mysql_connection' => array(
             'driver' => 'mysql',
-            'host' => $host,
+            'host' => $hostname,
             'database' => $database,
             'username' => $username,
             'password' => $password,
