@@ -121,6 +121,7 @@ export default class Transactions extends React.Component{
                     <Table responsive striped bordered hover size="sm">
                         <thead>
                             <tr>
+                            <th>#</th>
                             <th>Date</th>
                             <th>Categories</th>
                             <th>Total</th>
@@ -129,8 +130,9 @@ export default class Transactions extends React.Component{
                             </tr>
                         </thead>
                         <tbody>
-                            {sumTrans.map((item)=>(
+                            {sumTrans.map((item, index)=>(
                                 <tr>
+                                    <td>{index+1}</td>
                                     <td className="trans-col">{item.date}</td>
                                     <td className="trans-col">{item.categories}</td>
                                     <td className="trans-col">{item.total.toFixed(2)}</td>
