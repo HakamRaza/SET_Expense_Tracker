@@ -567,7 +567,7 @@ class APIController extends Controller
         if ($data->isEmpty()) {
             return response()->json([
                 'status' => 'success_empty',
-                'pieData' => $data,
+                'barsData' => $data,
             ]);
         }
 
