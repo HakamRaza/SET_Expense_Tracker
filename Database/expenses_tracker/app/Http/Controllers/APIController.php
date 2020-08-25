@@ -6,14 +6,10 @@ use App\Models\Categories;
 use App\Models\Transaction;
 use App\User;
 use Carbon\Carbon;
-use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
-
-use function PHPSTORM_META\map;
-use function PHPSTORM_META\type;
 
 class APIController extends Controller
 {
@@ -85,10 +81,17 @@ class APIController extends Controller
 
     function register(Request $request)
     {
-        $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:6|confirmed',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Invalid input, please try again'
+            ], 422);
+        }
 
         $existing = User::where('email', '=', request('email'))->first();
 
@@ -148,32 +151,68 @@ class APIController extends Controller
         $user_id = auth()->user()->id;
         $user_cats = Categories::where('user_id', '=', $user_id)->get();
 
-        $startDate = Carbon::createFromDate($request->startYear, $request->startMonth, $request->startDay);
-        return $startDate;
+        $startDate = $endDate = $minPrice = $maxPrice = null;
+        $description = "";
 
-        // $catName = request('catName');
+        if ($request->startYear && $request->startMonth && $request->startDay) {
+            $startDate = Carbon::createFromDate($request->startYear, $request->startMonth, $request->startDay)->toDateString();
+        }
 
-        // if ($catName) {
-        //     $list = Categories::where('category_title', '=', request('catName'))
-        //         ->where('user_id', '=', $user_id)
-        //         ->first();
+        if ($request->endYear && $request->endMonth && $request->endDay) {
+            $endDate = Carbon::createFromDate($request->endYear, $request->endMonth, $request->endDay)->toDateString();
+        }
 
-        //     if (!$list) {
-        //         return response()->json([
-        //             'error' => 'List does not belong to this user',
-        //             'list_id' => $list->id,
-        //             'user_id' => $user_id
-        //         ], 422);
-        //     }
-        // }
+        if ($request->minPrice) {
+            $minPrice = $request->minPrice;
+        }
+
+        if ($request->maxPrice) {
+            $maxPrice = $request->maxPrice;
+        }
+
+        if ($request->description) {
+            $description = $request->description;
+        }
+
+        $catName = request('categoryName');
+
+        if ($catName) {
+            $cat = Categories::where('category_title', '=', request('categoryName'))
+                ->where('user_id', '=', $user_id)
+                ->first();
+
+            if (!$cat) {
+                return response()->json([
+                    'error' => 'Category does not belong to this user',
+                    'cat_id' => $cat->id,
+                    'user_id' => $user_id
+                ], 422);
+            }
+        }
 
         $data = Transaction::join('categories', 'category_id', '=', 'categories.id')
             ->select('categories.category_title', 'transactions.description', 'transactions.amount', 'transactions.date')
             ->where('transactions.user_id', '=', $user_id)
-            // ->when(, function ($query, $listName) {
-            //     return $query->where('lists.list_name', $listName);
-            // })
+            ->when($startDate, function ($query, $startDate) {
+                return $query->where('transactions.date', '>=', $startDate);
+            })
+            ->when($endDate, function ($query, $endDate) {
+                return $query->where('transactions.date', '<=', $endDate);
+            })
+            ->when($catName, function ($query, $catName) {
+                return $query->where('categories.category_title', $catName);
+            })
+            ->when($minPrice, function ($query, $minPrice) {
+                return $query->where('transactions.amount', '>=', $minPrice);
+            })
+            ->when($maxPrice, function ($query, $maxPrice) {
+                return $query->where('transactions.amount', '<=', $maxPrice);
+            })
+            ->when($description, function ($query, $description) {
+                return $query->where('transactions.description', 'LIKE', '%' . $description . '%');
+            })
             ->orderBy('transactions.date', 'desc')
+            ->limit(100)
             ->get();
 
         // $current = Task::join('lists', 'list_id', '=', 'lists.id')
@@ -191,10 +230,17 @@ class APIController extends Controller
 
     function createTransaction(Request $request)
     {
-        $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'description' => 'string|max:255',
             'amount' => "regex:/^-?\d+(\.\d{1,2})?$/"
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Invalid input, please try again'
+            ], 422);
+        }
 
         if (!$request->description) {
             return response()->json([
@@ -223,7 +269,7 @@ class APIController extends Controller
             return response()->json([
                 'status' => 'failed',
                 'error' => 'Category does not belong to this user'
-            ]);
+            ], 422);
         }
 
         $transaction = new Transaction();
@@ -252,13 +298,19 @@ class APIController extends Controller
             ->where('user_id', '=', auth()->user()->id)
             ->first();
 
-        if (!$transaction) return response()->json(['status' => 'failed', 'error' => "Transaction not found", 'transactionID' => request('transactionID')]);
+        if (!$transaction) {
+            return response()->json([
+                'status' => 'failed',
+                'error' => "Transaction not found",
+                'transactionID' => request('transactionID')
+            ], 422);
+        }
 
         if (!$request->newDesc && !$request->newAmount && !$request->newDate) {
             return response()->json([
                 'status' => 'failed',
                 'message' => 'No new input given'
-            ]);
+            ], 422);
         }
 
         $transaction->description = isset($request->newDesc) ? $request->newDesc : $transaction->description;
@@ -294,7 +346,7 @@ class APIController extends Controller
             return response()->json([
                 'status' => 'failed',
                 'error' => 'Transaction does not belong to this user'
-            ]);
+            ], 422);
         }
 
         $transaction->delete();
@@ -360,7 +412,7 @@ class APIController extends Controller
             return response()->json([
                 'status' => 'failed_max',
                 'error' => 'User already has 10 categories'
-            ]);
+            ], 422);
         }
 
         $existing = Categories::where('category_title', $request->category_title)->first();
@@ -369,7 +421,7 @@ class APIController extends Controller
             return response()->json([
                 'status' => 'failed_existing',
                 'error' => 'Category already exists'
-            ]);
+            ], 422);
         }
 
         // $now = Carbon::now();
@@ -410,13 +462,13 @@ class APIController extends Controller
             'status' => 'failed',
             'error' => "Category not found",
             'categoryID' => request('categoryID')
-        ]);
+        ], 422);
 
         if (!$request->newTitle && !$request->newBudget) {
             return response()->json([
                 'status' => 'failed',
                 'message' => 'No new input given'
-            ]);
+            ], 422);
         }
 
         $category->category_title = isset($request->newTitle) ? $request->newTitle : $category->category_title;
@@ -459,7 +511,7 @@ class APIController extends Controller
             return response()->json([
                 'status' => 'failed',
                 'error' => 'Category does not belong to this user'
-            ]);
+            ], 422);
         }
 
         $category->delete();
