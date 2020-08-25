@@ -40,17 +40,19 @@ class Register extends React.Component{
             this.setState({onLoading:false});
             
             if(getRegisterData.data.status === "success") {
+                alert("Registration Success! Please Log In");
+                this.props.history.push("/login");
                 
-                this.setState({
-                    showAlert: true,
-                    alertMsg: "Registration Success! Redirecting You To Login Page..",
-                    alertVar:"info",
-                });
+                // this.setState({
+                //     showAlert: true,
+                //     alertMsg: "Registration Success! Redirecting You To Login Page..",
+                //     alertVar:"info",
+                // });
                 
-                setTimeout(() => {
-                    //token already get when register, direct push to dash also can
-                    this.props.history.push("/login");
-                }, 2000);
+                // setTimeout(() => {
+                //     //token already get when register, direct push to dash also can
+                //     this.props.history.push("/login");
+                // }, 1800);
                 
             } else if (getRegisterData.error !== null){
                 

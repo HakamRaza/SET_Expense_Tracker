@@ -57,17 +57,16 @@ class Login extends React.Component{
         var mail = document.getElementById('formBasicEmail').validity.valid;
         var pass = document.getElementById('formBasicPassword').validity.valid;
         var valid = mail && pass;
-
-        // console.log("form status", mail, pass);
-        // console.log("sum", mail && pass);
         
         this.setState({buttonValid: !valid});
+        // console.log("form status", mail, pass);
+        // console.log("sum", mail && pass);
     }
 
     _submitLogin(){
         const {email, password} = this.state;
 
-        if(email !="" && password !==""){
+        if(email !=="" && password !==""){
             const formData = {
                 email,
                 password,

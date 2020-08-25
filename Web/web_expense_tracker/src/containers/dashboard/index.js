@@ -3,7 +3,7 @@ import Drawer from '../../components/drawer';
 import './dashboard.css';
 import SumCard from '../../components/sumCard';
 import SumCardBar from '../../components/sumCardBar';
-import {VictoryChart, VictoryLine, VictoryLabel} from 'victory';
+import {VictoryChart, VictoryLine} from 'victory';
 import CategoriesCard from '../../components/categoriesCard';
 import TransactionCard from '../../components/transactionCard';
 
@@ -241,7 +241,7 @@ export default class Dashboard extends React.Component{
     
     render(){
         return(
-            <dvi style={{maxWidth:1000, backgroundColor:"red"}}>
+            <div>
                 <Drawer />
 
                 <div className="dash-container">
@@ -309,7 +309,7 @@ export default class Dashboard extends React.Component{
                     </div>
                 </div>
 
-            </dvi>
+            </div>
         );
     }
 }

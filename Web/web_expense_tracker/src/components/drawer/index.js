@@ -1,13 +1,18 @@
 import React from 'react';
 import './drawer.css';
+import Actions from '../../actions';
+import { connect } from "react-redux";
+// import  { Redirect } from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
+
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 
-export default class Drawer extends React.Component{
+class Drawer extends React.Component{
+
     constructor(props){
         super(props);
 
@@ -16,9 +21,22 @@ export default class Drawer extends React.Component{
         }
     }
 
+    componentDidUpdate(prevProps){
+        const { getLogoutData } = this.props;
+        
+        if(prevProps.getLogoutData.isLoading && !getLogoutData.isLoading){
+            
+            if(getLogoutData.data.status === "success") {        
+                alert("Logout Success");
+                this.props.history.push("/login");
+        
+            } else if (getLogoutData.error !== null){
+                alert("Failed To Logout, Please Try Again");
+        }}
+    }
+                
     _onLogout(){
-        console.log("logout user");
-        // this.props.history.push("/login");
+        this.props.onLogout();
     }
 
     render(){
@@ -40,7 +58,7 @@ export default class Drawer extends React.Component{
                             <Nav.Link href="/monthly-summary">Monthly Overview</Nav.Link>
                             </Nav>
                             <Form inline>
-                                <Button variant="danger" type="submit" onClick={()=>(this._onLogout())}>Logout</Button>
+                                <Button variant="danger" onClick={()=>(this._onLogout())}>Logout</Button>
                             </Form>
                         </Navbar.Collapse>
                     </Navbar>
@@ -49,3 +67,8 @@ export default class Drawer extends React.Component{
         );
     }
 }
+
+const mapStateToProps = store => ({getLogoutData: Actions.getLogoutData(store)});
+const mapDispatchToProps = {onLogout: Actions.logout};
+
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Drawer));

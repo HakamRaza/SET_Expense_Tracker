@@ -7,5 +7,3 @@ export default {
   ...auth,
   ...profile,
 };
-
-// this is outer layer index

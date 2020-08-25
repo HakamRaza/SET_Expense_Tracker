@@ -1,9 +1,9 @@
 import auth from "./auth";
-// import profile from "./profile";
+import profile from "./profile";
 // import todo from "./todo";
 
 export default {
   AUTH: auth,
-  // PROFILE: profile,
+  PROFILE: profile,
   // TODO: todo,
 };

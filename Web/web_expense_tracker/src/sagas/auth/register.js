@@ -1,14 +1,7 @@
-// // saga function import
 import { takeLatest, call, all, fork, put } from "redux-saga/effects";
-
-// import action
 import Actions from "../../actions";
-
-// import api
 import * as api from "../../api";
 
-// import { register } from "../../actions/auth/register";
-// import { encode } from "../../services/encryption";
 
 function* register({ data }) {
   console.log("THIS IS REGISTER SAGA");

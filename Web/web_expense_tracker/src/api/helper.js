@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const configureInterceptor = () => {};
-const baseToken = "716cdcf6-84d3-4aa0-8f3c-8c81f24621db";
+// const baseToken = "716cdcf6-84d3-4aa0-8f3c-8c81f24621db";
 
 export const getHeader = () => {
   return {

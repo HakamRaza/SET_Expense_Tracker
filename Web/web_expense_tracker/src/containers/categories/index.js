@@ -3,7 +3,7 @@ import Drawer from '../../components/drawer';
 // import Sidebar from '../../components/sidebar';
 import './categories.css';
 import Modal from '../../components/modal';
-import apiData from '../../apiData';
+// import apiData from '../../apiData';
 // import CategoriesCard from '../../components/categoriesCard';
 import Card from 'react-bootstrap/Card';
 import { IconContext } from "react-icons";
