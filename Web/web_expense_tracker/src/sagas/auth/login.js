@@ -3,7 +3,7 @@ import Actions from "../../actions";
 import * as api from "../../api";
 
 function* login({ data }) {
-  
+  // console.log("THIS IS LOGIN SAGA");
   const formData = new FormData();
   formData.append("email", data.email);
   formData.append("password", data.password);

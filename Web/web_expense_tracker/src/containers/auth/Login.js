@@ -80,30 +80,31 @@ class Login extends React.Component{
                         <div className="auth-bgp">
                             <div>
                                 <Form>
-                                    <div className="auth-input">
-                                        <Form.Group controlId="formBasicEmail">
-                                            <IconContext.Provider value={{ className: 'auth-icons' }}><IoIosMail /></IconContext.Provider>
-                                            <Form.Label>Email address</Form.Label>
-                                            <Form.Control style={{fontSize:"0.8em", paddingLeft:36}} type="email" placeholder="Enter email" onChange={(email)=> this.setState({email: email.target.value})}/>
-                                        </Form.Group>
-                                    </div>
-
-                                    <div className="auth-input">
-                                        <Form.Group controlId="formBasicPassword">
-                                            <IconContext.Provider value={{ className: 'auth-icons' }}><IoMdKey /></IconContext.Provider>
-                                            <Form.Label>Password</Form.Label>
-                                            <Form.Control style={{fontSize:"0.8em", paddingLeft:36}} type={this.state.showPass? "text" : "password"} placeholder="Password" onChange = {(password) => this.setState({password: password.target.value})}/>
-                                        </Form.Group>
-
-                                        <div>
-                                            <IconContext.Provider value={{ className: 'auth-icons-pass' }}>
-                                                {this.state.showPass ? (<IoIosEye onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>):(<IoIosEyeOff onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>
-                                            )}</IconContext.Provider>
+                                    <fieldset disabled={this.state.onLoading}>
+                                        <div className="auth-input">
+                                            <Form.Group controlId="formBasicEmail">
+                                                <IconContext.Provider value={{ className: 'auth-icons' }}><IoIosMail /></IconContext.Provider>
+                                                <Form.Label>Email address</Form.Label>
+                                                <Form.Control required style={{fontSize:"0.8em", paddingLeft:36}} type="email" placeholder="Enter email" onChange={(email)=> this.setState({email: email.target.value})}/>
+                                            </Form.Group>
                                         </div>
-                                    </div>
 
-                                    {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/> Login ...</span>): (<Button variant="primary" onClick={()=>(this._submitLogin())}>Submit</Button>)}
+                                        <div className="auth-input">
+                                            <Form.Group controlId="formBasicPassword">
+                                                <IconContext.Provider value={{ className: 'auth-icons' }}><IoMdKey /></IconContext.Provider>
+                                                <Form.Label>Password</Form.Label>
+                                                <Form.Control required style={{fontSize:"0.8em", paddingLeft:36}} type={this.state.showPass? "text" : "password"} placeholder="Password" pattern=".{6,}" onChange = {(password) => this.setState({password: password.target.value})}/>
+                                            </Form.Group>
 
+                                            <div>
+                                                <IconContext.Provider value={{ className: 'auth-icons-pass' }}>
+                                                    {this.state.showPass ? (<IoIosEye onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>):(<IoIosEyeOff onClick={()=>{this.setState({showPass : !this.state.showPass})}}/>
+                                                )}</IconContext.Provider>
+                                            </div>
+                                        </div>
+
+                                        {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/> Login ...</span>): (<Button variant="primary" onClick={()=>(this._submitLogin())}>Submit</Button>)}
+                                    </fieldset>
                                 </Form>
                             </div>
                         </div>

@@ -14,7 +14,7 @@ export const getHeader = () => {
 const getFullUrl = endpoint => {
   // where you put end point
   // return "localhost:8000/" + endpoint;
-  return "http://enigmatic-falls-21596.herokuapp.com/" + endpoint;
+  return "https://enigmatic-falls-21596.herokuapp.com/" + endpoint;
 };
 
 
