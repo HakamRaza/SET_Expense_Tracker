@@ -58,12 +58,12 @@ class Register extends React.Component{
                 
                 this.setState({
                     showAlert: true,
-                    //  alertMsg: getRegisterData.error.error,
-                    alertMsg: "Registration Failed, Please Try Again",
+                     alertMsg: getRegisterData.error.data.error,
+                    // alertMsg: "Registration Failed, Please Try Again",
                     alertVar:"danger",
                 });
                 
-                // console.log("this is error",getRegisterData.error);
+                // console.log("this is error",getRegisterData.error.data.error);
             }
         }
     }

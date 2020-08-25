@@ -6,6 +6,7 @@ import SumCardBar from '../../components/sumCardBar';
 import {VictoryChart, VictoryLine} from 'victory';
 import CategoriesCard from '../../components/categoriesCard';
 import TransactionCard from '../../components/transactionCard';
+import AddTransaction from '../../components/addNewTransaction';
 
 
 const sumData =[
@@ -242,6 +243,7 @@ export default class Dashboard extends React.Component{
         super();
 
         this.state={
+            showAddNew: true,
             showSumMore: false,
             showCatMore: false,
             showLatestMore: false,
@@ -325,6 +327,21 @@ export default class Dashboard extends React.Component{
                             {sumTrans.map((item)=>(
                                 <TransactionCard date={item.date} categ={item.categories} desc={item.desc} total={item.total.toFixed(2)}/>
                             ))}
+                        </div>
+                    </div>
+
+                    <div className="dash-add"  style={{height: this.state.showAddNew ? "100%" : "4em", overflow: !this.state.showAddNew && "hidden"}}>
+                        <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+                            <p><b>Add New Transaction :</b></p>
+                            <h5 onClick={()=>this.setState({showAddNew: !this.state.showAddNew})}>&#9776;</h5>
+                        </div>
+                        
+                        <div className="dash-latest-trans">
+                            <AddTransaction/>
+
+                            {/* {sumTrans.map((item)=>(
+                                <TransactionCard date={item.date} categ={item.categories} desc={item.desc} total={item.total.toFixed(2)}/>
+                            ))} */}
                         </div>
                     </div>
 
