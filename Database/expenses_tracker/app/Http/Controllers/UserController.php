@@ -39,15 +39,16 @@ class UserController extends Controller
 
         $lastLogin = $user->last_login;
         $now = Carbon::now();
+        $currDate = $now->format('m/Y');
 
         if ($lastLogin !== null && (($lastLogin->year == ($now->year) && $lastLogin->month < ($now->month)) || ($lastLogin->year < ($now->year)))) {
             $categories = Categories::where('user_id', '=', $user->id)->get();
             foreach ($categories as $category) {
                 $buffBudget = $category->budget;
                 $latestMonth = array_key_last($buffBudget);
-                $month = $now->month;
-                $year = $now->year;
-                $currDate = $month . '/' . $year;
+                // $month = $now->month;
+                // $year = $now->year;
+                // $currDate = $month . '/' . $year;
                 $buffBudget[$currDate] = (float)$buffBudget[$latestMonth];
                 $category->budget = $buffBudget;
                 $category->save();

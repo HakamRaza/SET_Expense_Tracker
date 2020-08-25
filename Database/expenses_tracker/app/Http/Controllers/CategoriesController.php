@@ -126,10 +126,10 @@ class CategoriesController extends Controller
 
         if (isset($request->newBudget)) {
             $buffBudget = $category->budget;
-            $now = Carbon::now();
-            $month = $now->month;
-            $year = $now->year;
-            $currDate = $month . '/' . $year;
+            $currDate = Carbon::now()->format('m/Y');
+            // $month = $now->month;
+            // $year = $now->year;
+            // $currDate = $month . '/' . $year;
             $buffBudget[$currDate] = (float)$request->newBudget;
             $category->budget = $buffBudget;
         }
