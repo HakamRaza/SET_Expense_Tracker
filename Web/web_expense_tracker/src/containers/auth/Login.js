@@ -23,6 +23,8 @@ class Login extends React.Component{
             alertMsg:"",
             alertVar:"",
             onLoading:false,
+            buttonValid:true,
+
         }
     }
 
@@ -45,6 +47,17 @@ class Login extends React.Component{
                 // this.props.history.push("/login");
             }
         }
+    }
+
+    _checkFormValidity(){
+        var mail = document.getElementById('formBasicEmail').validity.valid;
+        var pass = document.getElementById('formBasicPassword').validity.valid;
+        var valid = mail && pass;
+
+        // console.log("form status", mail, pass);
+        // console.log("sum", mail && pass);
+        
+        this.setState({buttonValid: !valid});
     }
 
     _submitLogin(){
@@ -79,7 +92,7 @@ class Login extends React.Component{
 
                         <div className="auth-bgp">
                             <div>
-                                <Form>
+                            <Form onChange={()=>(this._checkFormValidity())}>
                                     <fieldset disabled={this.state.onLoading}>
                                         <div className="auth-input">
                                             <Form.Group controlId="formBasicEmail">
@@ -103,7 +116,7 @@ class Login extends React.Component{
                                             </div>
                                         </div>
 
-                                        {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/> Login ...</span>): (<Button variant="primary" onClick={()=>(this._submitLogin())}>Submit</Button>)}
+                                        {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/> Login ...</span>): (<Button variant="primary" disabled={this.state.buttonValid} onClick={()=>(this._submitLogin())}>Submit</Button>)}
                                     </fieldset>
                                 </Form>
                             </div>
