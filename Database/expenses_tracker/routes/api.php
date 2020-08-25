@@ -21,6 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'UserController@login')->name('login');
     Route::post('register', 'UserController@register')->name('register');
+    Route::get('logout', 'UserController@logout')->name('logout');
 });
 
 Route::group(['middleware' => ['jwt.verify']], function () {
