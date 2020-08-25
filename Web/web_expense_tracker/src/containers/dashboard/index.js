@@ -288,7 +288,6 @@ export default class Dashboard extends React.Component{
 
                             data={budgetlineData}/>
                         </VictoryChart>
-
                     </div>
 
                     <div className="dash-sum" style={{height: this.state.showSumMore ? "100%" : "4em"}}>
@@ -336,18 +335,10 @@ export default class Dashboard extends React.Component{
                             <h5 onClick={()=>this.setState({showAddNew: !this.state.showAddNew})}>&#9776;</h5>
                         </div>
                         
-                        <div className="dash-latest-trans">
+                        <div className="dash-add-trans">
                             <AddTransaction/>
-
-                            {/* {sumTrans.map((item)=>(
-                                <TransactionCard date={item.date} categ={item.categories} desc={item.desc} total={item.total.toFixed(2)}/>
-                            ))} */}
                         </div>
                     </div>
-
-
-
-
                 </div>
 
             </div>

@@ -1,5 +1,7 @@
 import React from 'react';
 import './addnewtrans.css';
+import Actions from '../../actions';
+import { connect } from "react-redux";
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -7,7 +9,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { Alert } from 'react-bootstrap';
 
 
-export default class AddTransaction extends React.Component{
+class AddTransaction extends React.Component{
     constructor(){
         super();
 
@@ -49,6 +51,27 @@ export default class AddTransaction extends React.Component{
         // console.log(new Date().toISOString());
         
     }
+
+    // componentDidUpdate(prevProps){
+    //     const { getLoginData } = this.props;
+        
+    //     if(prevProps.getLoginData.isLoading && !getLoginData.isLoading){
+    //         this.setState({onLoading:false});
+            
+    //         if(getLoginData.data.status === "success") {
+    //             this.props.history.push("/dashboard");
+                
+    //         } else if (getLoginData.error !== null){
+    //             this.setState({
+    //                 showAlert: true,
+    //                 alertMsg: getLoginData.error.error,
+    //                 alertVar:"danger",
+    //             });
+                
+    //             // this.props.history.push("/login");
+    //         }
+    //     }
+    // }
 
     _submitAddTransaction(){
         this.setState({onLoading:true});
@@ -120,3 +143,11 @@ export default class AddTransaction extends React.Component{
         );
     }
 }
+
+// const mapStateToProps = store => ({getLoginData: Actions.getLoginData(store)});
+// const mapDispatchToProps = {onLogin: Actions.login};
+
+const mapStateToProps = store => ({});
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps,mapDispatchToProps)(AddTransaction);
