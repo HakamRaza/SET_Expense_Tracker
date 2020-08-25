@@ -16,16 +16,6 @@ class APIController extends Controller
     //
 
     /**
-     * Create a new APIController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
-
-    /**
      *
      * User API Functions - Login, Register, Logout
      *
@@ -184,7 +174,7 @@ class APIController extends Controller
             if (!$cat) {
                 return response()->json([
                     'error' => 'Category does not belong to this user',
-                    'cat_id' => $cat->id,
+                    'categoryName' => $catName,
                     'user_id' => $user_id
                 ], 422);
             }
@@ -657,10 +647,22 @@ class APIController extends Controller
             }
         }
 
+        $allBudgets = 0;
+        foreach ($budgets as $cat) {
+            foreach ($cat->budget as $month => $value) {
+                // return response()->json([$cat->budget, $month]);
+                if ($month > $period->format('m/Y')) {
+                    break;
+                }
+                $allBudgets += $value;
+            }
+        }
+
         $allExpenses = Transaction::where('user_id', $user_id)
+            ->where('date', '<=', $period->copy()->endOfMonth())
             ->sum('amount');
 
-        $totalSavings = $totalBudget - $allExpenses;
+        $totalSavings = $allBudgets - $allExpenses;
 
         return response()->json([
             'status' => 'success',
