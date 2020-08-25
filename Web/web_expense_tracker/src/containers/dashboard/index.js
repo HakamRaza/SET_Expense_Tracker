@@ -244,9 +244,9 @@ export default class Dashboard extends React.Component{
 
         this.state={
             showAddNew: true,
-            showSumMore: false,
-            showCatMore: false,
-            showLatestMore: false,
+            showSumMore: true,
+            showCatMore: true,
+            showLatestMore: true,
         }
     }
     
@@ -289,6 +289,7 @@ export default class Dashboard extends React.Component{
                             data={budgetlineData}/>
                         </VictoryChart>
                     </div>
+
 
                     <div className="dash-sum" style={{height: this.state.showSumMore ? "100%" : "4em"}}>
                         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
@@ -339,6 +340,7 @@ export default class Dashboard extends React.Component{
                             <AddTransaction/>
                         </div>
                     </div>
+
                 </div>
 
             </div>
