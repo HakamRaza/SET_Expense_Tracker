@@ -27,6 +27,10 @@ class Login extends React.Component{
 
         }
     }
+    
+    componentDidMount(){
+        Actions.resetUserSession();
+    }
 
     componentDidUpdate(prevProps){
         const { getLoginData } = this.props;

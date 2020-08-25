@@ -11,7 +11,7 @@ import * as api from "../../api";
 // import { encode } from "../../services/encryption";
 
 function* register({ data }) {
-  console.log("REGISTER SAGA HERE", data);
+  console.log("THIS IS REGISTER SAGA");
   
   const formData = new FormData();
   formData.append('email', data.email);
@@ -19,21 +19,21 @@ function* register({ data }) {
   formData.append('password_confirmation', data.password_conf);
 
   const {response, error} = yield call(api.register, formData);
-  
-  // console.log("response register:", response, error);
 
+  // console.log("response register:", response, error);
+  
   if(response && response.data.status === "success"){
     yield put(Actions.registerSuccess(response.data));
+    
+    const token = response.data.token;
+    yield put(Actions.activateUserSession(token));
 
-    // const token = response.data.token;
-    // yield put(Actions.activateUserSession(token));
-
-    console.log("success reg!");
+    // console.log("success reg!");
   }
     
   if(error){
     yield put(Actions.registerFail(error.response));
-    console.log("failed reg!");
+    // console.log("failed reg!");
   }
 
 }

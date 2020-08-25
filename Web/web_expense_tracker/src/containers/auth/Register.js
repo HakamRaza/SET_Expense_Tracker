@@ -25,7 +25,12 @@ class Register extends React.Component{
             alertVar:"",
             onLoading:false,
             buttonValid:true,
+
         }
+    }
+
+    componentDidMount(){
+        Actions.resetUserSession();
     }
 
     componentDidUpdate(prevProps){
@@ -35,18 +40,27 @@ class Register extends React.Component{
             this.setState({onLoading:false});
             
             if(getRegisterData.data.status === "success") {
-
-                //token already get when register, direct push to dash
-                // this.props.history.push("/dashboard");
                 
-            } else if (getRegisterData.error !== null){
                 this.setState({
                     showAlert: true,
-                //  alertMsg: getRegisterData.error.error,
-                    alertMsg: "Registration Failed",
+                    alertMsg: "Registration Success! Redirecting You To Login Page..",
+                    alertVar:"info",
+                });
+                
+                setTimeout(() => {
+                    //token already get when register, direct push to dash also can
+                    this.props.history.push("/login");
+                }, 2000);
+                
+            } else if (getRegisterData.error !== null){
+                
+                this.setState({
+                    showAlert: true,
+                    //  alertMsg: getRegisterData.error.error,
+                    alertMsg: "Registration Failed, Please Try Again",
                     alertVar:"danger",
                 });
-
+                
                 // console.log("this is error",getRegisterData.error);
             }
         }
