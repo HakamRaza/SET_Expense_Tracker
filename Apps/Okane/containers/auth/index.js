@@ -20,6 +20,15 @@ class Auth extends React.Component{
         }
     }
 
+    componentDidMount(){
+        // this.ref.current.animateNextTransition; 
+        // console.log("DID MOUNT ", this.props.getUserSession);
+        const {getUserSession} = this.props;
+        if (Object.keys(getUserSession.data).length !== 0) {
+          this.props.navigation.navigate("Overview");
+        }
+      }
+
     componentDidUpdate(prevProps){
         const {getLoginData, getRegisterData} = this.props;
         // console.log("login componenetDidUpdate", getLoginData);
@@ -54,7 +63,7 @@ class Auth extends React.Component{
             getLoginData.data !== null) {
             Alert.alert("Success", "Your Account is created", [
               {
-                text:'To Login',
+                text:'To Log In',
                 onPress:this.setState({ showLoginForm: true}),
               },
             ]
@@ -175,6 +184,8 @@ class Auth extends React.Component{
                             />
                         </View>
 
+                        <Text><a>Return to Log In</a></Text>
+
                     </View>
                 )}
             </View>
@@ -201,6 +212,7 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (store) => ({
+    getUserSession: Actions.getUserSession(store),
     getLoginData: Actions.getLoginData(store),
     getRegisterData: Actions.getRegisterData(store),
 });

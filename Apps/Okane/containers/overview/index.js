@@ -1,8 +1,7 @@
 import React from "react";
-import {ScrollView, View, Text, TouchableOpacity, Modal, StyleSheet} from "react-native";
+import {ScrollView, View, Text, TouchableOpacity, Modal, StyleSheet, Picker} from "react-native";
 import MonthPicker from 'react-native-month-year-picker';
 import moment from 'moment';
-import DropDownPicker from 'react-native-dropdown-picker';
 import {VictoryChart, VictoryLine} from 'victory-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -71,14 +70,10 @@ class Overview extends React.Component{
             date: new Date(),
             mode: 'date',
             show:false,
-            show2:false,
-            selectedMonth: moment().format("MMM YYYY"),
-            selectedEndDate: null,
-            image: null,
-            selectedImage:'',
-            selectedImage2:'',
             status:'',
-            modalVisible:""
+            modalVisible:"",
+            selectedMonth: "Aug 2020",
+            language:""
         }
     }
 
@@ -97,11 +92,19 @@ class Overview extends React.Component{
                                 // onPress={()=>this.setState({show:true})}
                                 onPress={()=>this.setState({show:true})}
                             >
-                        <Text style={{fontSize:18}}>{this.state.selectedMonth}</Text>
+                        <Text style={{fontSize:18}}>{this.state.language}</Text>
                     </TouchableOpacity>
                 </View> 
                 
-
+                {this.state.show && (
+                    <Picker
+                    selectedValue={this.state.language}
+                    style={{ height: 50, width: "100%" , backgroundColor: "white"}}
+                    onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue })}>
+                        <Picker.Item label="Java" value="java" />
+                        <Picker.Item label="JavaScript" value="js" />
+                    </Picker>
+                )}  
 
                 {/* <Modal visible={modalOpen} animationType="slide">
                     <View style={StyleSheet.modalContainer}>
@@ -205,7 +208,7 @@ class Overview extends React.Component{
 
                     <Ionicons 
                     name={"ios-add-circle-outline"} 
-                    size={25} 
+                    size={36} 
                     color={"white"}
                     />
 

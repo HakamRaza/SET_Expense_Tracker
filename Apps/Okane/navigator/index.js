@@ -1,5 +1,5 @@
 import React from "react";
-import {Text, TouchableOpacity} from "react-native";
+import {Text, TouchableOpacity, StyleSheet, Modal, View} from "react-native";
 import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -91,8 +91,10 @@ class BottomTab extends React.Component{
 }
 
 class Navigator extends React.Component {
+    
     render(){
         return(
+                                        
             <NavigationContainer>
                 <Stack.Navigator>
 
@@ -166,14 +168,15 @@ class Navigator extends React.Component {
                                             headerTitleAlign: "left",
                                             headerTitleStyle:{color:"white", fontSize:25},
                                             headerStyle:{backgroundColor: "rgb(0,163,255)", height: 80},
-                                            // headerRight: ()=>   <TouchableOpacity>
+                                            // headerRight: ()=> 
+                                            //                     <TouchableOpacity
+                                            //                         onPress = {()=>this.setModalVisible(true)}>
 
                                             //                         <Ionicons 
                                             //                         name={"ios-add-circle-outline"} 
                                             //                         size={25} 
                                             //                         color={"white"}
                                             //                         />
-
                                             //                     </TouchableOpacity>,
                                             // headerRightContainerStyle: {marginRight:20}
                                         }
@@ -193,6 +196,7 @@ class Navigator extends React.Component {
                         }
                         
                     />
+
 
                 </Stack.Navigator>
             </NavigationContainer>
