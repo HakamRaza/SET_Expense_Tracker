@@ -1,11 +1,11 @@
 .dash-container {
-    height: 1200px;
+    /* height: 1200px; */
     padding: 6em 1em 0 1em;
     box-sizing: border-box;
 
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto auto 300px 300px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
     grid-gap: 1rem;
     font-size: small;
     /* border: 1px solid tomato; */
@@ -13,10 +13,10 @@
     margin: 0 auto;
 
     grid-template-areas:
-    'graph graph graph'
-    'expsum expsum expsum'
-    'categ categ categ'
-    'latran latran latran'
+    'graph'
+    'expsum'
+    'categ'
+    'latran'
     ;
 
 }
@@ -49,9 +49,9 @@
     /* border: 1px solid lightcoral; */
     border: 1px solid skyblue;
     box-shadow: 4px 4px 0px #318fb5;
-
-
     border-radius: 10px;
+    overflow: hidden;
+    transition: all 1.5s;
 }
 
 .dash-sum2 {
@@ -67,13 +67,15 @@
     /* border: 1px solid lightgreen; */
     border: 1px solid skyblue;
     box-shadow: 4px 4px 0px #318fb5;
-
-
+    
+    
     border-radius: 10px;
-
+    
     /* display: grid;
     justify-items: center; */
+    max-height: 350px;
     overflow: scroll;
+    transition: all 1.5s;
 }
 
 .dash-categ2 {
@@ -91,14 +93,16 @@
     /* border: 1px solid lightpink; */
     border: 1px solid skyblue;
     box-shadow: 4px 4px 0px #318fb5;
-
-
+    
+    
     border-radius: 10px;
-    /* max-height: 300px; */
+    max-height: 300px;
     
     /* background-color:lightpink; */
     /* display: grid;
     justify-items: center; */
+    transition: all 1.5s;
+
 }
 
 .dash-latest-trans {
@@ -109,7 +113,7 @@
 
 
 
-@media (min-device-width: 700px){
+@media (min-device-width: 800px){
     .dash-container {
         grid-template-columns: 1fr 0.7fr; 
         grid-template-rows: auto auto auto;
@@ -128,6 +132,7 @@
     .dash-latest-trans {
         grid-template-columns: 1fr 1fr;
     }
+
     
 }
 
@@ -142,6 +147,10 @@
         'expsum categ'
         'latran categ'
         ;
+    }
+    
+    .dash-sum {
+        max-height: 450px;
     }
 
     .dash-sum2 {

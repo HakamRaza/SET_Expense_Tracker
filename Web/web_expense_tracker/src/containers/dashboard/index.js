@@ -238,6 +238,15 @@ const budgetlineData = [
 ]
 
 export default class Dashboard extends React.Component{
+    constructor(){
+        super();
+
+        this.state={
+            showSumMore: false,
+            showCatMore: false,
+            showLatestMore: false,
+        }
+    }
     
     render(){
         return(
@@ -280,8 +289,12 @@ export default class Dashboard extends React.Component{
 
                     </div>
 
-                    <div className="dash-sum">
-                        <p><b>Monthly Overview :</b></p>
+                    <div className="dash-sum" style={{height: this.state.showSumMore ? "100%" : "4em"}}>
+                        <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+                            <p><b>Monthly Overview :</b></p>
+                            <h5 onClick={()=>this.setState({showSumMore: !this.state.showSumMore})}>&#9776;</h5>
+                        </div>
+
                         <div className="dash-sum2">
                             <SumCardBar title={sumData[0].type} left={sumData[0].left} total={sumData[0].total} percent={(sumData[0].left/ sumData[0].total*100)}/>
                             <SumCard type='1' title={sumData[1].type} total={sumData[1].total}  />
@@ -289,8 +302,11 @@ export default class Dashboard extends React.Component{
                         </div>
                     </div>
 
-                    <div className="dash-categ">
-                    <p><b>Categories Summary :</b></p>
+                    <div className="dash-categ" style={{height: this.state.showCatMore ? "100%" : "4em", overflow: !this.state.showCatMore && "hidden"}}>
+                        <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+                            <p><b>Categories Summary :</b></p>
+                            <h5 onClick={()=>this.setState({showCatMore: !this.state.showCatMore})}>&#9776;</h5>
+                        </div>
                         <div className="dash-categ2">
                             {sumCat.map((item) =>(
                                 <CategoriesCard color={item.color} name={item.name} budget={item.month_budget} expense={item.month_expense} bal ={(item.month_budget-item.month_expense).toFixed(2)}/>
@@ -298,8 +314,12 @@ export default class Dashboard extends React.Component{
                         </div>
                     </div>
 
-                    <div className="dash-latest">
-                        <p><b>Latest Transactions :</b></p>
+                    <div className="dash-latest"  style={{height: this.state.showLatestMore ? "100%" : "4em", overflow: !this.state.showLatestMore && "hidden"}}>
+                        <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+                            <p><b>Latest Transactions :</b></p>
+                            <h5 onClick={()=>this.setState({showLatestMore: !this.state.showLatestMore})}>&#9776;</h5>
+                        </div>
+                        
                             {/* <TransactionCard style={{backgroundColor:"transparent"}} date='Date' categ='Categories' desc='Description' total=''/> */}
                         <div className="dash-latest-trans">
                             {sumTrans.map((item)=>(
@@ -307,6 +327,10 @@ export default class Dashboard extends React.Component{
                             ))}
                         </div>
                     </div>
+
+
+
+
                 </div>
 
             </div>
