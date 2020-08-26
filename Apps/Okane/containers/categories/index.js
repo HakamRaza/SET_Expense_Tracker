@@ -33,7 +33,8 @@ class Categories extends React.Component{
             budget: "",
             selectedColor: "",
             month:8,
-            year: 2020
+            year: 2020,
+            getBarsData: []
         }
     }
 
@@ -84,7 +85,8 @@ class Categories extends React.Component{
         if (prevProps.getGetBarsData.isLoading && !getGetBarsData.isLoading) {
             // console.log("prevProps", prevProps.getGetBarsData.isLoading);
             // console.log("latest props", getGetBarsData.isLoading);
-            console.log("this is getBarsData", getGetBarsData);  
+            this.setState({getBarsData:getGetBarsData});
+            console.log("this is getBarsData @ container", getGetBarsData);  
         }
     }
 

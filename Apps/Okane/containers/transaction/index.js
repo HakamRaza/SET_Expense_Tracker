@@ -26,7 +26,8 @@ class Transaction extends React.Component{
             mode: 'date',
             selectedDate: moment().format("DD-MM-YYYY"),
             selectedDateforDTP: "",
-            show:false
+            show:false,
+            DDCategoryList:[]
         }
     }
 
@@ -45,26 +46,20 @@ class Transaction extends React.Component{
     }
 
     componentDidMount(){
-        const{getGetCategoryData} = this.props;
-
         this.props.onGetCategories();
-        console.log("categories include: ", getGetCategoryData.data.categoryList);
-
     }
 
     componentDidUpdate(prevProps){
-        const{getGetCategoryData} = this.props;
+        const{getCategoryData} = this.props;
+        console.log("categories list container", getCategoryData.data);
 
-        if(prevProps.getGetCategoryData.isLoading && !getGetCategoryData.isLoading){
-            // this.setState({ refreshing: false})
-            // console.log("categories include: ", getGetCategoryData.data)
-            console.log("categories include: ", getGetCategoryData.data.categoryList)
-            if(getGetCategoryData.data.status === "success"){
-                // this.setState({taskList:getGetCategoryData.data[0]});
-                // console.log("Dashboard didupdate", getGetCategoryData.data[categoryList]);
-                // console.log({taskList});
+        if(prevProps.getCategoryData.isLoading && !getCategoryData.isLoading){
+            if(getCategoryData.data.status === "success"){
+                console.log("this is getCategoryList didupdate", getCategoryData.data)
+                this.setState({DDCategoryList:getCategoryData.data.categoryList});
             }
         }
+        console.log("this is DDCategoryList", this.state.DDCategoryList)
     }
 
     render(){
@@ -300,7 +295,7 @@ addButton: {
 };
 
 const mapStateToProps = (store) => ({
-    getGetCategoryData: Actions.getGetCategoryData(store),
+    getCategoryData: Actions.getGetCategoryData(store),
 });
 
 const mapDispatchToProps = {

@@ -22,13 +22,14 @@ function* getBars({ data }) {
     
     const { response, error } = yield call(api.getBars, data, headers);
     
-    console.log("this is getbar saga", response);
-
+    
     if (response && response.data.status === "success") {
         yield put(Actions.getBarsSuccess(response.data));
     } else {
         yield put(Actions.getBarsFail(error));
     }
+
+    console.log("this is getBarsData", response.data[1].budget); 
 }
 
 function* watchGetBars() {

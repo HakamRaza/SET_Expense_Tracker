@@ -55,8 +55,8 @@ class Auth extends React.Component{
         }
   
         if (prevProps.getRegisterData.isLoading && !getRegisterData.isLoading) {
-          console.log("prevProps", prevProps.getRegisterData.isLoading);
-          console.log("latest props", getRegisterData.isLoading);
+        //   console.log("prevProps", prevProps.getRegisterData.isLoading);
+        //   console.log("latest props", getRegisterData.isLoading);
           this.setState({loading: false});
   
           if(Object.keys(getRegisterData.data).length !== 0 &&
@@ -84,7 +84,7 @@ class Auth extends React.Component{
             password:this.state.password,
             password_confirmation: this.state.password_confirmation
         };
-        console.log("this is login", data);
+        // console.log("this is login", data);
         this.props.onLogin(data);
 
     }
