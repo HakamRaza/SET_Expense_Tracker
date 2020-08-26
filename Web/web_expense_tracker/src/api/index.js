@@ -11,3 +11,7 @@ export const register = data => {
 export const logout = (header) => {
   return fetchApi("get", "api/auth/logout", null, header);
 };
+              //same as in saga api call
+export const get_categories = (header) => {
+  return fetchApi("get", "api/get_categories", null, header);
+};

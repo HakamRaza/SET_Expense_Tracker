@@ -1,9 +1,8 @@
 import { all, fork } from "redux-saga/effects";
 
 import auth from "./auth";
-// import todo from "./todo";
+import category from "./category";
 
 export default function* submit() {
-  yield all([fork(auth)]);
-  // yield all([fork(auth), fork(todo)]);
+  yield all([fork(auth), fork(category)]);
 }

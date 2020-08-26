@@ -22,6 +22,7 @@ class AddTransaction extends React.Component{
 
             buttonValid: true,
             onLoading: false,
+            getCategories:[],
         }
     }
 
@@ -50,28 +51,27 @@ class AddTransaction extends React.Component{
         // console.log(`${yr}-${mo}-${dt}`);
         // console.log(new Date().toISOString());
         
+        //get categories
+        this.props.onGetCategories();
     }
 
-    // componentDidUpdate(prevProps){
-    //     const { getLoginData } = this.props;
+    componentDidUpdate(prevProps){
+        const { getCategoriesData } = this.props;
+        // console.log("this is categories container", getCategoriesData.data);
         
-    //     if(prevProps.getLoginData.isLoading && !getLoginData.isLoading){
-    //         this.setState({onLoading:false});
+        if(prevProps.getCategoriesData.isLoading && !getCategoriesData.isLoading){
             
-    //         if(getLoginData.data.status === "success") {
-    //             this.props.history.push("/dashboard");
+            if(getCategoriesData.data.status === "success") {
+
+                this.setState({getCategories:getCategoriesData.data.categoryList});
                 
-    //         } else if (getLoginData.error !== null){
-    //             this.setState({
-    //                 showAlert: true,
-    //                 alertMsg: getLoginData.error.error,
-    //                 alertVar:"danger",
-    //             });
-                
-    //             // this.props.history.push("/login");
-    //         }
-    //     }
-    // }
+            } else if (getCategoriesData.error !== null){
+                Alert('Oops, failed to retrieve Categories List');
+            }
+        }
+
+        console.log(this.state.getCategories);
+    }
 
     _submitAddTransaction(){
         this.setState({onLoading:true});
@@ -89,6 +89,8 @@ class AddTransaction extends React.Component{
 
             console.log('formdata add trans', formData);
             // this.props.onAddTransaction(formData);
+
+
         } else {
             Alert("Oops, make sure to fill all the items")
         }
@@ -108,13 +110,18 @@ class AddTransaction extends React.Component{
                     <Form.Group controlId="selectCat">
                         <Form.Label>Category :</Form.Label>
                         <Form.Control required as="select" onChange={(trans_category)=> this.setState({trans_category: trans_category.target.value})}>
-                        {/* {color.map(item=>(
-                        <option className='color-cont' style={{backgroundColor:item}}>{item}</option>
-                        ))} */}
                             <option value="">- Select Category -</option>
-                            <option value="1">Category 1</option>
+
+                            {this.state.getCategories.map( item=>(
+                                <option value={item.id}>{item.category_title}</option>
+                            ))}
+
+                            {/* {color.map(item=>(
+                            <option className='color-cont' style={{backgroundColor:item}}>{item}</option>
+                            ))} */}
+                            {/* <option value="1">Category 1</option>
                             <option value="2">Category 2</option>
-                            <option value="3">Category 3</option>
+                            <option value="3">Category 3</option> */}
                         </Form.Control>
                     </Form.Group>
 
@@ -147,7 +154,13 @@ class AddTransaction extends React.Component{
 // const mapStateToProps = store => ({getLoginData: Actions.getLoginData(store)});
 // const mapDispatchToProps = {onLogin: Actions.login};
 
-const mapStateToProps = store => ({});
-const mapDispatchToProps = {};
+const mapStateToProps = store => ({
+                                //same as in action
+    getCategoriesData: Actions.getCategoriesData(store)
+});
+const mapDispatchToProps = {
+                                //same as in actions
+    onGetCategories: Actions.get_categories
+};
 
 export default connect(mapStateToProps,mapDispatchToProps)(AddTransaction);
