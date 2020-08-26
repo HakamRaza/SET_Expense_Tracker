@@ -11,8 +11,8 @@ function* newCategory({data}) {
 
     const formData = new FormData();
     //db column name  //container form name
-    // formData.append("id",data.id);
-    // console.log(data.id);
+    formData.append("id",data.id);
+    console.log("newCAT saga is here", data);
     formData.append("category_title", data.category_title);
     formData.append("budget", data.budget);
     formData.append("color", data.color);
@@ -24,12 +24,12 @@ function* newCategory({data}) {
     console.log(headers);
     
     const {response, error} = yield call(api.newCategory, formData, headers);
-    console.log(response, error);
+    console.log("thi is new category saga" ,response, error);
 
     
     if(response && response.data.status === "success") {
       yield put(Actions.newCategorySuccess(response.data));
-      yield put(Actions.getAll());
+      // yield put(Actions.getAll());
     }
 
     if(error) {

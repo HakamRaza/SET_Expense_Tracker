@@ -1,5 +1,5 @@
 import React from "react";
-import {ScrollView, View, Text, StyleSheet, TouchableOpacity,TouchableHighlight, Modal} from "react-native";
+import {ScrollView, View, Text, StyleSheet, TouchableOpacity,Alert, Modal} from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import MonthPicker from 'react-native-month-year-picker';
@@ -9,6 +9,11 @@ import { VictoryPie} from 'victory-native';
 import BudgetBarCategories from "components/budgetBar@categories";
 import ValueInputField from "components/valueInput";
 import SubmitButton from "components/submit";
+import ColorBox from "components/colorOptionsBox";
+import DropDownPicker from "react-native-dropdown-picker";
+
+import {connect} from "react-redux";
+import Actions from "actions";
 
 const data = [
     { x: 1, y: 16.7 ,label: "Food"},
@@ -23,13 +28,65 @@ class Categories extends React.Component{
             modalVisible: false, 
             selectedMonthYear:  moment().format("MMM YYYY"),
             show:false,
-            date: new Date()
+            date: new Date(),
+            category_title: "",
+            budget: "",
+            selectedColor: "",
+            month:8,
+            year: 2020
         }
     }
 
     setModalVisible = (visible) => {
         this.setState({ modalVisible: visible });
       }
+
+    onNewCatDonePressed(){
+        const data = {
+            category_title:this.state.category_title,
+            budget:this.state.budget,
+            color: this.state.selectedColor
+        };
+        // console.log("this is new category ",data);
+        this.props.onNewCategory(data);
+    }
+
+    componentDidMount(){
+        const data ={ 
+            month: this.state.month,
+            year: this.state.year
+        }
+        this.props.onGetBars(data);
+    }
+
+    componentDidUpdate(prevProps){
+        const {getNewCategoryData, getGetBarsData} = this.props;
+        
+        if (prevProps.getNewCategoryData.isLoading && !getNewCategoryData.isLoading) {
+            // console.log("prevProps", prevProps.getNewCategoryData.isLoading);
+            // console.log("latest props", getNewCategoryData.isLoading);
+            console.log("this is new cat", getNewCategoryData.data);
+            if(Object.keys(getNewCategoryData.data).length !== 0 &&
+            getNewCategoryData.data !== null) {
+                Alert.alert("Success", "New Category has been created", [
+                    {
+                        text:'To Categories',
+                        // onPress:() => this.setModalVisible(!modalVisible),
+                    },
+                ]
+                );
+                
+            } else if(getNewCategoryData.error !== null) { 
+                Alert.alert("Failed", "Please fill in all the fields")
+            }
+        }
+
+        if (prevProps.getGetBarsData.isLoading && !getGetBarsData.isLoading) {
+            // console.log("prevProps", prevProps.getGetBarsData.isLoading);
+            // console.log("latest props", getGetBarsData.isLoading);
+            console.log("this is getBarsData", getGetBarsData);  
+        }
+    }
 
     render(){
 
@@ -44,20 +101,6 @@ class Categories extends React.Component{
                             >
                         <Text style={{fontSize:18}}>{this.state.selectedMonthYear}</Text>
                     </TouchableOpacity>
-                    {this.state.show && (
-                            <MonthPicker
-                              onChange={(event, a)=>
-                                { 
-                                    // console.log(selectedDate);
-                                    this.setState({selectedMonthYear: moment(a).format("DD-MM-YYYY, h:mm:ss a"), show:false});
-                                }}
-                              value={this.state.date}
-                              minimumDate={new Date()}
-                              maximumDate={new Date(2025, 5)}
-                              enableAutoDarkMode={false}
-                            />
-                            )
-                    }
                 </View> 
 
             <ScrollView>
@@ -135,22 +178,40 @@ class Categories extends React.Component{
                             inputTitle="Name"
                             inputPlaceHolder="Something"
                             inputType="default"
-                            abc={(description)=>this.setState({description})}
+                            abc={(category_title)=>this.setState({category_title})}
                             />
                             <ValueInputField
                             inputTitle="Budget Allocation"
                             inputPlaceHolder="0.00"
                             inputType="numeric"
-                            abc={(amount)=>this.setState({amount})}
+                            abc={(budget)=>this.setState({budget})}
                             />
 
-                            <Text>Color</Text> 
-                            
+                            <Text>Color</Text>
+
+                            <View style={{flexDirection: "row" }}>
+                                <TouchableOpacity onPress={() => {this.setState({selectedColor:"#F1D302"}); console.log("color here")}}>
+                                    <ColorBox color="#F1D302" selected={this.state.selectedColor} />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => {this.setState({selectedColor:"#F4A261" })}}>
+                                    <ColorBox color="#F4A261" selected={this.state.selectedColor}/>
+                                    {/* <ColorBox color="#F4A261" selected={this.state.selectedColor==="#F4A261"? true: false}/> */}
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => {this.setState({selectedColor:"#EA526F" })}}>
+                                    <ColorBox color="#EA526F" selected={this.state.selectedColor}/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => {this.setState({selectedColor:"#AAFCB8" })}}>
+                                    <ColorBox color="#AAFCB8" selected={this.state.selectedColor}/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => {this.setState({selectedColor:"#53D8FB" })}}>
+                                    <ColorBox color="#53D8FB" selected={this.state.selectedColor}/>     
+                                </TouchableOpacity>
+                            </View>
 
                             <SubmitButton
                                 buttonTitle="Done"
                                 submitButtonText="Done"
-                                navigate = {()=>this.setModalVisible(!modalVisible)}
+                                navigate = {()=>this.onNewCatDonePressed()}
                             />
                         </View>
                     </View>
@@ -247,4 +308,15 @@ const styles = StyleSheet.create({
       }
   });
 
-export default Categories;  
+const mapStateToProps = (store) => ({
+    getNewCategoryData: Actions.getNewCategoryData(store),
+    getGetBarsData: Actions.getGetBarsData(store),
+    
+});
+
+const mapDispatchToProps = {
+    onNewCategory: Actions.newCategory,
+    onGetBars: Actions.getBars,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Categories);  

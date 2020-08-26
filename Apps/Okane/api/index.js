@@ -39,7 +39,7 @@ import fetchApi from "./helper";
 
 //stats
   export const getBars = (data, headers) => {
-    return fetchApi("get", "api/get_bars", data, headers);
+    return fetchApi("post", "api/get_bars", data, headers);
   };
   export const getPie = (data, headers) => {
     return fetchApi("post", "api/get_pie", data, headers);
