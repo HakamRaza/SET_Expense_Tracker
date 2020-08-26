@@ -243,10 +243,10 @@ export default class Dashboard extends React.Component{
         super();
 
         this.state={
-            showAddNew: true,
+            showAddNew: false,
             showSumMore: true,
             showCatMore: true,
-            showLatestMore: true,
+            showLatestMore: false,
         }
     }
     

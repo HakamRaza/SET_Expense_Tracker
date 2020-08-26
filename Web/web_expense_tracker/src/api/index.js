@@ -8,6 +8,6 @@ export const register = data => {
   return fetchApi("post", "api/auth/register", data);
 };
 
-export const logout = data => {
-  return fetchApi("get", "api/auth/logout", data);
+export const logout = (header) => {
+  return fetchApi("get", "api/auth/logout", null, header);
 };

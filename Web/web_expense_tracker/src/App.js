@@ -15,9 +15,9 @@ import PieChart from './containers/piechart';
 function App() {
   return (
     <Provider store={store}>
-      {/* keeping something, persist */}
       <PersistGate persistor={persistor}>
         <Router>
+        
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />

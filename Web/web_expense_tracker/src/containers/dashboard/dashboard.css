@@ -9,7 +9,7 @@
     grid-gap: 1rem;
     font-size: small;
     /* border: 1px solid tomato; */
-    /* max-width: 1100px; */
+    max-width: 1100px;
     margin: 0 auto;
 
     grid-template-areas:
@@ -162,8 +162,8 @@
         
         grid-template-areas:
         'graph categ'
-        'addtran categ'
         'expsum categ'
+        'addtran categ'
         'latran categ'
         ;
     }
@@ -177,7 +177,8 @@
     }
 
     .dash-categ {
-    max-height: 100%;
+        min-height: 99.9%;
+        /* max-height: 99%; */
     }
     
     .dash-categ2 {
