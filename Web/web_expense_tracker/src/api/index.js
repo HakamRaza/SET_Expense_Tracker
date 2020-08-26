@@ -15,3 +15,7 @@ export const logout = (header) => {
 export const get_categories = (header) => {
   return fetchApi("get", "api/get_categories", null, header);
 };
+
+export const new_transaction = (data, header) => {
+  return fetchApi("post", "api/new_transaction", data, header);
+};

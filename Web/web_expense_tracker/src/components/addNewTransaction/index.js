@@ -6,7 +6,8 @@ import { connect } from "react-redux";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
-import { Alert } from 'react-bootstrap';
+// import { Alert } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal'
 
 
 class AddTransaction extends React.Component{
@@ -23,6 +24,11 @@ class AddTransaction extends React.Component{
             buttonValid: true,
             onLoading: false,
             getCategories:[],
+
+            showModal:false,
+            modalTitle:"",
+            modalMsg:"",
+
         }
     }
 
@@ -36,7 +42,7 @@ class AddTransaction extends React.Component{
         // console.log(valid);
         this.setState({buttonValid: !valid});
     }
-    
+
 
     componentDidMount(){
         //setting current date
@@ -57,23 +63,82 @@ class AddTransaction extends React.Component{
 
     componentDidUpdate(prevProps){
         const { getCategoriesData } = this.props;
-        // console.log("this is categories container", getCategoriesData.data);
+        const { getNewTransactionData } = this.props;
+        
         
         if(prevProps.getCategoriesData.isLoading && !getCategoriesData.isLoading){
             
             if(getCategoriesData.data.status === "success") {
-
+                
                 this.setState({getCategories:getCategoriesData.data.categoryList});
                 
             } else if (getCategoriesData.error !== null){
-                Alert('Oops, failed to retrieve Categories List');
-            }
-        }
 
-        console.log(this.state.getCategories);
+                if(getCategoriesData.error.status !== null){
+                    
+                    this.setState({
+                        showModal:true,
+                        modalTitle: "Failed",
+                        modalMsg:getCategoriesData.data.status,
+                    });
+
+                } else {
+                    
+                    this.setState({
+                        showModal:true,
+                        modalTitle: "Failed",
+                        modalMsg:"Failed to get Categories List",
+                    });
+                    
+                }
+
+                // Alert('Oops, failed to retrieve Categories List');
+            }
+
+            this.setState({onLoading:false});
+        }
+        
+        if(prevProps.getNewTransactionData.isLoading && !getNewTransactionData.isLoading){
+            
+            if(getNewTransactionData.data.status === "success") {
+
+                this.setState({
+                    showModal:true,
+                    modalTitle: "Success!",
+                    modalMsg:"New Transaction Added."
+                });
+
+                
+            } else if (getNewTransactionData.error !== null){
+
+                console.log(getNewTransactionData.error.data.error);
+
+                if(getNewTransactionData.error.data.error !== null){
+                    
+                    this.setState({
+                        showModal:true,
+                        modalTitle: "Failed",
+                        modalMsg:getNewTransactionData.error.data.error
+                    });
+
+                } else {
+                    
+                    this.setState({
+                        showModal:true,
+                        modalTitle: "Failed",
+                        modalMsg:"Failed to record new Transaction"
+                    });
+                }
+
+                // Alert('Oops, failed to record new Transaction');
+            }
+
+            this.setState({onLoading:false});
+        }
+        // console.log(this.state.getCategories);
     }
 
-    _submitAddTransaction(){
+    _submitNewTransaction(){
         this.setState({onLoading:true});
 
         const { trans_category, trans_desc, trans_date, trans_value } = this.state;
@@ -87,23 +152,40 @@ class AddTransaction extends React.Component{
                 trans_value,
             }
 
-            console.log('formdata add trans', formData);
+            // console.log('formdata add trans', formData);
             // this.props.onAddTransaction(formData);
-
+            this.props.onNewTransaction(formData);
 
         } else {
-            Alert("Oops, make sure to fill all the items")
+            this.setState({
+                showModal:true,
+                modalTitle: "Oops..",
+                modalMsg:"Make sure to fill up all the items",
+            });
+            // Alert("Oops, make sure to fill all the items")
         }
-
-        setTimeout(() => {
-            this.setState({onLoading:false});
-        }, 2000);
-
     }
 
     render(){
         return(
             <div>
+                {<div>
+                    <Modal show={this.state.showModal} onHide={()=>this.setState({showModal:false})}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{this.state.modalTitle}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>{this.state.modalMsg}</Modal.Body>
+
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={()=>this.setState({showModal:false})}>
+                                Close
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                </div>}
+
+                {/* <h3 onClick={()=>this.setState({showModal:true})}>Show Modal</h3> */}
+
                 <Form onChange={()=>(this._checkFormValidity())}>
                     <fieldset disabled={this.state.onLoading}>
 
@@ -132,7 +214,7 @@ class AddTransaction extends React.Component{
 
                     <Form.Group controlId="selectDate">
                         <Form.Label>Date :</Form.Label>
-                        <Form.Control required size="sm" type="date" min="2020-01-01" max="2050-01-01" value={this.state.trans_date} onChange={(trans_date)=> this.setState({trans_date: trans_date.target.value})}/>
+                        <Form.Control required size="sm" type="text" min="2020-01-01" max="2050-01-01" value={this.state.trans_date} onChange={(trans_date)=> this.setState({trans_date: trans_date.target.value})}/>
                     </Form.Group>
 
                     <Form.Group controlId="selectVal">
@@ -140,10 +222,9 @@ class AddTransaction extends React.Component{
                         <Form.Control required size="sm" type="number" min="0" step="0.01" placeholder="Transaction Value" onChange={(trans_value)=> this.setState({trans_value: trans_value.target.value})}/>
                     </Form.Group>
 
-                    {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/> Saving ...</span>): (<Button variant="primary" disabled={this.state.buttonValid} onClick={()=>(this._submitAddTransaction())}>ADD NEW</Button>)}
+                    {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/> Saving ...</span>): (<Button variant="primary" disabled={this.state.buttonValid} onClick={()=>(this._submitNewTransaction())}>ADD NEW</Button>)}
                     
                     </fieldset>
-
                 </Form>
 
             </div>
@@ -151,16 +232,17 @@ class AddTransaction extends React.Component{
     }
 }
 
-// const mapStateToProps = store => ({getLoginData: Actions.getLoginData(store)});
-// const mapDispatchToProps = {onLogin: Actions.login};
 
 const mapStateToProps = store => ({
                                 //same as in action
-    getCategoriesData: Actions.getCategoriesData(store)
+    getCategoriesData: Actions.getCategoriesData(store),
+    getNewTransactionData: Actions.newTransactionData(store),
 });
+
 const mapDispatchToProps = {
                                 //same as in actions
-    onGetCategories: Actions.get_categories
+    onGetCategories: Actions.get_categories,
+    onNewTransaction: Actions.new_transaction,
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(AddTransaction);
