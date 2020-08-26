@@ -89,9 +89,7 @@ class AddTransaction extends React.Component{
                         modalTitle: "Failed",
                         modalMsg:"Failed to get Categories List",
                     });
-                    
                 }
-
                 // Alert('Oops, failed to retrieve Categories List');
             }
 
@@ -198,12 +196,6 @@ class AddTransaction extends React.Component{
                                 <option value={item.id}>{item.category_title}</option>
                             ))}
 
-                            {/* {color.map(item=>(
-                            <option className='color-cont' style={{backgroundColor:item}}>{item}</option>
-                            ))} */}
-                            {/* <option value="1">Category 1</option>
-                            <option value="2">Category 2</option>
-                            <option value="3">Category 3</option> */}
                         </Form.Control>
                     </Form.Group>
 
