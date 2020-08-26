@@ -10,16 +10,19 @@ function* getCategory() {
     let store = getStore().getState();
     let token = Actions.getUserSession(store).data;
     const headers ={ Authorization: `Bearer ${token}`};
+    console.log(headers)
     
-    const {response, error} = yield call(api.getCategories, headers);
-    console.log("login saga response and error", response, error);
+    const {response, error} = yield call(api.getCategoryList, headers);
+    console.log("getCAT saga response and error", response, error);
 
     if(response && response.data.status === "success"){
-      yield call(Actions.getCategorySuccess(response.data));
+      yield put(Actions.getCategorySuccess(response.data));
+      console.log("details in data", response.data.categoryList);
+
     }
 
     if(error) {
-      yield call(Actions.getCategoryFail(error.response));
+      yield put(Actions.getCategoryFail(error.response));
     }
     
 }

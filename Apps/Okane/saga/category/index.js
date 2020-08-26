@@ -5,6 +5,11 @@ import deleteCategory from "./deleteCategory";
 import getCategories from "./getCategories";
 
 export default function* home() {
-  yield all([fork(getCategories)]);
+  yield all([
+    fork(getCategories), 
+    fork(deleteCategory), 
+    fork(updateCategory),
+    fork(newCategory)
+  ]);
 }
 

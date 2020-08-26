@@ -4,6 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import {Dropdown} from 'react-native-material-dropdown';
 
 
 import TransactionRecord from "components/transactionRecord";
@@ -44,7 +45,11 @@ class Transaction extends React.Component{
     }
 
     componentDidMount(){
+        const{getGetCategoryData} = this.props;
+
         this.props.onGetCategories();
+        console.log("categories include: ", getGetCategoryData.data.categoryList);
+
     }
 
     componentDidUpdate(prevProps){
@@ -52,18 +57,16 @@ class Transaction extends React.Component{
 
         if(prevProps.getGetCategoryData.isLoading && !getGetCategoryData.isLoading){
             // this.setState({ refreshing: false})
-            console.log("categories include: ", getGetCategoryData.data)
-            // console.log("categories include: ", getGetCategoryData.data[categoryList])
-            // if(getGetCategoryData.data.status === "success"){
-            //     // this.setState({taskList:getGetCategoryData.data[0]});
-            //     console.log("Dashboard didupdate", getGetCategoryData.data[categoryList]);
-            //     // console.log({taskList});
-            // }
+            // console.log("categories include: ", getGetCategoryData.data)
+            console.log("categories include: ", getGetCategoryData.data.categoryList)
+            if(getGetCategoryData.data.status === "success"){
+                // this.setState({taskList:getGetCategoryData.data[0]});
+                // console.log("Dashboard didupdate", getGetCategoryData.data[categoryList]);
+                // console.log({taskList});
+            }
         }
     }
 
-
-    onCancel 
     render(){
 
         const {modalVisible} = this.state;

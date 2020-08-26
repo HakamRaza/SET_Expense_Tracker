@@ -14,7 +14,7 @@ export const newCategory = data => ({
     data: data,
 })
 
-export const newCategorySucess= data => ({
+export const newCategorySuccess= data => ({
     type: NEW_CATEGORY_SUCCESS,
     data: data,
 })

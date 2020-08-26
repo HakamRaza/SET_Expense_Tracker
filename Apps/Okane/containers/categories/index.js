@@ -144,6 +144,9 @@ class Categories extends React.Component{
                             abc={(amount)=>this.setState({amount})}
                             />
 
+                            <Text>Color</Text> 
+                            
+
                             <SubmitButton
                                 buttonTitle="Done"
                                 submitButtonText="Done"

@@ -33,8 +33,8 @@ import fetchApi from "./helper";
   export const deleteCategory = (data, headers) => {
     return fetchApi("post", "api/delete_category", data, headers);
   };
-  export const getCategories = (data, headers) => {
-    return fetchApi("get", "api/get_categories", data, headers);
+  export const getCategoryList = (headers) => {
+    return fetchApi("get", "api/get_categories", null, headers);
   };
 
 //stats

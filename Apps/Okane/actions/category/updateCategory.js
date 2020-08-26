@@ -14,7 +14,7 @@ export const updateCategory = data => ({
     data: data,
 })
 
-export const updateCategorySucess= data => ({
+export const updateCategorySuccess= data => ({
     type: UPDATE_CATEGORY_SUCCESS,
     data: data,
 })
