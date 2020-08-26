@@ -18,7 +18,7 @@ class CategoriesController extends Controller
     function getCategories()
     {
         $user_id = auth()->user()->id;
-        $user_cats = Categories::select('category_title')->where('user_id', '=', $user_id)->get();
+        $user_cats = Categories::select('id', 'category_title')->where('user_id', '=', $user_id)->get();
 
         if (count($user_cats) === 0) {
             return response()->json([
@@ -26,13 +26,13 @@ class CategoriesController extends Controller
                 'categoryList' => $user_cats
             ]);
         } else {
-            $categoryList = [];
-            foreach ($user_cats as $cat) {
-                $categoryList[] = $cat->category_title;
-            }
+            // $categoryList = [];
+            // foreach ($user_cats as $cat) {
+            //     $categoryList[] = $cat->category_title;
+            // }
             return response()->json([
                 'status' => 'success',
-                'categoryList' => $categoryList
+                'categoryList' => $user_cats
             ]);
         }
     }
