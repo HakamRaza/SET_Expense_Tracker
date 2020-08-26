@@ -28,6 +28,7 @@ class FilterBar extends React.Component{
             onLoading:false,
             buttonValid:false,
             getCategories:[],
+            // getTransaction:[],
 
             showModal:false,
             modalTitle:"",
@@ -83,15 +84,26 @@ class FilterBar extends React.Component{
                 });
             }
         }
-        
-        comparisonState && console.log("search button press");
-        // this.state.comparisonState && console.log("search button press");
-        // if(this.state.comparisonState){
-        //     console.log(this.state.comparisonState);
-        // }
 
-        // console.log(startDate, endDate, minPrice, maxPrice, description, categoryName);
-        // this.props.onGetTransaction(form);
+        if(comparisonState){
+
+            const formData = {
+                startDate,
+                endDate,
+                minPrice,
+                maxPrice,
+                description,
+                categoryName,
+            }
+
+            this.props.onGetTransaction(formData);
+            console.log("search button press");
+            
+        } else {
+
+            this.setState({comparisonState:true});
+        }
+        
     }
 
     componentDidMount(){
@@ -100,8 +112,10 @@ class FilterBar extends React.Component{
 
     componentDidUpdate(prevProps){
         const { getCategoriesData } = this.props;
+        const { getTransactionData } = this.props;
         
         if(prevProps.getCategoriesData.isLoading && !getCategoriesData.isLoading){
+            this.setState({onLoading:false});
             
             if(getCategoriesData.data.status === "success") {
                 
@@ -114,11 +128,33 @@ class FilterBar extends React.Component{
                     this.setState({
                         showModal:true,
                         modalTitle: "Failed",
-                        modalMsg:"Failed to get Categories List. Please Re-Login",
+                        modalMsg:"Failed to fetch Categories List. Please Re-Login",
                     });
                 }
             }
         }
+
+        if(prevProps.getTransactionData.isLoading && !getTransactionData.isLoading){
+            this.setState({onLoading:false});
+            
+            // if(getTransactionData.data.status === "success") {
+                
+            //     this.setState({getTransaction:getTransactionData.data.data});
+
+                
+            // } else if (getTransactionData.error !== null){
+
+            //     if(getTransactionData.error.data !== null){
+                    
+            //         this.setState({
+            //             showModal:true,
+            //             modalTitle: "Failed",
+            //             modalMsg:"Failed to fetch Transaction List. Please Try Again",
+            //         });
+            //     }
+            // }
+        }
+
     }
 
 
@@ -150,48 +186,49 @@ class FilterBar extends React.Component{
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="0">
                             <Card.Body>
-                                <Form className="filter-holder" onChange={()=>(this._checkFormValidity())}>
-                                    {/* <fieldset disabled={this.state.onLoading}> */}
-                                    <Form.Group controlId="sdate">
-                                        <Form.Label>Start Date :</Form.Label>
-                                        <Form.Control size="sm" type="date" placeholder="Select Start Date ..." onChange={(startDate)=> this.setState({startDate: startDate.target.value})}/>
-                                    </Form.Group>
 
-                                    <Form.Group controlId="edate">
-                                        <Form.Label>End Date :</Form.Label>
-                                        <Form.Control size="sm" type="date" placeholder="Select End Date ..." onChange={(endDate)=> this.setState({endDate: endDate.target.value})}/>
-                                    </Form.Group>
+                                <Form onChange={()=>(this._checkFormValidity())}>
+                                    <fieldset disabled={this.state.onLoading}>
+                                    <div className="filter-holder">
+                                        <Form.Group controlId="sdate">
+                                            <Form.Label>Start Date :</Form.Label>
+                                            <Form.Control size="sm" type="date" placeholder="Select Start Date ..." onChange={(startDate)=> this.setState({startDate: startDate.target.value})}/>
+                                        </Form.Group>
 
-                                    <Form.Group controlId="mnp">
-                                        <Form.Label>Minimum Price Value :</Form.Label>
-                                        <Form.Control size="sm" type="number" min="0" step="0.01" placeholder="Min Price ..." onChange={(minPrice)=> this.setState({minPrice: minPrice.target.value})}/>
-                                    </Form.Group>
+                                        <Form.Group controlId="edate">
+                                            <Form.Label>End Date :</Form.Label>
+                                            <Form.Control size="sm" type="date" placeholder="Select End Date ..." onChange={(endDate)=> this.setState({endDate: endDate.target.value})}/>
+                                        </Form.Group>
 
-                                    <Form.Group controlId="mxp">
-                                        <Form.Label>Maximum Price Value :</Form.Label>
-                                        <Form.Control size="sm" min="0" max="1000000" value={this.state.maxPrice} step="0.01" type="number" placeholder="Max Price ..." onChange={(maxPrice)=> this.setState({maxPrice: maxPrice.target.value})}/>
-                                    </Form.Group>
+                                        <Form.Group controlId="mnp">
+                                            <Form.Label>Minimum Price Value :</Form.Label>
+                                            <Form.Control size="sm" type="number" min="0" step="0.01" placeholder="Min Price ..." onChange={(minPrice)=> this.setState({minPrice: minPrice.target.value})}/>
+                                        </Form.Group>
 
-                                    <Form.Group controlId="keyw">
-                                        <Form.Label>Unique Keyword :</Form.Label>
-                                        <Form.Control size="sm" type="text" placeholder="Description Unique Identifier ..." onChange={(description)=> this.setState({description: description.target.value})}/>
-                                    </Form.Group>
+                                        <Form.Group controlId="mxp">
+                                            <Form.Label>Maximum Price Value :</Form.Label>
+                                            <Form.Control size="sm" min="0" max="1000000" value={this.state.maxPrice} step="0.01" type="number" placeholder="Max Price ..." onChange={(maxPrice)=> this.setState({maxPrice: maxPrice.target.value})}/>
+                                        </Form.Group>
 
-                                    <Form.Group controlId="catname">
-                                        <Form.Label>Category :</Form.Label>
-                                        <Form.Control size="sm" as="select" onChange={(categoryName)=> this.setState({categoryName: categoryName.target.value})}>
-                                            <option value="">- Select Category -</option>
+                                        <Form.Group controlId="keyw">
+                                            <Form.Label>Unique Keyword :</Form.Label>
+                                            <Form.Control size="sm" type="text" placeholder="Description Unique Identifier ..." onChange={(description)=> this.setState({description: description.target.value})}/>
+                                        </Form.Group>
 
-                                            {this.state.getCategories.map( item=>(
-                                                <option value={item.id}>{item.category_title}</option>
-                                            ))}
-                                        </Form.Control>
-                                    </Form.Group>
+                                        <Form.Group controlId="catname">
+                                            <Form.Label>Category :</Form.Label>
+                                            <Form.Control size="sm" as="select" onChange={(categoryName)=> this.setState({categoryName: categoryName.target.value})}>
+                                                <option value="">- Select Category -</option>
 
-                                    {/* <Button variant="primary" >Search</Button> */}
-                                    <Button variant="primary" disabled={this.state.buttonValid} onClick={()=>(this._submitGetTransaction())}>Search</Button>
-                                    {/* {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/> Registering ..</span>): (<Button variant="primary" disabled={this.state.buttonValid} onClick={()=>(this._submitRegister())}>Register</Button>)} */}
-                                    {/* </fieldset> */}
+                                                {this.state.getCategories.map( item=>(
+                                                    <option value={item.category_title}>{item.category_title}</option>
+                                                ))}
+                                            </Form.Control>
+                                        </Form.Group>
+                                    </div>
+
+                                    {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/> Searching..</span>): (<Button variant="primary" disabled={this.state.buttonValid} onClick={()=>(this._submitGetTransaction())}>Search</Button>)}
+                                    </fieldset>
                                 </Form>
                             </Card.Body>
                         </Accordion.Collapse>

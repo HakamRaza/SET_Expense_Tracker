@@ -9,130 +9,77 @@ import Table from 'react-bootstrap/Table';
 import './transaction.css';
 import { IconContext } from "react-icons";
 import { IoIosTrash, IoMdCreate } from "react-icons/io";
-
-
-
-const sumTrans = [
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-    
-    
-
-]
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 
 class Transactions extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
 
         this.state={
+            getTransaction:[],
 
-            startDay:"",
-            startMonth:"",
-            startYear:"",
-            endDay:"",
-            endMonth:"",
-            endYear:"",
-            minPrice:"",
-            maxPrice:"",
-            description:"",
-            categoryName:"",
+            showModal:false,
+            modalTitle:"",
+            modalMsg:"",
+            totalAmount:0,
 
         }
     }
-    
-    // _checkFormValidity(){
-        //     var mail = document.getElementById('formBasicEmail').validity.valid;
-        //     var pass = document.getElementById('formBasicPassword').validity.valid;
-        //     var valid = mail && pass;
+
+    componentDidUpdate(prevProps){
+        const { getTransactionData } = this.props;
         
-        //     this.setState({buttonValid: !valid});
-        //     // console.log("form status", mail, pass);
-        //     // console.log("sum", mail && pass);
+        if(prevProps.getTransactionData.isLoading && !getTransactionData.isLoading){
+            
+            if(getTransactionData.data.status === "success") {
+                
+                this.setState({getTransaction:getTransactionData.data.data});
+
+                
+                
+            } else if (getTransactionData.error !== null){
+
+                if(getTransactionData.error.data !== null){
+                    
+                    this.setState({
+                        showModal:true,
+                        modalTitle: "Failed",
+                        modalMsg:"Failed to fetch Transaction List. Please Try Again",
+                    });
+                }
+            }
+        }
+
+        // console.log(this.state.getTransaction);
+
+        
+        // for (let i = 0; i < this.state.getTransaction; i++) {
+        //     var totalAmount = parseInt(this.state.getTransaction[i]["amount"]);
+        //     this.setState({totalAmount});
         // }
         
-        
-    _submitGetTransaction(){
-
+        // console.log(this.state.totalAmount);
     }
 
     render(){
         return(
             <div className="latest-trans">
+                {<div>
+                    <Modal show={this.state.showModal} onHide={()=>this.setState({showModal:false})}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{this.state.modalTitle}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>{this.state.modalMsg}</Modal.Body>
+
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={()=>this.setState({showModal:false})}>
+                                Close
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                </div>}
                 <Drawer />
                 <FilterBar/>
                 <p><b>Results :</b></p>
@@ -147,8 +94,14 @@ class Transactions extends React.Component{
                         </thead>
                         <tbody>
                             <tr>
-                                <td className="trans-col">000 Results</td>
-                                <td className="trans-col">$ 0000.00</td>
+                                <td className="trans-col">{this.state.getTransaction.length} Results</td>
+                                <td className="trans-col">$ 
+                                {
+                                    // for (let i = 0; i < this.state.getTransaction.length; i++) {
+                                    //     const element = this.state.getTransaction.amount[i];
+                                    // }
+                                }
+                                </td>
                             </tr>
                         </tbody>
                     </Table>
@@ -160,20 +113,20 @@ class Transactions extends React.Component{
                             <tr>
                             <th>#</th>
                             <th>Date</th>
-                            <th>Categories</th>
-                            <th>Total</th>
+                            <th>Category</th>
+                            <th>Amount (RM)</th>
                             <th className="trans-col-desc">Description</th>
                             <th>Del/ Edit</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {sumTrans.map((item, index)=>(
+                            {this.state.getTransaction.map((item, index)=>(
                                 <tr>
                                     <td>{index+1}</td>
                                     <td className="trans-col">{item.date}</td>
-                                    <td className="trans-col">{item.categories}</td>
-                                    <td className="trans-col">{item.total.toFixed(2)}</td>
-                                    <td className="trans-col-desc">{item.desc}</td>
+                                    <td className="trans-col">{item.category_title}</td>
+                                    <td className="trans-col">{item.amount}</td>
+                                    <td className="trans-col-desc">{item.description}</td>
                                     <td className="trans-col">
                                         <div>
                                         <IconContext.Provider value={{ className: 'trans-icons' }}>
@@ -186,15 +139,18 @@ class Transactions extends React.Component{
                             ))}
                         </tbody>
                     </Table>
-
                 </div>
             </div>
         );
     }
 }
 
-const mapStateToProps = store => ({getTransactionData: Actions.getTransactionData(store)});
+const mapStateToProps = store => ({
+    getTransactionData: Actions.getTransactionData(store)
+});
 
-const mapDispatchToProps = {onGetTransaction: Actions.get_transaction};
+const mapDispatchToProps = {
+    // onGetTransaction: Actions.get_transaction
+};
 
 export default connect(mapStateToProps,mapDispatchToProps)(Transactions);

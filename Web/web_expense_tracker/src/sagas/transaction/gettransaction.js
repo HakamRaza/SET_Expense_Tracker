@@ -7,33 +7,47 @@ import { store } from 'store/index';
 function* get_transaction({ data }) {
   console.log("THIS IS GET TRANSACTION SAGA");
   
-//   const formData = new FormData();
-//   formData.append("category_id", data.trans_category);
-//   formData.append("description", data.trans_desc);
-//   formData.append("amount", data.trans_value);
-//   formData.append("date", data.trans_date);
+  const formData = new FormData();
+  
+  if(data.startDate !== ""){
+    let sd = data.startDate.split("-");
+    // console.log(sd);
+    formData.append("startDay", sd[2]);
+    formData.append("startMonth", sd[1]);
+    formData.append("startYear", sd[0]);
+  }
 
-//   let token = store.getState().PROFILE.userSession.data;
-//   const headers = {Authorization:`Bearer ${token}`};
-    
-//   const { response, error } = yield call(api.get_transaction, formData, headers);
+  if(data.endDate !== ""){
+    let ed = data.endDate.split("-");
+    formData.append("endDay", ed[2]);
+    formData.append("endMonth", ed[1]);
+    formData.append("endYear", ed[0]);
+  }
 
-// //   console.log(response);
-// //   console.log(error);
+  (data.minPrice !=="" && formData.append("minPrice", data.minPrice));
+  (data.maxPrice !=="" && formData.append("maxPrice", data.maxPrice));
+  (data.description !=="" && formData.append("description", data.description));
+  (data.categoryName !=="" && formData.append("categoryName", data.categoryName));
 
-//     if (response && response.data.status === "success"){
-//         //same in action
-//         yield put(Actions.get_transactionSuccess(response.data));
-//         console.log("yeyyy");
+  let token = store.getState().PROFILE.userSession.data;
+  const headers = {Authorization:`Bearer ${token}`};
 
-//     } else if (response && response.data.status === "failed"){
+  const { response, error } = yield call(api.get_transaction, formData, headers);
 
-//         yield put(Actions.get_transactionFail(response.data));
-        
-//     } else if (error){
+  // console.log(response);
+  // console.log(error);
 
-//         yield put(Actions.get_transactionFail(error.response));
-//     }
+  if (response && response.data.status === "success"){
+    yield put(Actions.get_transactionSuccess(response.data));
+
+  } else if (response && response.data.error !== null){
+
+      yield put(Actions.get_transactionFail(response.data));
+      
+  } else if (error){
+
+      yield put(Actions.get_transactionFail(error.response));
+  }
 }
 
 
