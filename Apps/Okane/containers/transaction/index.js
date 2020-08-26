@@ -1,11 +1,12 @@
 import React from "react";
-import {View, Text, ScrollView, TouchableOpacity, TouchableHighlight, Modal, ActionSheetIOS} from "react-native";
+import {View, Text, ScrollView, TouchableOpacity, TouchableHighlight, Modal} from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import {Dropdown} from 'react-native-material-dropdown';
-
+import RNPickerSelect from 'react-native-picker-select';
+import {Picker} from '@react-native-community/picker';
+import {DropDown} from "react-native-material-dropdown"
 
 import TransactionRecord from "components/transactionRecord";
 import ValueInputField from "components/valueInput";
@@ -143,6 +144,36 @@ class Transaction extends React.Component{
                             abc={(amount)=>this.setState({amount})}
                             />
 
+                            <View style={{width:"100%", alignItems:"flex-start",paddingHorizontal: 30, marginBottom:15}}>
+                                <Text style={styles.title}>Category</Text>
+
+                                {/* <RNPickerSelect
+                                style={{marginTop: 15}}
+                                onValueChange={(value) => console.log(value)}
+                                items={[
+                                    { label: 'Football', value: 'football' },
+                                    { label: 'Baseball', value: 'baseball' },
+                                    { label: 'Hockey', value: 'hockey' },
+                                ]}
+                                /> */}
+
+                                {/* <Picker
+                                selectedValue={this.state.language}
+                                style={{height: 50, width: 100}}
+                                onValueChange={(itemValue, itemIndex) =>
+                                    this.setState({language: itemValue})
+                                }>
+                                <Picker.Item label="Java" value="java" />
+                                <Picker.Item label="JavaScript" value="js" />
+                                </Picker> */}
+
+                                <DropDown
+                                label='Favorite Fruit'
+                                data={this.state.DDCategoryList}
+                                />
+
+
+                            </View>
                             <SubmitButton
                                 buttonTitle="Done"
                                 submitButtonText="Done"
@@ -235,6 +266,11 @@ modalTitle:{
     fontSize:25,
     fontWeight: "bold",
     marginBottom:15
+},
+
+title:{
+    fontSize: 18,
+    fontWeight:"bold",
 },
 
 closeButton: {

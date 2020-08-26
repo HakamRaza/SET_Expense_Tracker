@@ -15,10 +15,10 @@ import DropDownPicker from "react-native-dropdown-picker";
 import {connect} from "react-redux";
 import Actions from "actions";
 
-const data = [
-    { x: 1, y: 16.7 ,label: "Food"},
-    { x: 2, y: 7.3 , label: "Food"}
-  ];
+// const data = [
+//     { x: 1, y: 16.7 ,label: "Food"},
+//     { x: 2, y: 7.3 , label: "Food"}
+//   ];
 
 class Categories extends React.Component{
 
@@ -58,10 +58,11 @@ class Categories extends React.Component{
             year: this.state.year
         }
         this.props.onGetBars(data);
+        this.props.onGetPie(data);
     }
 
     componentDidUpdate(prevProps){
-        const {getNewCategoryData, getGetBarsData} = this.props;
+        const {getGetPieData, getNewCategoryData, getGetBarsData} = this.props;
         
         if (prevProps.getNewCategoryData.isLoading && !getNewCategoryData.isLoading) {
             // console.log("prevProps", prevProps.getNewCategoryData.isLoading);
@@ -85,8 +86,15 @@ class Categories extends React.Component{
         if (prevProps.getGetBarsData.isLoading && !getGetBarsData.isLoading) {
             // console.log("prevProps", prevProps.getGetBarsData.isLoading);
             // console.log("latest props", getGetBarsData.isLoading);
-            this.setState({getBarsData:getGetBarsData});
-            console.log("this is getBarsData @ container", getGetBarsData);  
+            // this.setState({getGetBarsData:getGetBarsData});
+            console.log("this is getGetBarsData @ container", getGetBarsData);  
+        }
+
+        if (prevProps.getGetPieData.isLoading && !getGetPieData.isLoading) {
+            // console.log("prevProps", prevProps.getGetPieData.isLoading);
+            // console.log("latest props", getGetPieData.isLoading);
+            this.setState({getPieData:getGetPieData});
+            console.log("this is getPieData @ container", getGetPieData.data.pieData);  
         }
     }
 
@@ -108,9 +116,10 @@ class Categories extends React.Component{
             <ScrollView>
                 <View style={styles.container}>
                     <VictoryPie
-                    width={300}
-                    height={300}
-                    colorScale={["tomato", "orange",  ]}
+                        width={300}
+                        height={300}
+                        colorScale={["tomato", "orange", "gold", "cyan", "navy" ]}
+                        data={this.props.getGetPieData.data.pieData}    
                     />
                 </View>
                 <BudgetBarCategories 
@@ -311,14 +320,16 @@ const styles = StyleSheet.create({
   });
 
 const mapStateToProps = (store) => ({
+    getGetPieData: Actions.getGetPieData(store),
     getNewCategoryData: Actions.getNewCategoryData(store),
     getGetBarsData: Actions.getGetBarsData(store),
     
 });
 
 const mapDispatchToProps = {
-    onNewCategory: Actions.newCategory,
+    onGetPie: Actions.getPie,
     onGetBars: Actions.getBars,
+    onNewCategory: Actions.newCategory,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Categories);  

@@ -25,6 +25,8 @@ function* getOverview({ data }) {
     } else {
         yield put(Actions.getOverviewFail(error));
     }
+
+    console.log("Overview Response",error, response)
 }
 
 function* watchGetOverview() {

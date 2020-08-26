@@ -6,6 +6,6 @@ import getPie from "./getPie";
 
 export default combineReducers({
   getBars,
-  // getOverview,
-  // getPie
+  getOverview,
+  getPie
 });

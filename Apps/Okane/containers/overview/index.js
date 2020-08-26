@@ -5,11 +5,11 @@ import moment from 'moment';
 import {VictoryChart, VictoryLine} from 'victory-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
-
-
 import StatsBar from "components/statsBar";
 import BudgetBarOverview from "components/budgetBar@overview";
+
+import {connect} from "react-redux";
+import Actions from "actions";
 
 const DailyExpenses = [
      
@@ -73,12 +73,37 @@ class Overview extends React.Component{
             status:'',
             modalVisible:"",
             selectedMonth: "Aug 2020",
-            language:""
+            language:"",
+            getOverviewData:[],
+            graphBudgetData:[],
+            graphDailyExpenseData:[],
+            graphTotalExpenseData:[],
+            month:8,
+            year: 2020,
         }
     }
 
     setModalVisible = (visible) => {
         this.setState({modalVisible: visible});
+    }
+
+    componentDidMount(){
+        const data ={ 
+            month: this.state.month,
+            year: this.state.year
+        }
+        this.props.onGetOverview(data);
+        console.log("data to overview saga",data)
+    }
+
+    componentDidUpdate(prevProps){
+        const {getOverviewData} = this.props;
+        
+        if (prevProps.getOverviewData.isLoading && !getOverviewData.isLoading) {
+            console.log("this is Buget Data @ container", this.state.graphBudgetData);  
+            console.log("this is Daily Expense Data @ container", getOverviewData.data.graphDailyExpense);  
+            console.log("this is Total Expense @ container", getOverviewData.data.graphTotalExpense);  
+        }
     }
 
   
@@ -143,17 +168,17 @@ class Overview extends React.Component{
                 
                 <StatsBar
                     barTitle="Savings" 
-                    barAmount="24583.00"
+                    barAmount={this.props.getOverviewData.data.totalSavings}
                     />
                     <StatsBar 
                     barTitle="Expenses"
-                    barAmount="945.60"
+                    barAmount={this.props.getOverviewData.data.expensesData}
                     />
                     <BudgetBarOverview
                     barTitle="Budget"
-                    budget="900.00"
+                    budget={this.props.getOverviewData.data.budgetData}
                     barAmountLeft="443.25"
-                    AccExpenses="456.75"
+                    AccExpenses={this.props.getOverviewData.data.expensesData}
                     />
                     
                     {/* <VictoryChart
@@ -174,7 +199,11 @@ class Overview extends React.Component{
                     />
                     </VictoryChart> */}
 
-                    <VictoryChart>
+                    <VictoryChart 
+                        height={350}  
+                        width={350} 
+                        
+                    >
                             <VictoryLine
                             interpolation="natural"
                             text={"Daily Expenses (RM)"}
@@ -182,7 +211,7 @@ class Overview extends React.Component{
                                 data: { stroke: "green" }
                             }}
                             
-                            data={DailyExpenses}/>
+                            data={this.props.getOverviewData.data.graphDailyExpense}/>
 
                             <VictoryLine
                             interpolation="natural"
@@ -191,7 +220,7 @@ class Overview extends React.Component{
                                 data: { stroke: "blue" }
                             }}
 
-                            data={AccExpenses}/>
+                            data={this.props.getOverviewData.data.graphTotalExpense}/>
 
                             <VictoryLine
                             interpolation="natural"
@@ -200,7 +229,7 @@ class Overview extends React.Component{
                                 data: { stroke: "red" }
                             }}
 
-                            data={budgetLine}/>
+                            data={this.props.getOverviewData.data.graphBudget}/>
                         </VictoryChart>
 
                 </ScrollView>
@@ -245,6 +274,12 @@ const styles = StyleSheet.create({
     }
   });
 
+  const mapStateToProps = (store) => ({
+    getOverviewData: Actions.getGetOverviewData(store),
+});
 
+const mapDispatchToProps = {
+    onGetOverview: Actions.getOverview,
+};
 
-export default Overview;
+export default connect(mapStateToProps, mapDispatchToProps)(Overview);

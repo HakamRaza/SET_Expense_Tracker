@@ -6,8 +6,8 @@ import getPie from "./getPie";
 export default function* home() {
   yield all([
     fork(getBars), 
-    // fork(getOverview),
-    // fork(getPie)
+    fork(getOverview),
+    fork(getPie)
   ]);
 }
 

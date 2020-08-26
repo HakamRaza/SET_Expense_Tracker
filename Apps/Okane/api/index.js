@@ -45,6 +45,6 @@ import fetchApi from "./helper";
     return fetchApi("post", "api/get_pie", data, headers);
   };
   export const getOverview = (data, headers) => {
-    return fetchApi("get", "api/get_overview", data, headers);
+    return fetchApi("post", "api/get_overview", data, headers);
   };
 

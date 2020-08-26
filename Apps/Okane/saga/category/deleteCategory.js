@@ -19,7 +19,7 @@ function* deleteCategory({data}) {
 
     if(response && response.data.status ==="success"){
       yield put(Actions.deleteCategorySuccess(response.data));
-      yield put(Actions.getAll());
+      // yield put(Actions.getAll());
     }
 
     if(error) {
