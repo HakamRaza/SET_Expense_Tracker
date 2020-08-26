@@ -75,6 +75,18 @@ class CategoriesController extends Controller
             ], 422);
         }
 
+        if ($request->color) {
+            $colorexisting = Categories::where('color', $request->color)
+                ->where('user_id', auth()->user()->id)
+                ->first();
+            if ($colorexisting) {
+                return response()->json([
+                    'status' => 'failed_color',
+                    'error' => 'Color already in use'
+                ], 422);
+            }
+        }
+
         // $now = Carbon::now();
         // $month = $now->month;
         // $year = $now->year;
@@ -115,7 +127,7 @@ class CategoriesController extends Controller
             'categoryID' => request('categoryID')
         ], 422);
 
-        if (!$request->newTitle && !$request->newBudget) {
+        if (!$request->newTitle && !$request->newBudget && !$request->newColor) {
             return response()->json([
                 'status' => 'failed',
                 'message' => 'No new input given'
@@ -127,11 +139,22 @@ class CategoriesController extends Controller
         if (isset($request->newBudget)) {
             $buffBudget = $category->budget;
             $currDate = Carbon::now()->format('m/Y');
-            // $month = $now->month;
-            // $year = $now->year;
-            // $currDate = $month . '/' . $year;
             $buffBudget[$currDate] = (float)$request->newBudget;
             $category->budget = $buffBudget;
+        }
+
+        if (isset($request->newColor)) {
+            $colorexisting = Categories::where('color', $request->newColor)
+                ->where('user_id', auth()->user()->id)
+                ->first();
+            if ($colorexisting) {
+                return response()->json([
+                    'status' => 'failed_color',
+                    'error' => 'Color already in use'
+                ], 422);
+            } else {
+                $category->color = $request->newColor;
+            }
         }
 
         try {
