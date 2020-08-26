@@ -1,13 +1,14 @@
 import React from 'react';
 import Drawer from '../../components/drawer';
+import Actions from '../../actions';
+import { connect } from "react-redux";
+
 // import Sidebar from '../../components/sidebar';
 import FilterBar from '../../components/filtering';
 import Table from 'react-bootstrap/Table';
 import './transaction.css';
 import { IconContext } from "react-icons";
 import { IoIosTrash, IoMdCreate } from "react-icons/io";
-
-
 
 
 
@@ -92,7 +93,43 @@ const sumTrans = [
     
 
 ]
-export default class Transactions extends React.Component{
+
+
+class Transactions extends React.Component{
+    constructor(){
+        super();
+
+        this.state={
+
+            startDay:"",
+            startMonth:"",
+            startYear:"",
+            endDay:"",
+            endMonth:"",
+            endYear:"",
+            minPrice:"",
+            maxPrice:"",
+            description:"",
+            categoryName:"",
+
+        }
+    }
+    
+    // _checkFormValidity(){
+        //     var mail = document.getElementById('formBasicEmail').validity.valid;
+        //     var pass = document.getElementById('formBasicPassword').validity.valid;
+        //     var valid = mail && pass;
+        
+        //     this.setState({buttonValid: !valid});
+        //     // console.log("form status", mail, pass);
+        //     // console.log("sum", mail && pass);
+        // }
+        
+        
+    _submitGetTransaction(){
+
+    }
+
     render(){
         return(
             <div className="latest-trans">
@@ -104,7 +141,7 @@ export default class Transactions extends React.Component{
                     <Table responsive striped bordered hover size="sm">
                         <thead>
                             <tr>
-                            <th>Total Results</th>
+                            <th>Total Results <i>(max: 100 results)</i></th>
                             <th>Total Expenses</th>
                             </tr>
                         </thead>
@@ -155,3 +192,9 @@ export default class Transactions extends React.Component{
         );
     }
 }
+
+const mapStateToProps = store => ({getTransactionData: Actions.getTransactionData(store)});
+
+const mapDispatchToProps = {onGetTransaction: Actions.get_transaction};
+
+export default connect(mapStateToProps,mapDispatchToProps)(Transactions);

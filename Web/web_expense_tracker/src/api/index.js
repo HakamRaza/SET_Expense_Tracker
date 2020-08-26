@@ -19,3 +19,7 @@ export const get_categories = (header) => {
 export const new_transaction = (data, header) => {
   return fetchApi("post", "api/new_transaction", data, header);
 };
+
+export const get_transaction = (data, header) => {
+  return fetchApi("post", "api/get_transactions", data, header);
+};

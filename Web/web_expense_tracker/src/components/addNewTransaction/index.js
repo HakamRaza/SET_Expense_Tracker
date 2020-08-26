@@ -76,13 +76,13 @@ class AddTransaction extends React.Component{
 
                 if(getCategoriesData.error.status !== null){
                     
-                    this.setState({
-                        showModal:true,
-                        modalTitle: "Failed",
-                        modalMsg:getCategoriesData.data.status,
-                    });
+                //     this.setState({
+                //         showModal:true,
+                //         modalTitle: "Failed",
+                //         modalMsg:getCategoriesData.data.status,
+                //     });
 
-                } else {
+                // } else {
                     
                     this.setState({
                         showModal:true,
@@ -189,7 +189,7 @@ class AddTransaction extends React.Component{
 
                     <Form.Group controlId="selectCat">
                         <Form.Label>Category :</Form.Label>
-                        <Form.Control required as="select" onChange={(trans_category)=> this.setState({trans_category: trans_category.target.value})}>
+                        <Form.Control required size="sm" as="select" onChange={(trans_category)=> this.setState({trans_category: trans_category.target.value})}>
                             <option value="">- Select Category -</option>
 
                             {this.state.getCategories.map( item=>(

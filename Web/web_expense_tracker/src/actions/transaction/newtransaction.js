@@ -24,6 +24,6 @@ export const new_transactionFail = error => ({
   error
 });
 
-export const resetaddTransaction = () => ({
+export const resetnew_transaction = () => ({
   type: RESET_NEW_TRANSACTION
 });
