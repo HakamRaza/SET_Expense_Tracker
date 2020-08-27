@@ -63,7 +63,7 @@ class TransactionController extends Controller
         }
 
         $data = Transaction::join('categories', 'category_id', '=', 'categories.id')
-            ->select('categories.category_title', 'transactions.description', 'transactions.amount', 'transactions.date')
+            ->select('transactions.id', 'categories.category_title', 'transactions.description', 'transactions.amount', 'transactions.date')
             ->where('transactions.user_id', '=', $user_id)
             ->when($startDate, function ($query, $startDate) {
                 return $query->where('transactions.date', '>=', $startDate);
@@ -87,8 +87,13 @@ class TransactionController extends Controller
             ->limit(100)
             ->get();
 
+        $totalAmount = 0;
+        foreach ($data as $transaction) {
+            $totalAmount += (float)$transaction->amount;
+        }
+
         $status = 'success';
-        return response()->json(compact('status', 'data', 'user_cats'));
+        return response()->json(compact('status', 'totalAmount', 'data', 'user_cats'));
     }
 
     function createTransaction(Request $request)
@@ -169,7 +174,7 @@ class TransactionController extends Controller
             ], 422);
         }
 
-        if (!$request->newDesc && !$request->newAmount && !$request->newDate) {
+        if (!$request->newDesc && !$request->newAmount && !$request->newDate && !$request->newCategoryID) {
             return response()->json([
                 'status' => 'failed',
                 'message' => 'No new input given'
@@ -179,6 +184,7 @@ class TransactionController extends Controller
         $transaction->description = isset($request->newDesc) ? $request->newDesc : $transaction->description;
         $transaction->amount = isset($request->newAmount) ? $request->newAmount : $transaction->amount;
         $transaction->date = isset($request->newDate) ? $request->newDate : $transaction->date;
+        $transaction->category_id = isset($request->newCategoryID) ? $request->newCategoryID : $transaction->category_id;
 
         try {
             $transaction->save();

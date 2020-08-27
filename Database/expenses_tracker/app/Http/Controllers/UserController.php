@@ -46,9 +46,6 @@ class UserController extends Controller
             foreach ($categories as $category) {
                 $buffBudget = $category->budget;
                 $latestMonth = array_key_last($buffBudget);
-                // $month = $now->month;
-                // $year = $now->year;
-                // $currDate = $month . '/' . $year;
                 $buffBudget[$currDate] = (float)$buffBudget[$latestMonth];
                 $category->budget = $buffBudget;
                 $category->save();
@@ -101,8 +98,8 @@ class UserController extends Controller
 
         $newBudget = array($budgetDate => (float)1000.00);
 
-        Categories::create(["user_id" => auth()->user()->id, "category_title" => "Food", "budget" => $newBudget]);
-        Categories::create(["user_id" => auth()->user()->id, "category_title" => "Others", "budget" => $newBudget]);
+        Categories::create(["user_id" => auth()->user()->id, "category_title" => "Food", "budget" => $newBudget, "color" => "#F4A261"]);
+        Categories::create(["user_id" => auth()->user()->id, "category_title" => "Others", "budget" => $newBudget, "color" => "#F1D302"]);
 
         $status = "success";
         return response()->json([
@@ -115,16 +112,16 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
-        $token = JWTAuth::getToken();
-
-        if (JWTAuth::invalidate($token)) {
+        try {
+            auth()->logout(true);
             return response()->json([
                 'status' => 'success',
                 'message' => 'User logged off successfully!'
             ], 200);
-        } else {
+        } catch (JWTException $e) {
             return response()->json([
-                'message' => 'Failed to logout user. Try again.'
+                'message' => 'Failed to logout user. Try again.',
+                $e->getMessage()
             ], 500);
         }
     }

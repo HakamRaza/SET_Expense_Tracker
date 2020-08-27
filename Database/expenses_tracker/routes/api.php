@@ -28,12 +28,12 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('get_transactions', 'TransactionController@getTransactions')->name('get_transactions');
     Route::post('new_transaction', 'TransactionController@createTransaction')->name('new_transaction');
     Route::post('update_transaction', 'TransactionController@updateTransaction')->name('update_transaction');
-    Route::delete('delete_transaction', 'TransactionController@deleteTransaction')->name('delete_transaction');
+    Route::post('delete_transaction', 'TransactionController@deleteTransaction')->name('delete_transaction');
 
     Route::get('get_categories', 'CategoriesController@getCategories')->name('get_categories');
     Route::post('new_category', 'CategoriesController@createCategory')->name('new_category');
     Route::post('update_category', 'CategoriesController@updateCategory')->name('update_category');
-    Route::delete('delete_category', 'CategoriesController@deleteCategory')->name('delete_category');
+    Route::post('delete_category', 'CategoriesController@deleteCategory')->name('delete_category');
 
     Route::post('get_pie', 'GraphController@getCategoriesPie')->name('get_pie');
     Route::post('get_overview', 'GraphController@getOverviewData')->name('get_overview');

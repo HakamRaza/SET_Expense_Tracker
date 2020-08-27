@@ -87,10 +87,6 @@ class CategoriesController extends Controller
             }
         }
 
-        // $now = Carbon::now();
-        // $month = $now->month;
-        // $year = $now->year;
-        // $budgetDate = $month . '/' . $year;
         $budgetDate = Carbon::now()->format('m/Y');
 
         $newBudget = array($budgetDate => (float)$request->budget);

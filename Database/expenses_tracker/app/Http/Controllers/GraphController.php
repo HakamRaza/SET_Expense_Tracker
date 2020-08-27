@@ -6,6 +6,7 @@ use App\Models\Categories;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class GraphController extends Controller
 {
@@ -26,7 +27,7 @@ class GraphController extends Controller
 
         $user_id = auth()->user()->id;
         $data = Transaction::join('categories', 'category_id', '=', 'categories.id')
-            ->select(Transaction::raw('categories.id, categories.category_title, SUM(transactions.amount) as catTotal'))
+            ->select(Transaction::raw('categories.id, categories.category_title, SUM(transactions.amount) as catTotal, categories.color'))
             ->where('transactions.user_id', '=', $user_id)
             ->whereMonth('transactions.date', $request->month)
             ->whereYear('transactions.date', $request->year)
@@ -40,8 +41,8 @@ class GraphController extends Controller
             ]);
         }
 
-        // return $data;
         $pieData = [];
+        $colorData = [];
         foreach ($data as $cat) {
             $currCat = [
                 'x' => $cat->id,
@@ -50,11 +51,13 @@ class GraphController extends Controller
             ];
 
             $pieData[] = $currCat;
+            $colorData[] = $cat->color;
         }
 
         return response()->json([
             'status' => 'success',
-            'pieData' => $pieData
+            'pieData' => $pieData,
+            'colorData' => $colorData,
         ]);
     }
 
@@ -79,6 +82,8 @@ class GraphController extends Controller
                 $totalBudget += $cat->budget[$period->format('m/Y')];
             }
         }
+
+        $totalBudget = round($totalBudget, 2);
 
         $budgetData = [['x' => '0', 'y' => $totalBudget]];
         for ($x = $startOfMonth; $x <= $endOfMonth; $x->add('day', 1)) {
@@ -163,17 +168,30 @@ class GraphController extends Controller
      */
     function getCategoryBars(Request $request)
     {
-        $this->validate($request, [
+        // $this->validate($request, [
+        //     'month' => 'required',
+        //     'year' => 'required',
+        // ]);
+        $validator = Validator::make($request->all(), [
             'month' => 'required',
             'year' => 'required',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Invalid input, please try again'
+            ], 422);
+        }
+
+        $period = Carbon::createFromDate($request->year, $request->month);
         $user_id = auth()->user()->id;
-        $data = Categories::join('transactions', 'transactions.category_id', '=', 'categories.id')
+        $data = Categories::leftJoin('transactions', 'transactions.category_id', '=', 'categories.id')
             ->select(Categories::raw('categories.id, categories.category_title, SUM(transactions.amount) as catTotal, categories.budget, categories.color'))
-            ->where('transactions.user_id', '=', $user_id)
-            ->whereMonth('transactions.date', $request->month)
-            ->whereYear('transactions.date', $request->year)
+            ->where('categories.user_id', '=', $user_id)
+            // ->whereMonth('transactions.date', $request->month)
+            // ->whereYear('transactions.date', $request->year)
+            ->whereNotNull('categories.budget->' . $period->format('m/Y'))
             ->groupBy('categories.id')
             ->get();
 
@@ -185,7 +203,7 @@ class GraphController extends Controller
         }
 
         $barsData = [];
-        $period = Carbon::createFromDate($request->year, $request->month);
+        // $period = Carbon::createFromDate($request->year, $request->month);
         foreach ($data as $cat) {
             $currCat = [
                 'title' => $cat->category_title,
