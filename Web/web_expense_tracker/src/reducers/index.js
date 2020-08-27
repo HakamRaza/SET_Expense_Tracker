@@ -2,7 +2,7 @@ import auth from "./auth";
 import category from "./category";
 import profile from "./profile";
 import transaction from "./transaction";
-// import todo from "./todo";
+import stats from "./stats";
 
 export default {
   //this is the same as action name declare at header
@@ -10,4 +10,5 @@ export default {
   CATEGORY: category,
   PROFILE: profile,
   TRANSACTION: transaction,
+  STATS: stats,
 };
