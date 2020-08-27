@@ -29,6 +29,7 @@ function* newCategory({data}) {
     
     if(response && response.data.status === "success") {
       yield put(Actions.newCategorySuccess(response.data));
+      yield put(Actions.getBars());
       // yield put(Actions.getAll());
     }
 

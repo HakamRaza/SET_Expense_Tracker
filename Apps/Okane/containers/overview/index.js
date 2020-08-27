@@ -4,6 +4,8 @@ import MonthPicker from 'react-native-month-year-picker';
 import moment from 'moment';
 import {VictoryChart, VictoryLine} from 'victory-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MonthSelectorCalendar from "react-native-month-selector"
+
 
 import StatsBar from "components/statsBar";
 import BudgetBarOverview from "components/budgetBar@overview";
@@ -72,19 +74,35 @@ class Overview extends React.Component{
             show:false,
             status:'',
             modalVisible:"",
-            selectedMonth: "Aug 2020",
             language:"",
             getOverviewData:[],
             graphBudgetData:[],
             graphDailyExpenseData:[],
             graphTotalExpenseData:[],
-            month:8,
-            year: 2020,
+            month:"8",
+            year: "2020",
+            currDate:new Date()
         }
     }
 
     setModalVisible = (visible) => {
         this.setState({modalVisible: visible});
+    }
+
+    monthYearSelected(){
+        if(this.state.show == false){
+            this.setState({show:true});
+
+        } else {
+            this.setState({show:false}, () => {
+                console.log("AHHHHH", this.state.month, this.state.year);
+                const data ={ 
+                    month: this.state.month,
+                    year: this.state.year
+                }
+                this.props.onGetOverview(data);
+            });
+        }
     }
 
     componentDidMount(){
@@ -100,9 +118,9 @@ class Overview extends React.Component{
         const {getOverviewData} = this.props;
         
         if (prevProps.getOverviewData.isLoading && !getOverviewData.isLoading) {
-            console.log("this is Buget Data @ container", this.state.graphBudgetData);  
-            console.log("this is Daily Expense Data @ container", getOverviewData.data.graphDailyExpense);  
-            console.log("this is Total Expense @ container", getOverviewData.data.graphTotalExpense);  
+            // console.log("this is Buget Data @ container", this.state.graphBudgetData);  
+            // console.log("this is Daily Expense Data @ container", getOverviewData.data.graphDailyExpense);  
+            // console.log("this is Total Expense @ container", getOverviewData.data.graphTotalExpense);  
         }
     }
 
@@ -110,25 +128,28 @@ class Overview extends React.Component{
     render(){
         const {modalVisible} = this.state;
         return(
-            <View style={{flex:1}}>
+            <View >
 
                 <View>
                     <TouchableOpacity style={styles.monthYearPickerHolder}
                                 // onPress={()=>this.setState({show:true})}
-                                onPress={()=>this.setState({show:true})}
+                                onPress={()=>this.monthYearSelected()}
                             >
-                        <Text style={{fontSize:18}}>{this.state.language}</Text>
+                        {/* <Text style={{fontSize:18}}>{this.state.currDate.toUTCString()}</Text> */}
+                        <Text style={{fontSize:18}}>{moment(this.state.currDate).format("MM/YYYY")}</Text>
                     </TouchableOpacity>
+
                 </View> 
                 
                 {this.state.show && (
-                    <Picker
-                    selectedValue={this.state.language}
-                    style={{ height: 50, width: "100%" , backgroundColor: "white"}}
-                    onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue })}>
-                        <Picker.Item label="Java" value="java" />
-                        <Picker.Item label="JavaScript" value="js" />
-                    </Picker>
+                    <MonthSelectorCalendar
+                    selectedDate={moment(this.state.currDate)}
+                    onMonthTapped={(date) => {this.setState({ 
+                        currDate: date, 
+                        month: moment(date).format("MM"),
+                        year: moment(date).format("YYYY")
+                    })}}
+                    />
                 )}  
 
                 {/* <Modal visible={modalOpen} animationType="slide">
@@ -165,44 +186,36 @@ class Overview extends React.Component{
 
                 <ScrollView contentContainerStyle={{alignItems:"center"}} >
                 {/* <ScrollView style={{ flex:1, alignItems:"center"}} > */}
-                
-                <StatsBar
-                    barTitle="Savings" 
-                    barAmount={this.props.getOverviewData.data.totalSavings}
-                    />
-                    <StatsBar 
-                    barTitle="Expenses"
-                    barAmount={this.props.getOverviewData.data.expensesData}
-                    />
-                    <BudgetBarOverview
-                    barTitle="Budget"
-                    budget={this.props.getOverviewData.data.budgetData}
-                    barAmountLeft="443.25"
-                    AccExpenses={this.props.getOverviewData.data.expensesData}
-                    />
-                    
-                    {/* <VictoryChart
-                    // theme={VictoryTheme.material}
-                    >
-                    <VictoryLine
-                        style={{
-                        data: { stroke: "#c43a31" },
-                        parent: { border: "1px solid #ccc"}
-                        }}
-                        data={[
-                        { x: 1, y: 2 },
-                        { x: 2, y: 3 },
-                        { x: 3, y: 5 },
-                        { x: 4, y: 4 },
-                        { x: 5, y: 7 }
-                        ]}
-                    />
-                    </VictoryChart> */}
-
+                {
+                    (this.props.getOverviewData.data.budgetData && this.props.getOverviewData.data.totalSavings !== null && this.props.getOverviewData.data.expensesData !== null ) && (
+                        <View>
+                        <StatsBar
+                        barTitle="Savings" 
+                        barAmount={this.props.getOverviewData.data.totalSavings}
+                        color="#33FF99"
+                        />
+                        <StatsBar 
+                        barTitle="Expenses"
+                        barAmount={this.props.getOverviewData.data.expensesData}
+                        color="#FF0033"
+                        />
+                        <BudgetBarOverview
+                        barTitle="Budget"
+                        budget={this.props.getOverviewData.data.budgetData}
+                        barAmountLeft={this.props.getOverviewData.data.budgetData-this.props.getOverviewData.data.expensesData}
+                        AccExpenses={this.props.getOverviewData.data.expensesData}
+                        />
+                        </View>
+                    )
+                }
+                    <Text style={{fontWeight:"bold", fontSize: 20, marginTop:20}}>
+                        Monthly Expenses Chart
+                    </Text>
                     <VictoryChart 
                         height={350}  
                         width={350} 
-                        
+                        domain={{y:[0,3000]}}
+                        style={{tickLabels:{angle:90}}}
                     >
                             <VictoryLine
                             interpolation="natural"

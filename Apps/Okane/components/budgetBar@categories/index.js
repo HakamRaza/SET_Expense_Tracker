@@ -13,17 +13,17 @@ class BudgetBarCategories extends React.Component{
             <View style={[styles.contentHolder, {backgroundColor:this.props.barBackgroundColor}]}>
                 <View style={styles.barContentUpper}>
                     <Text style={styles.barTitleLeft}>{this.props.barTitle}</Text>
-                    <Text style={{color:this.props.balance<0? "red": "black", fontSize:20}}>RM {this.props.balance} left</Text>
+                    <Text style={{color:this.props.balance<0? "red": "black", fontSize:20}}>RM {this.props.balance.toFixed(2)} left</Text>
                 </View>
                 <View style= {styles.percentageBarHolder}>
                     <View 
                         style={[styles.percentageBar,
-                                {backgroundColor: this.props.AccExpenses>this.props.budget?"red":"rgb(0, 150, 0)",
+                                {backgroundColor: this.props.AccExpenses>this.props.budget?"red":"#33FF66",
                                  width: this.props.percentage}
                                 ]}>
                     {/* <View style={[styles.percentageBar,{width: this.props.percentage}]}> */}
                     </View>
-                    <Text style={styles.barAmount}>RM{this.props.AccExpenses} of RM{this.props.budget}</Text>
+                    <Text style={styles.barAmount}>RM{this.props.AccExpenses.toFixed(2)} of RM{this.props.budget.toFixed(2)}</Text>
                     
                 </View>
             </View>

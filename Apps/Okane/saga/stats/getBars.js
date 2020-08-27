@@ -13,7 +13,7 @@ function* getBars({ data }) {
     let store = getStore().getState();
     let token = Actions.getUserSession(store).data;
     const headers = { Authorization: `Bearer ${token}` };
-
+    console.log("get bars data", data)
     const formData = new FormData();
     formData.append("month", data.month);
     formData.append("year", data.year);
@@ -29,7 +29,7 @@ function* getBars({ data }) {
         yield put(Actions.getBarsFail(error));
     }
 
-    console.log("this is getBarsData", response.data[1].budget); 
+    // console.log("this is getBarsData saga", response.data[1].budget); 
 }
 
 function* watchGetBars() {

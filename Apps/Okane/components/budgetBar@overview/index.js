@@ -7,14 +7,15 @@ class BudgetBarOverview extends React.Component{
     }
 
     render(){
+        const budget=this.props.budget
         return(
-            <View style={[styles.budgetBarOverviewHolder, {backgroundColor:"lime"}]}>
+            <View style={[styles.budgetBarOverviewHolder, {backgroundColor:"#33FF66"}]}>
             {/* // <View style={[styles.BudgetBarOverviewHolder, {backgroundColor:{this.props.barBackgroundColor}}]}> */}
                 <View style={styles.barContentUpper}>
                     <Text style={styles.barTitleLeft}>{this.props.barTitle}</Text>
-                    <Text style={styles.barTitleRight}>RM{this.props.barAmountLeft}left</Text>
+                    <Text style={styles.barTitleRight}>RM {this.props.barAmountLeft.toFixed(2)} left</Text>
                 </View>
-                <Text style={styles.barAmount}>RM{this.props.AccExpenses} of RM{this.props.budget}</Text>
+                <Text style={styles.barAmount}>RM {this.props.AccExpenses.toFixed(2)} of RM {this.props.budget.toFixed(2)}</Text>
             </View>
         )
     }

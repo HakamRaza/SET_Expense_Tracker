@@ -5,7 +5,7 @@ class SubmitButton extends React.Component{
     render(){
         return (
             <TouchableOpacity
-                style={styles.submitButton}
+                style={[styles.submitButton, {backgroundColor:this.props.color||"rgb(45, 156, 219)"}]}
                 onPress={this.props.navigate}
                 disabled={this.props.loading}
             >
@@ -26,7 +26,6 @@ const styles =StyleSheet.create({
         justifyContent:"center",
         alignItems: "center",
         fontWeight: "bold",
-        backgroundColor: "rgb(45, 156, 219)",
         paddingVertical: 15,
         marginVertical:10,
         borderRadius:25,

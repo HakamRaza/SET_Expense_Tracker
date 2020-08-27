@@ -28,7 +28,12 @@ class Transaction extends React.Component{
             selectedDate: moment().format("DD-MM-YYYY"),
             selectedDateforDTP: "",
             show:false,
-            DDCategoryList:[]
+            DDCategoryList:[],
+            TransactionHistory:[],
+            category_id:"",
+            month:8,
+            year: 2020,
+
         }
     }
 
@@ -47,12 +52,16 @@ class Transaction extends React.Component{
     }
 
     componentDidMount(){
-        this.props.onGetCategories();
+        this.props.onGetCategories();   
+        const data={
+            month:this.state.month,
+            year: this.state.year
+        }
+        this.props.onGetTransactions(data);
     }
 
     componentDidUpdate(prevProps){
-        const{getCategoryData} = this.props;
-        console.log("categories list container", getCategoryData.data);
+        const{getCategoryData, getTransactionData} = this.props;
 
         if(prevProps.getCategoryData.isLoading && !getCategoryData.isLoading){
             if(getCategoryData.data.status === "success"){
@@ -60,7 +69,12 @@ class Transaction extends React.Component{
                 this.setState({DDCategoryList:getCategoryData.data.categoryList});
             }
         }
-        console.log("this is DDCategoryList", this.state.DDCategoryList)
+        if(prevProps.getTransactionData.isLoading && !getTransactionData.isLoading){
+            if(getTransactionData.data.status === "success"){
+                console.log("this is TransactionData didupdate", getTransactionData.data)
+                this.setState({TransactionHistory:getTransactionData.data.categoryList});
+            }
+        }
     }
 
     render(){
@@ -147,32 +161,34 @@ class Transaction extends React.Component{
                             <View style={{width:"100%", alignItems:"flex-start",paddingHorizontal: 30, marginBottom:15}}>
                                 <Text style={styles.title}>Category</Text>
 
-                                {/* <RNPickerSelect
-                                style={{marginTop: 15}}
-                                onValueChange={(value) => console.log(value)}
-                                items={[
-                                    { label: 'Football', value: 'football' },
-                                    { label: 'Baseball', value: 'baseball' },
-                                    { label: 'Hockey', value: 'hockey' },
-                                ]}
-                                /> */}
+                                <TouchableOpacity
+                                    style={{
+                                        width: 250,
+                                        height: 50,
+                                        justifyContent:"center",
+                                        paddingHorizontal: 30,
+                                        marginVertical:15,
+                                        borderColor: "black",
+                                        borderWidth:1,
+                                        borderRadius: 25,
+                                        overflow: "hidden",
+                                        shadowOpacity:0.2,
+                                        // shadowColor: "black",
+                                        shadowRadius:5,
+                                        shadowOffset:{
+                                            height: 2,
+                                            width:2 },
 
-                                {/* <Picker
-                                selectedValue={this.state.language}
-                                style={{height: 50, width: 100}}
-                                onValueChange={(itemValue, itemIndex) =>
-                                    this.setState({language: itemValue})
-                                }>
-                                <Picker.Item label="Java" value="java" />
-                                <Picker.Item label="JavaScript" value="js" />
-                                </Picker> */}
-
-                                <DropDown
-                                label='Favorite Fruit'
-                                data={this.state.DDCategoryList}
-                                />
-
-
+                                    }}>
+                                    <RNPickerSelect
+                                        onValueChange={(value)=>this.setState({category_id:value})}
+                                        items = {this.state.DDCategoryList.map((category) => 
+                                            ({
+                                                label: category.category_title,
+                                                value: category.id,
+                                            }))}
+                                    />
+                                </TouchableOpacity>
                             </View>
                             <SubmitButton
                                 buttonTitle="Done"
@@ -183,61 +199,16 @@ class Transaction extends React.Component{
                     </View>
                 </Modal>
 
-                <ScrollView>
+                <ScrollView >
                     <TransactionRecord
                         itemName="Chicken Burger and Nasi "
                         itemPrice={5.60}
                         category="Food"
                         dateCreated="7 Aug 2020"
+                        color="orange"
                     />
-                    <TransactionRecord
-                        itemName="Chicken Burger"
-                        itemPrice={5.60}
-                        category="Food"
-                        dateCreated="7 Aug 2020"
-                    />
-                    <TransactionRecord
-                        itemName="Chicken Burger"
-                        itemPrice={5.60}
-                        category="Food"
-                        dateCreated="7 Aug 2020"
-                    />
-                    <TransactionRecord
-                        itemName="Chicken Burger"
-                        itemPrice={5.60}
-                        category="Food"
-                        dateCreated="7 Aug 2020"
-                    />
-                    <TransactionRecord
-                        itemName="Chicken Burger"
-                        itemPrice={5.60}
-                        category="Food"
-                        dateCreated="7 Aug 2020"
-                    />
-                    <TransactionRecord
-                        itemName="Chicken Burger"
-                        itemPrice={5.60}
-                        category="Food"
-                        dateCreated="7 Aug 2020"
-                    />
-                    <TransactionRecord
-                        itemName="Chicken Burger"
-                        itemPrice={5.60}
-                        category="Food"
-                        dateCreated="7 Aug 2020"
-                    />
-                    <TransactionRecord
-                        itemName="Chicken Burger"
-                        itemPrice={5.60}
-                        category="Food"
-                        dateCreated="7 Aug 2020"
-                    />
-                    <TransactionRecord
-                        itemName="Chicken Burger"
-                        itemPrice={5.60}
-                        category="Food"
-                        dateCreated="7 Aug 2020"
-                    />
+
+
 
                 </ScrollView>
                 <TouchableOpacity style={styles.addButton} onPress={() => {this.setModalVisible(true)}}>
@@ -302,7 +273,7 @@ addButton: {
     },
     modalView: {
       width:"100%",
-      height:"80%",
+      height:"90%",
     //   height:450,
       backgroundColor: "white",
       borderTopLeftRadius: 20,
@@ -332,9 +303,11 @@ addButton: {
 
 const mapStateToProps = (store) => ({
     getCategoryData: Actions.getGetCategoryData(store),
+    getTransactionData: Actions.getGetTransactionData(store),
 });
 
 const mapDispatchToProps = {
     onGetCategories: Actions.getCategory,
+    onGetTransactions: Actions.getTransaction,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Transaction);

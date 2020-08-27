@@ -18,7 +18,7 @@ function* deleteCategory({data}) {
     console.log(response, error);
 
     if(response && response.data.status ==="success"){
-      yield put(Actions.deleteCategorySuccess(response.data));
+      yield put(Actions.deleteCategorySucccess(response.data));
       // yield put(Actions.getAll());
     }
 

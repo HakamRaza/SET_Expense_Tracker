@@ -8,7 +8,7 @@ class TransactionRecord extends React.Component{
         return(
                 <View style={{backgroundColor:"white",height: 80, flexDirection: "row",justifyContent:"flex-start", borderWidth:0.5, 
                 borderColor: "grey",}}>
-                    <View style={{backgroundColor: "orange", width: 10}}></View>
+                    <View style={{backgroundColor: this.props.color, width: 10}}></View>
                     <View style={{flexDirection:"column", justifyContent:"space-evenly"}}>
                         <View style={styles.upperContent}> 
                             <Text style={styles.textUpperSec}>{this.props.itemName}</Text>
