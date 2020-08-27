@@ -15,170 +15,6 @@ import TransactionCard from '../../components/transactionCard';
 import AddTransaction from '../../components/addNewTransaction';
 
 
-const sumCat = [
-    {
-        name:"Food",
-        month_budget: 800,
-        month_expense: 400,
-        color:"lightblue",
-    },
-
-    {
-        name:"Drinks & Boba",
-        month_budget: 300,
-        month_expense: 150,
-        color:"lightgreen",
-
-    },
-
-    {
-        name:"House Bills",
-        month_budget: 100,
-        month_expense: 0,
-        color:"lightblue",
-
-    },
-
-    {
-        name:"Savings",
-        month_budget: 900,
-        month_expense: 302.04,
-        color:"lightcoral",
-
-    },
-
-    {
-        name:"Drinks & Boba",
-        month_budget: 300,
-        month_expense: 150,
-        color:"lightgreen",
-
-    },
-
-    {
-        name:"House Bills",
-        month_budget: 100,
-        month_expense: 0,
-        color:"lightcoral",
-
-    },
-
-    {
-        name:"Savings",
-        month_budget: 900,
-        month_expense: 302.04,
-        color:"lightsalmon",
-
-    },
-
-    {
-        name:"Drinks & Boba",
-        month_budget: 300,
-        month_expense: 150,
-        color:"yellow",
-
-    },
-
-    {
-        name:"House Bills",
-        month_budget: 100,
-        month_expense: 0,
-        color:"limegreen",
-
-    },
-
-    {
-        name:"Savings",
-        month_budget: 900,
-        month_expense: 302.04,
-        color:"limegreen",
-
-    },
-]
-
-const sumTrans = [
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-
-    {
-        date:"19-08-2020",
-        categories: "Food",
-        desc: "KFC McDonal Chicken Mc Deluxe Yummy",
-        total: 89,
-    },
-    
-    
-
-]
-
-
 class Dashboard extends React.Component{
     constructor(props){
         super(props);
@@ -260,9 +96,12 @@ class Dashboard extends React.Component{
                 
                 this.setState({
 
-                    budgetData: getOverviewData.data.budgetData,
-                    expensesData: getOverviewData.data.expensesData,
-                    totalSavings: getOverviewData.data.totalSavings,
+                    // budgetData: getOverviewData.data.budgetData,
+                    // expensesData: getOverviewData.data.expensesData,
+                    // totalSavings: getOverviewData.data.totalSavings,
+                    budgetData: parseInt(getOverviewData.data.budgetData).toFixed(2),
+                    expensesData: parseInt(getOverviewData.data.expensesData).toFixed(2),
+                    totalSavings: parseInt(getOverviewData.data.totalSavings).toFixed(2),
                     graphBudget: getOverviewData.data.graphBudget,
                     graphDailyExpense: getOverviewData.data.graphDailyExpense,
                     graphTotalExpense: getOverviewData.data.graphTotalExpense,
@@ -322,7 +161,6 @@ class Dashboard extends React.Component{
             year : currentYear,
         }
 
-        // this.props.onGetBarsData(formData);
         this.props.onGetOverviewData(formData);
     }
 
@@ -410,7 +248,7 @@ class Dashboard extends React.Component{
                             title="Remaining Budget" 
                             left={this.state.budgetData - this.state.expensesData}
                             total={this.state.budgetData}
-                            percent={this.state.expensesData/ this.state.budgetData *100}
+                            percent={((this.state.budgetData - this.state.expensesData)/ this.state.budgetData *100).toFixed(1)}
                             />
 
                             <SumCard 

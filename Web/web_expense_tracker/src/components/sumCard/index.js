@@ -15,7 +15,7 @@ export default class SumCard extends React.Component{
                 <Card border="primary" style={{ width: '18rem', marginTop:10}}>
                     <Card.Body>
                     <Card.Text>{this.props.title || ""} :</Card.Text>
-                    <Card.Title><b>$ {this.props.total.toFixed(2) || 0}</b></Card.Title>
+                    <Card.Title><b>$ {this.props.total.toFixed(2)|| "0"}</b></Card.Title>
 
                     <Card.Text>
                         {this.props.type === '1' ? (

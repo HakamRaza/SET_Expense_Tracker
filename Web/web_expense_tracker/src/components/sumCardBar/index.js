@@ -26,7 +26,7 @@ export default class SumCardBar extends React.Component{
                                 
                                 data={[
                                     { x: "", y: this.props.total-this.props.left},
-                                    { x: "", y: this.props.left },
+                                    { x: "", y: this.props.left},
                                 ]}
                                 
                                 animate={{
@@ -34,8 +34,8 @@ export default class SumCardBar extends React.Component{
                                 }}
                                 />
                         </div>
-                            <div className="pie-cent"><p>{this.props.percent.toFixed(1)}%</p></div>
-                            <div className="pie-total"><p> from $ {this.props.total.toFixed(2) || 0}</p></div>
+                            <div className="pie-cent"><p>{this.props.percent}%</p></div>
+                            <div className="pie-total"><p> from $ {this.props.total || "0"}</p></div>
 
                     </Card.Text>
 
