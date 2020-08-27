@@ -148,7 +148,7 @@ class GraphController extends Controller
             ->where('date', '<=', $period->copy()->endOfMonth())
             ->sum('amount');
 
-        $totalSavings = $allBudgets - $allExpenses;
+        $totalSavings = round(($allBudgets - $allExpenses), 2);
 
         return response()->json([
             'status' => 'success',
@@ -168,10 +168,6 @@ class GraphController extends Controller
      */
     function getCategoryBars(Request $request)
     {
-        // $this->validate($request, [
-        //     'month' => 'required',
-        //     'year' => 'required',
-        // ]);
         $validator = Validator::make($request->all(), [
             'month' => 'required',
             'year' => 'required',
@@ -203,20 +199,27 @@ class GraphController extends Controller
         }
 
         $barsData = [];
+        $totalBudget = $totalExpenses = 0;
         // $period = Carbon::createFromDate($request->year, $request->month);
         foreach ($data as $cat) {
             $currCat = [
+                'id' => $cat->id,
                 'title' => $cat->category_title,
-                'totalExpense' => (float)$cat->catTotal,
-                'budget' => (float)$cat->budget[$period->format('m/Y')],
+                'totalExpense' => round((float)$cat->catTotal, 2),
+                'budget' => round((float)$cat->budget[$period->format('m/Y')], 2),
                 'color' => $cat->color,
             ];
+
+            $totalBudget += round($currCat['budget'], 2);
+            $totalExpenses += round($currCat['totalExpense'], 2);
 
             $barsData[] = $currCat;
         }
 
         return response()->json([
             'status' => 'success',
+            'totalBudget' => round($totalBudget, 2),
+            'totalExpenses' => round($totalExpenses, 2),
             'barsData' => $barsData
         ]);
     }
