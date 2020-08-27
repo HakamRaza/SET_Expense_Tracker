@@ -27,3 +27,7 @@ export const get_transaction = (data, header) => {
 export const update_transaction = (data, header) => {
   return fetchApi("post", "api/update_transaction", data, header);
 };
+
+export const delete_transaction = (data, header) => {
+  return fetchApi("post", "api/delete_transaction", data, header);
+};

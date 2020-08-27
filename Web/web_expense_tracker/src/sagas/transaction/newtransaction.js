@@ -18,22 +18,22 @@ function* new_transaction({ data }) {
     
   const { response, error } = yield call(api.new_transaction, formData, headers);
 
-//   console.log(response);
-//   console.log(error);
+  //   console.log(response);
+  //   console.log(error);
 
-    if (response && response.data.status === "success"){
-        //same in action
-        yield put(Actions.new_transactionSuccess(response.data));
-        console.log("yeyyy");
+  if (response && response.data.status === "success"){
+      //same in action
+      yield put(Actions.new_transactionSuccess(response.data));
 
-    } else if (response && response.data.status === "failed"){
+  } else if (response && response.data.status === "failed"){
 
-        yield put(Actions.new_transactionFail(response.data));
-        
-    } else if (error){
+      yield put(Actions.new_transactionFail(response.data));
+      
+  } else if (error){
 
-        yield put(Actions.new_transactionFail(error.response));
-    }
+      yield put(Actions.new_transactionFail(error.response));
+  }
+  
 }
 
 

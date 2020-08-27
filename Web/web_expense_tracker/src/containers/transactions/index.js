@@ -7,7 +7,6 @@ import { connect } from "react-redux";
 import FilterBar from '../../components/filtering';
 import Table from 'react-bootstrap/Table';
 import './transaction.css';
-import { IconContext } from "react-icons";
 import { IoIosTrash, IoMdCreate } from "react-icons/io";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -32,7 +31,6 @@ class Transactions extends React.Component{
             showModalAlert:false,
             modalTitleAlert:"",
             modalMsgAlert:"",
-            // totalAmount:0,
 
             showModalUpdate:false,
             showModalDelete:false,
@@ -41,7 +39,10 @@ class Transactions extends React.Component{
     }
 
     componentDidUpdate(prevProps){
-        const { getTransactionData, updateTransactionData, getCategoriesData } = this.props;
+        
+        const { getTransactionData, updateTransactionData, getCategoriesData, deleteTransactionData } = this.props;
+        console.log("this is component did update");
+        console.log(prevProps);
         
         if(prevProps.getTransactionData.isLoading && !getTransactionData.isLoading){
             
@@ -71,8 +72,6 @@ class Transactions extends React.Component{
             }
         }
 
-        // console.log(this.state.getTransactionAmount.totalAmount);
-
 
         if(prevProps.updateTransactionData.isLoading && !updateTransactionData.isLoading){
             
@@ -90,7 +89,7 @@ class Transactions extends React.Component{
                 this.setState({
                     showModalAlert:true,
                     modalTitleAlert: "Failed",
-                    modalMsgAlert:"Failed to update Transaction List. Please Try Again",
+                    modalMsgAlert:"Failed to update Transaction. Please Try Again",
                 });
             }
         }
@@ -113,6 +112,28 @@ class Transactions extends React.Component{
                 }
             }
         }
+
+       if(prevProps.deleteTransactionData.isLoading && !deleteTransactionData.isLoading) {
+
+            if(deleteTransactionData.data.status === "success") {
+                    
+                this.setState({
+                    showModalAlert:true,
+                    modalTitleAlert: "Success",
+                    modalMsgAlert:"Transaction Delete Sucess!",
+                });
+
+                
+            } else if (deleteTransactionData.error !== null){
+
+                this.setState({
+                    showModalAlert:true,
+                    modalTitleAlert: "Failed",
+                    modalMsgAlert:"Failed to delete Transaction. Please Try Again",
+                });
+            }
+        }
+
     }
     
     // _updateTransaction(itemID){
@@ -155,11 +176,13 @@ class Transactions extends React.Component{
         this.props.onUpdateTransaction(formData);
         this.setState({showModalUpdate:false});
     }
-        
+    
     _deleteTransaction(){
         console.log("Delete Transaction Pressed");
         // console.log(this.state.itemID);
         
+        this.props.onDeleteTransaction(this.state.itemID)
+        this.setState({showModalDelete:false});
     }
 
     render(){
@@ -297,12 +320,13 @@ const mapStateToProps = store => ({
     getCategoriesData: Actions.getCategoriesData(store),
     getTransactionData: Actions.getTransactionData(store),
     updateTransactionData: Actions.updateTransactionData(store),
+    deleteTransactionData: Actions.deleteTransactionData(store),
 });
 
 const mapDispatchToProps = {
     onUpdateTransaction: Actions.update_transaction,
     onGetTransaction: Actions.get_transaction,
-
+    onDeleteTransaction: Actions.delete_transaction,
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(Transactions);

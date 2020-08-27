@@ -26,7 +26,7 @@ function* update_transaction({ data }) {
     if (response && response.data.status === "success"){
       //same in action
       yield put(Actions.update_transactionSuccess(response.data));
-      yield put( Actions.get_transaction());
+      // yield put(Actions.get_transaction());
 
     } else if (response && response.data.status === "failed"){
 
