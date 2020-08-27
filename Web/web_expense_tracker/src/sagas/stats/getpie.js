@@ -3,33 +3,31 @@ import Actions from "../../actions";
 import * as api from "../../api";
 import { store } from "store/index";
 
-function* getPie({ data }) {
+function* getpie({ data }) {
     console.log("THIS IS GET PIE SAGA");
 
-    // let token = store.getState().PROFILE.userSession.data;
-    // const headers = {
-    //   Authorization: `Bearer ${token}`,
-    // };
+    // console.log(data);
+    
+    let token = store.getState().PROFILE.userSession.data;
+    const headers = {Authorization:`Bearer ${token}`};
 
-    // let store = getStore().getState();
-    // let token = Actions.getUserSession(store).data;
-    // const headers = { Authorization: `Bearer ${token}` };
+    const formData = new FormData();
+    formData.append("month", data.month);
+    formData.append("year", data.year);
 
-    // const formData = new FormData();
-    // formData.append("month", data.month);
-    // formData.append("year", data.year);
+    const { response, error } = yield call(api.get_pie, data, headers);
 
-    // const { response, error } = yield call(api.getPie, data, headers);
+    if (response && response.data.status === "success") {
+        yield put(Actions.get_pieSuccess(response.data));
 
-    // if (response && response.data.status === "success") {
-    //     yield put(Actions.getPieSuccess(response.data));
-    // } else {
-    //     yield put(Actions.getPieFail(error));
-    // }
+    } else {
+
+        yield put(Actions.get_pieFail(error));
+    }
 }
 
 function* watchGetPie() {
-    yield takeLatest(Actions.GET_PIE, getPie);
+    yield takeLatest(Actions.GET_PIE, getpie);
 }
 
 export default function* submit() {

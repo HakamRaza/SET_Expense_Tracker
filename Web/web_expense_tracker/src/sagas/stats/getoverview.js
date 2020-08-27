@@ -17,7 +17,7 @@ function* getoverview({ data }) {
 
     if (response && response.data.status === "success") {
         yield put(Actions.get_overviewSuccess(response.data));
-        console.log(response.data);
+        // console.log(response.data);
 
     } else {
 

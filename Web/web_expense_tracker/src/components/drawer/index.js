@@ -54,8 +54,8 @@ class Drawer extends React.Component{
                             <Nav className="mr-auto">
                             <Nav.Link href="/dashboard">Dashboard</Nav.Link>
                             <Nav.Link href="/transaction">History</Nav.Link>
-                            <Nav.Link href="/category">Category Settings</Nav.Link>
                             <Nav.Link href="/monthly-summary">Monthly Overview</Nav.Link>
+                            <Nav.Link href="/category">Category Settings</Nav.Link>
                             </Nav>
                             <Form inline>
                                 <Button variant="danger" onClick={()=>(this._onLogout())}>Logout</Button>

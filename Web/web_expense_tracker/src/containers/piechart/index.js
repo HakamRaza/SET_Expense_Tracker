@@ -4,6 +4,7 @@ import Actions from '../../actions';
 import { connect } from "react-redux";
 
 import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
 import { VictoryPie} from 'victory';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -11,24 +12,21 @@ import Button from 'react-bootstrap/Button';
 import Drawer from '../../components/drawer';
 import SumCardBar from '../../components/sumCardBar';
 import SumCard from '../../components/sumCard';
+import { wait } from '@testing-library/react';
 
-
-const sumData =[
-    {
-        type:"Remaining Budget",
-        left: 5000,
-        total: 9000,
-    },
-
-    {
-        type:"Current Expenses",
-        total: 5000,
-    },
-
-    {
-        type: "Accrued Savings",
-        total: 3987.05,
-    },
+const month = [
+    "Jan",
+    "Feb",
+    "Mac",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
 ]
 
 class PieChart extends React.Component{
@@ -41,21 +39,37 @@ class PieChart extends React.Component{
             modalTitleAlert:"",
             modalMsgAlert:"",
 
-            currentMonth:"",
+            currentMonth:"1",
             currentYear:"",
+            selectedYear:"",
 
             budgetData:0,
             expensesData:0,
             totalSavings:0,
 
+            piecolorData:[],
+            pieData:[],
+
         }
+    }
+
+    componentDidMount(){
+        const d = new Date();
+        const yr = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+        // const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+
+        this.setState({
+            // currentMonth: mo,
+            currentYear: yr,
+            selectedYear: yr,
+        });
     }
 
     componentDidUpdate(prevProps){
         
-        console.log("this is component did update");
+        // console.log("this is component did update");
         
-        const { getBarsData, getOverviewData, getTransactionData } = this.props;
+        const { getPieData, getOverviewData } = this.props;
         
         if(prevProps.getOverviewData.isLoading && !getOverviewData.isLoading){
             
@@ -66,9 +80,6 @@ class PieChart extends React.Component{
                     budgetData: parseInt(getOverviewData.data.budgetData).toFixed(2),
                     expensesData: parseInt(getOverviewData.data.expensesData).toFixed(2),
                     totalSavings: parseInt(getOverviewData.data.totalSavings).toFixed(2),
-                    // graphBudget: getOverviewData.data.graphBudget,
-                    // graphDailyExpense: getOverviewData.data.graphDailyExpense,
-                    // graphTotalExpense: getOverviewData.data.graphTotalExpense,
                 });
 
                 
@@ -81,19 +92,62 @@ class PieChart extends React.Component{
                 });
             }
         }
+
+        if(prevProps.getPieData.isLoading && !getPieData.isLoading){
+            
+            if(getPieData.data.status === "success") {
+                
+                // console.log(getPieData.data);
+                this.setState({
+                    piecolorData: getPieData.data.colorData,
+                    pieData: getPieData.data.pieData,
+                });
+
+                this._onGetMonthlyOverview();
+
+                
+            } else if (getPieData.error !== null){
+                
+                this.setState({
+                    showModalAlert:true,
+                    modalTitleAlert: "Failed",
+                    modalMsgAlert:"Failed to Pie Chart Data or Data Not Exist. Please Try Again",
+                });
+            }
+        }
     }
 
     _onGetMonthlyOverview(){
-        const { currentMonth, currentYear} = this.state;
+        const { currentMonth, selectedYear} = this.state;
 
         const formData = {
-            // month: currentMonth,
-            // year : currentYear,
-            month: 8,
-            year : 2020,
+            month: currentMonth,
+            year : selectedYear,
         }
 
         this.props.onGetOverviewData(formData);
+    }
+
+    _onGetMonthlyPieChart(){
+        // console.log("get month pie chart");
+        
+        const { currentMonth, selectedYear} = this.state;
+
+        const formData = {
+            month: currentMonth,
+            year : selectedYear,
+        }
+
+        // console.log(formData);
+
+        this.props.onGetMonthlyPieData(formData);
+
+    }
+
+    _onSubmitMonthSummary(){
+        // this._onGetMonthlyOverview();
+        this._onGetMonthlyPieChart();
+
     }
 
     render(){
@@ -115,33 +169,48 @@ class PieChart extends React.Component{
 
                 <Drawer />
 
-                <h3 onClick={()=>this._onGetMonthlyOverview()}>Monthly Overview</h3>
+                <h3>Monthly Overview</h3>
 
-                <div>
-                    <Form.Group controlId="exampleForm.ControlSelect1">
-                        <Form.Label>Select Month :</Form.Label>
-                        <Form.Control as="select">
-                            <option>Jan 2020</option>
-                            <option>Feb 2020</option>
-                            <option>Mac 2020</option>
-                            <option>Apr 2020</option>
-                        </Form.Control>
-                    </Form.Group>
+                <div className="pipg-form">
+                    <Form.Row>
+                        <Col>
+                        <Form.Group controlId="selectMonth">
+                            {/* <Form.Label>Select Month :</Form.Label> */}
+                            <Form.Control size="sm" as="select" onChange={(currentMonth)=> this.setState({currentMonth: currentMonth.target.value})}>
+                                {month.map((item, index)=>(
+                                    <option key={index+1} value={index+1}>{item}</option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
+                        </Col><Col>
+                        <Form.Group controlId="selectYear">
+                            {/* <Form.Label>Select Year :</Form.Label> */}
+                            <Form.Control size="sm" as="select" onChange={(selectedYear)=> this.setState({selectedYear: selectedYear.target.value})}>
+                                <option key={this.state.currentYear} value={this.state.currentYear}>{this.state.currentYear}</option>
+                                <option key={this.state.currentYear-1} value={this.state.currentYear-1}>{this.state.currentYear-1}</option>
+                                <option key={this.state.currentYear-2} value={this.state.currentYear-2}>{this.state.currentYear-2}</option>
+                                <option key={this.state.currentYear-3} value={this.state.currentYear-3}>{this.state.currentYear-3}</option>
+                                <option key={this.state.currentYear-4} value={this.state.currentYear-4}>{this.state.currentYear-4}</option>
+                            </Form.Control>
+                        </Form.Group>
+                        </Col>
+                        <Col>
+                            <Button variant="primary" size="sm" onClick={()=>this._onSubmitMonthSummary()}>Submit</Button>
+                        </Col>
+                    </Form.Row>
+
                 </div>
-
+                <br/>
+                <p>Chart :</p>
                 <div className="pipg-holder">
                     <div>
                         <div className="piepg-pie">
                             <VictoryPie
                             style={{data: {stroke: "black", strokeWidth: 2},}}
                             // innerRadius={110}
-                            colorScale={["white","#005086", "green"]}
+                            colorScale={this.state.piecolorData}
 
-                            data={[
-                                { x: "Test", y: 50},
-                                { x: "Test 2", y: 50 },
-                                { x: "Test 3", y: 30 },
-                            ]}
+                            data={this.state.pieData}
 
                             animate={{
                                 duration: 2000
@@ -154,9 +223,6 @@ class PieChart extends React.Component{
                 </div>
 
                 <div className="pipg-sum2">
-                    {/* <SumCardBar title={sumData[0].type} left={sumData[0].left} total={sumData[0].total} percent={(sumData[0].left/ sumData[0].total*100)}/>
-                    <SumCard type='1' title={sumData[1].type} total={sumData[1].total}  />
-                    <SumCard type='2'title={sumData[2].type} total={sumData[2].total}  /> */}
 
                     <SumCardBar 
                     title="Remaining Budget" 
@@ -176,7 +242,6 @@ class PieChart extends React.Component{
                     title="Accrued Savings"
                     total={parseInt(this.state.totalSavings)}
                     />
-
                     
                 </div>
                 
@@ -186,18 +251,14 @@ class PieChart extends React.Component{
 }
 
 const mapStateToProps = store => ({
-    // deleteTransactionData: Actions.deleteTransactionData(store),
-    // getBarsData: Actions.getBarsData(store),
+    getPieData: Actions.getPieData(store),
     getOverviewData: Actions.getOverviewData(store),
-    // getTransactionData: Actions.getTransactionData(store),
 
 });
 
 const mapDispatchToProps = {
-    // onDeleteTransaction: Actions.delete_transaction,
-    // onGetBarsData: Actions.get_bars,
+    onGetMonthlyPieData: Actions.get_pie,
     onGetOverviewData: Actions.get_overview,
-    // onGetTransaction: Actions.get_transaction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PieChart);

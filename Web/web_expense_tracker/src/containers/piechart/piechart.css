@@ -21,6 +21,7 @@
     font-size: smaller;
 }
 
+
 @media (min-device-width: 600px){
     .pipg-sum2 {
         grid-template-columns: 1fr 1fr;
