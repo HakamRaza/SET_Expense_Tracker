@@ -7,24 +7,24 @@ import {store} from "store/index";
 function* deleteCategory({data}) {
     console.log("THIS IS DELETE CATEGORY SAGA");
 
-    // let store = getStore().getState();
-    // let token = Actions.getUserSession(store).data;
-    // const headers ={ Authorization: `Bearer ${token}`};
-
-    // const formData = new FormData();
-    // formData.append("id",data);
     
-    // const {response, error} = yield call(api.deleteCategory, formData, headers);
-    // console.log(response, error);
+    let token = store.getState().PROFILE.userSession.data;
+    const headers = {Authorization:`Bearer ${token}`};
+    
+    const formData = new FormData();
+    formData.append("transactionID", data);
+    const { response, error } = yield call(api.delete_transaction, formData, headers);
+    
 
-    // if(response && response.data.status ==="success"){
-    //   yield put(Actions.deleteCategorySuccess(response.data));
-    //   // yield put(Actions.getAll());
-    // }
+    if(response && response.data.status ==="success"){
+      yield put(Actions.delete_categoriesSuccess(response.data));
 
-    // if(error) {
-    //   yield put(Actions.deleteCategoryFail(error.response));
-    // }
+      console.log("saga success");
+    }
+
+    if(error) {
+      yield put(Actions.delete_categoriesFail(error.response));
+    }
     
 }
 

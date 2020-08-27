@@ -14,6 +14,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import { IoIosTrash, IoMdCreate, IoMdAlbums } from "react-icons/io";
+import { Alert } from 'react-bootstrap';
 
 
 const sumCat = [
@@ -115,6 +116,10 @@ class Category extends React.Component{
             showModalUpdate:false,
             showModalAdd:false,
 
+            ModalAlert:false,
+            modalTitleAlert:"",
+            modalMsgAlert:"",
+
             barsData:[],
         }
     }
@@ -144,7 +149,7 @@ class Category extends React.Component{
         
         // console.log("this is component did update");
         
-        const { getBarsData} = this.props;
+        const { getBarsData, delCategoryData} = this.props;
         
         if(prevProps.getBarsData.isLoading && !getBarsData.isLoading){
             
@@ -162,6 +167,27 @@ class Category extends React.Component{
                 });
             }
         }
+
+        // if(prevProps.delCategoryData.isLoading && !delCategoryData.isLoading){
+            
+        //     if(delCategoryData.data.status === "success") {
+                
+        //         this.setState({
+        //             showModalAlert:true,
+        //             modalTitleAlert: "Success",
+        //             modalMsgAlert:"One Category Deleted.",
+        //         });
+                
+                
+        //     } else if (delCategoryData.error !== null){
+                
+        //         this.setState({
+        //             showModalAlert:true,
+        //             modalTitleAlert: "Failed",
+        //             modalMsgAlert:"Failed to fetch Delete Category. Please Try Again",
+        //         });
+        //     }
+        // }
     }
 
     _confirmation(selectID, id){
@@ -195,6 +221,7 @@ class Category extends React.Component{
     _delCategories(){
         console.log("Delete a Category");
         console.log(this.state.itemID);
+        this.props.onDeleteCategory(this.state.itemID);
         // this.setState({showDelCat:true});
         
     }
@@ -225,6 +252,20 @@ class Category extends React.Component{
         return(
             <div>
                 <Drawer/>
+                {this.state.showModalAlert && (
+                    <div>
+                    <Modal centered show={true} onHide={()=>this.setState({showModalAlert:false})}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{this.state.modalTitleAlert}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>{this.state.modalMsgAlert}</Modal.Body>
+
+                        <Modal.Footer>
+                            <Button variant="primary" onClick={()=>this.setState({showModalAlert:false})}>OK</Button>
+                        </Modal.Footer>
+                    </Modal>
+                </div>)}
+
                 {this.state.showModalDelete && (
                     <div>
                     <Modal centered show={true} onHide={()=>this.setState({showModalDelete:false})}>
@@ -287,7 +328,7 @@ class Category extends React.Component{
                         </Modal.Header>
                         <Modal.Body>
                             <Form.Group controlId="updateTitle">
-                                <Form.Label>Description :</Form.Label>
+                                <Form.Label>Title:</Form.Label>
                                 <Form.Control required size="sm" type="text" pattern=".{1,10}" placeholder="Max 10 Chars"/>
                             </Form.Group>
 
@@ -356,6 +397,7 @@ class Category extends React.Component{
 const mapStateToProps = store => ({
     // deleteTransactionData: Actions.deleteTransactionData(store),
     getBarsData: Actions.getBarsData(store),
+    delCategoryData: Actions.delCategoryData(store),
     //
     // getOverviewData: Actions.getOverviewData(store),
     // getTransactionData: Actions.getTransactionData(store),
@@ -365,6 +407,7 @@ const mapStateToProps = store => ({
 const mapDispatchToProps = {
     // onDeleteTransaction: Actions.delete_transaction,
     onGetBarsData: Actions.get_bars,
+    onDeleteCategory: Actions.delete_categories,
     // onGetOverviewData: Actions.get_overview,
     // onGetTransaction: Actions.get_transaction,
 };
