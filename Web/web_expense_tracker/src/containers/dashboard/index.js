@@ -189,6 +189,7 @@ class Dashboard extends React.Component{
             showCatMore: true,
             showLatestMore: false,
 
+            currentDay:"",
             currentMonth:"",
             currentYear:"",
             barsData:[],
@@ -203,6 +204,7 @@ class Dashboard extends React.Component{
             graphBudget:[],
             graphDailyExpense:[],
             graphTotalExpense:[],
+            todayTransaction:[],
 
         }
     }
@@ -212,24 +214,28 @@ class Dashboard extends React.Component{
         const d = new Date();
         const yr = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
         const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
-        // const dt = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+        const dt = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+        const today = `${yr}-${mo}-${dt}`;
+
         this.setState({
             currentMonth: mo,
             currentYear: yr,
+            currentDay: today,
         }, () => {
             
             //callback function
             this._onGetCategoriesBar();
             this._onGetMonthlyOverview();
+            this._onGetLatestTransaction();
         });
 
     }
     
     componentDidUpdate(prevProps){
         
-        console.log("this is component did update");
+        // console.log("this is component did update");
         
-        const { getBarsData, getOverviewData } = this.props;
+        const { getBarsData, getOverviewData, getTransactionData } = this.props;
         
         if(prevProps.getBarsData.isLoading && !getBarsData.isLoading){
             
@@ -272,6 +278,27 @@ class Dashboard extends React.Component{
                 });
             }
         }
+
+        if(prevProps.getTransactionData.isLoading && !getTransactionData.isLoading){
+            
+            if(getTransactionData.data.status === "success") {
+                
+                this.setState({todayTransaction: getTransactionData.data.data});
+
+            } else if (getTransactionData.error !== null){
+
+                if(getTransactionData.error.data !== null){
+                    
+                    this.setState({
+                        showModalAlert:true,
+                        modalTitleAlert: "Failed",
+                        modalMsgAlert:"Failed to fetch Transaction List. Please Try Again",
+                    });
+                }
+            }
+        }
+
+        // console.log(this.state.todayTransaction);
     }
     
     
@@ -299,16 +326,20 @@ class Dashboard extends React.Component{
         this.props.onGetOverviewData(formData);
     }
 
-    _onGetLineChart(){
-        console.log("get user monthly line chart");
-        
-        console.log(this.state.graphBudget);
-        console.log(this.state.graphDailyExpense);
-        console.log(this.state.graphTotalExpense);
-    }
-
     _onGetLatestTransaction(){
-        console.log("get user all month transactions");
+        // console.log("get user all month transactions");
+        const { currentDay} = this.state;
+
+        const formData = {
+            startDate: currentDay,
+            endDate:"",
+            minPrice:"",
+            maxPrice:"",
+            description:"",
+            categoryName:"",
+        }
+        
+        this.props.onGetTransaction(formData);
     }
     
     render(){
@@ -332,7 +363,7 @@ class Dashboard extends React.Component{
                 <div className="dash-container">
 
                     <div className="dash-lngr">
-                        <p onClick={()=>this._onGetLineChart()}>Graph:</p>
+                        <p><b>Graph :</b></p>
                         
 
                         <VictoryChart>
@@ -409,19 +440,6 @@ class Dashboard extends React.Component{
                         </div>
                     </div>
 
-                    <div className="dash-latest"  style={{height: this.state.showLatestMore ? "100%" : "4em", overflow: !this.state.showLatestMore && "hidden"}}>
-                        <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-                            <p><b>Latest Transactions :</b></p>
-                            <h5 onClick={()=>this.setState({showLatestMore: !this.state.showLatestMore})}>&#9776;</h5>
-                        </div>
-                        
-                            {/* <TransactionCard style={{backgroundColor:"transparent"}} date='Date' categ='Categories' desc='Description' total=''/> */}
-                        <div className="dash-latest-trans">
-                            {sumTrans.map((item)=>(
-                                <TransactionCard date={item.date} categ={item.categories} desc={item.desc} total={item.total.toFixed(2)}/>
-                            ))}
-                        </div>
-                    </div>
 
                     <div className="dash-add"  style={{height: this.state.showAddNew ? "100%" : "4em", overflow: !this.state.showAddNew && "hidden"}}>
                         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
@@ -434,6 +452,19 @@ class Dashboard extends React.Component{
                         </div>
                     </div>
 
+                    <div className="dash-latest"  style={{height: this.state.showLatestMore ? "100%" : "4em", overflow: !this.state.showLatestMore && "hidden"}}>
+                        <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+                            <p onClick={()=>this._onGetLatestTransaction()}><b>Today Transactions :</b></p>
+                            <h5 onClick={()=>this.setState({showLatestMore: !this.state.showLatestMore})}>&#9776;</h5>
+                        </div>
+                        
+                            {/* <TransactionCard style={{backgroundColor:"transparent"}} date='Date' categ='Categories' desc='Description' total=''/> */}
+                        <div className="dash-latest-trans">
+                            {this.state.todayTransaction.map((item)=>(
+                                <TransactionCard date={item.date} categ={item.category_title} desc={item.description} total={parseInt(item.amount).toFixed(2)}/>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -445,6 +476,7 @@ const mapStateToProps = store => ({
     // deleteTransactionData: Actions.deleteTransactionData(store),
     getBarsData: Actions.getBarsData(store),
     getOverviewData: Actions.getOverviewData(store),
+    getTransactionData: Actions.getTransactionData(store),
 
 });
 
@@ -452,6 +484,7 @@ const mapDispatchToProps = {
     // onDeleteTransaction: Actions.delete_transaction,
     onGetBarsData: Actions.get_bars,
     onGetOverviewData: Actions.get_overview,
+    onGetTransaction: Actions.get_transaction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
