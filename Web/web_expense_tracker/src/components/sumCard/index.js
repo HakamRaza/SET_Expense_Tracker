@@ -5,6 +5,10 @@ import { IconContext } from "react-icons";
 import { IoIosPodium, IoIosTimer } from "react-icons/io";
 
 export default class SumCard extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
     render(){
         return(
             <div>

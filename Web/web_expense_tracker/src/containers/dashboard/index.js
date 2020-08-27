@@ -1,31 +1,19 @@
 import React from 'react';
 import Drawer from '../../components/drawer';
 import './dashboard.css';
+import Actions from '../../actions';
+import { connect } from "react-redux";
+
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import {VictoryChart, VictoryLine} from 'victory';
+
 import SumCard from '../../components/sumCard';
 import SumCardBar from '../../components/sumCardBar';
-import {VictoryChart, VictoryLine} from 'victory';
 import CategoriesCard from '../../components/categoriesCard';
 import TransactionCard from '../../components/transactionCard';
 import AddTransaction from '../../components/addNewTransaction';
 
-
-const sumData =[
-    {
-        type:"Remaining Budget",
-        left: 5000,
-        total: 9000,
-    },
-
-    {
-        type:"Current Expenses",
-        total: 5000,
-    },
-
-    {
-        type: "Accrued Savings",
-        total: 3987.05,
-    },
-]
 
 const sumCat = [
     {
@@ -190,85 +178,174 @@ const sumTrans = [
 
 ]
 
-const graphDataDaily = [
-     
-    { x: 1, y: 1 },
-    { x: 2, y: 2 },
-    { x: 3, y: 1 },
-    { x: 4, y: 2 },
-    { x: 5, y: 1 },
-    { x: 6, y: 2 },
-    { x: 7, y: 1 },
-    { x: 8, y: 3 },
-    { x: 9, y: 1 },
-    { x: 10, y: 5 },
-    { x: 11, y: 1 },
-    { x: 12, y: 8 },
-]
 
-const graphDataAcc = [
-     
-    { x: 1, y: 1 },
-    { x: 2, y: 3 },
-    { x: 3, y: 4 },
-    { x: 4, y: 6 },
-    { x: 5, y: 7 },
-    { x: 6, y: 9 },
-    { x: 7, y: 10 },
-    { x: 8, y: 13 },
-    { x: 9, y: 15 },
-    { x: 10, y: 19 },
-    { x: 11, y: 24 },
-    { x: 12, y: 30 },
-]
-
-const budgetlineData = [
-     
-    { x: 1, y: 10 },
-    { x: 2, y: 10 },
-    { x: 3, y: 10 },
-    { x: 4, y: 10 },
-    { x: 5, y: 10 },
-    { x: 6, y: 10 },
-    { x: 7, y: 10 },
-    { x: 8, y: 10 },
-    { x: 9, y: 10 },
-    { x: 10, y: 10 },
-    { x: 11, y: 10 },
-    { x: 12, y: 10 },
-]
-
-export default class Dashboard extends React.Component{
-    constructor(){
-        super();
+class Dashboard extends React.Component{
+    constructor(props){
+        super(props);
 
         this.state={
             showAddNew: false,
             showSumMore: true,
             showCatMore: true,
             showLatestMore: false,
+
+            currentMonth:"",
+            currentYear:"",
+            barsData:[],
+            
+            showModalAlert:false,
+            modalTitleAlert:"",
+            modalMsgAlert:"",
+            
+            budgetData:0,
+            expensesData:0,
+            totalSavings:0,
+            graphBudget:[],
+            graphDailyExpense:[],
+            graphTotalExpense:[],
+
         }
+    }
+
+    
+    componentDidMount(){
+        const d = new Date();
+        const yr = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+        const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+        // const dt = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+        this.setState({
+            currentMonth: mo,
+            currentYear: yr,
+        }, () => {
+            
+            //callback function
+            this._onGetCategoriesBar();
+            this._onGetMonthlyOverview();
+        });
+
+    }
+    
+    componentDidUpdate(prevProps){
+        
+        console.log("this is component did update");
+        
+        const { getBarsData, getOverviewData } = this.props;
+        
+        if(prevProps.getBarsData.isLoading && !getBarsData.isLoading){
+            
+            if(getBarsData.data.status === "success") {
+                
+                this.setState({barsData: getBarsData.data.barsData});
+                
+                
+            } else if (getBarsData.error !== null){
+                
+                this.setState({
+                    showModalAlert:true,
+                    modalTitleAlert: "Failed",
+                    modalMsgAlert:"Failed to fetch Categories Bar List. Please Try Again",
+                });
+            }
+        }
+
+        if(prevProps.getOverviewData.isLoading && !getOverviewData.isLoading){
+            
+            if(getOverviewData.data.status === "success") {
+                
+                this.setState({
+
+                    budgetData: getOverviewData.data.budgetData,
+                    expensesData: getOverviewData.data.expensesData,
+                    totalSavings: getOverviewData.data.totalSavings,
+                    graphBudget: getOverviewData.data.graphBudget,
+                    graphDailyExpense: getOverviewData.data.graphDailyExpense,
+                    graphTotalExpense: getOverviewData.data.graphTotalExpense,
+                });
+
+                
+            } else if (getOverviewData.error !== null){
+                
+                this.setState({
+                    showModalAlert:true,
+                    modalTitleAlert: "Failed",
+                    modalMsgAlert:"Failed to fetch Categories Bar List. Please Try Again",
+                });
+            }
+        }
+    }
+    
+    
+    _onGetCategoriesBar(){
+        // console.log("get list of bars for use");
+        const { currentMonth, currentYear} = this.state;
+
+        const formData = {
+            month: currentMonth,
+            year : currentYear,
+        }
+
+        this.props.onGetBarsData(formData);
+    }
+
+    _onGetMonthlyOverview(){
+        const { currentMonth, currentYear} = this.state;
+
+        const formData = {
+            month: currentMonth,
+            year : currentYear,
+        }
+
+        // this.props.onGetBarsData(formData);
+        this.props.onGetOverviewData(formData);
+    }
+
+    _onGetLineChart(){
+        console.log("get user monthly line chart");
+        
+        console.log(this.state.graphBudget);
+        console.log(this.state.graphDailyExpense);
+        console.log(this.state.graphTotalExpense);
+    }
+
+    _onGetLatestTransaction(){
+        console.log("get user all month transactions");
     }
     
     render(){
         return(
             <div>
-                <Drawer />
+                {this.state.showModalAlert && (
+                    <div>
+                    <Modal centered show={true} onHide={()=>this.setState({showModalAlert:false})}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{this.state.modalTitleAlert}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>{this.state.modalMsgAlert}</Modal.Body>
 
+                        <Modal.Footer>
+                            <Button variant="primary" onClick={()=>this.setState({showModalAlert:false})}>OK</Button>
+                        </Modal.Footer>
+                    </Modal>
+                </div>)}
+
+                <Drawer />
                 <div className="dash-container">
 
                     <div className="dash-lngr">
-                        <p>Graph:</p>
+                        <p onClick={()=>this._onGetLineChart()}>Graph:</p>
+                        
 
                         <VictoryChart>
                             <VictoryLine
                             interpolation="natural"
                             text={"Daily Expenses (RM)"}
                             style={{
-                                data: { stroke: "green" }
+                                data: { stroke: "green" },
+                                tickLabels: {angle: -90},
+                                // axisLabel: {fontSize: 3},
                             }}
                             
-                            data={graphDataDaily}/>
+                            data={this.state.graphDailyExpense}/>
 
                             <VictoryLine
                             interpolation="natural"
@@ -277,7 +354,7 @@ export default class Dashboard extends React.Component{
                                 data: { stroke: "blue" }
                             }}
 
-                            data={graphDataAcc}/>
+                            data={this.state.graphTotalExpense}/>
 
                             <VictoryLine
                             interpolation="natural"
@@ -286,7 +363,7 @@ export default class Dashboard extends React.Component{
                                 data: { stroke: "red" }
                             }}
 
-                            data={budgetlineData}/>
+                            data={this.state.graphBudget}/>
                         </VictoryChart>
                     </div>
 
@@ -298,9 +375,25 @@ export default class Dashboard extends React.Component{
                         </div>
 
                         <div className="dash-sum2">
-                            <SumCardBar title={sumData[0].type} left={sumData[0].left} total={sumData[0].total} percent={(sumData[0].left/ sumData[0].total*100)}/>
-                            <SumCard type='1' title={sumData[1].type} total={sumData[1].total}  />
-                            <SumCard type='2'title={sumData[2].type} total={sumData[2].total}  />
+                            <SumCardBar 
+                            title="Remaining Budget" 
+                            left={this.state.budgetData - this.state.expensesData}
+                            total={this.state.budgetData}
+                            percent={this.state.expensesData/ this.state.budgetData *100}
+                            />
+
+                            <SumCard 
+                            type='1' 
+                            title="Current Expenses" 
+                            total= {parseInt(this.state.expensesData)}
+                            />
+
+                            <SumCard 
+                            type='2'
+                            title="Accrued Savings"
+                            total={parseInt(this.state.totalSavings)}
+                            />
+
                         </div>
                     </div>
 
@@ -310,8 +403,8 @@ export default class Dashboard extends React.Component{
                             <h5 onClick={()=>this.setState({showCatMore: !this.state.showCatMore})}>&#9776;</h5>
                         </div>
                         <div className="dash-categ2">
-                            {sumCat.map((item) =>(
-                                <CategoriesCard color={item.color} name={item.name} budget={item.month_budget} expense={item.month_expense} bal ={(item.month_budget-item.month_expense).toFixed(2)}/>
+                            {this.state.barsData.map((item) =>(
+                                <CategoriesCard color={item.color} name={item.title} budget={item.budget} expense={item.totalExpense} bal ={(item.budget-item.totalExpense).toFixed(2)}/>
                             ))}
                         </div>
                     </div>
@@ -347,3 +440,18 @@ export default class Dashboard extends React.Component{
         );
     }
 }
+
+const mapStateToProps = store => ({
+    // deleteTransactionData: Actions.deleteTransactionData(store),
+    getBarsData: Actions.getBarsData(store),
+    getOverviewData: Actions.getOverviewData(store),
+
+});
+
+const mapDispatchToProps = {
+    // onDeleteTransaction: Actions.delete_transaction,
+    onGetBarsData: Actions.get_bars,
+    onGetOverviewData: Actions.get_overview,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

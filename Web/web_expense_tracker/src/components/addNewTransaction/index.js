@@ -206,7 +206,7 @@ class AddTransaction extends React.Component{
 
                     <Form.Group controlId="selectDate">
                         <Form.Label>Date :</Form.Label>
-                        <Form.Control required size="sm" type="text" min="2020-01-01" max="2050-01-01" value={this.state.trans_date} onChange={(trans_date)=> this.setState({trans_date: trans_date.target.value})}/>
+                        <Form.Control required size="sm" type="date" min="2020-01-01" max="2050-01-01" value={this.state.trans_date} onChange={(trans_date)=> this.setState({trans_date: trans_date.target.value})}/>
                     </Form.Group>
 
                     <Form.Group controlId="selectVal">

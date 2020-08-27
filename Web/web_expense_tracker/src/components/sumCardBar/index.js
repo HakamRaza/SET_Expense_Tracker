@@ -4,6 +4,10 @@ import Card from 'react-bootstrap/Card';
 import { VictoryPie} from 'victory';
 
 export default class SumCardBar extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
     render(){
         return(
             <div>

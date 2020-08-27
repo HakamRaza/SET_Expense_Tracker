@@ -3,38 +3,36 @@ import Actions from "../../actions";
 import * as api from "../../api";
 import { store } from "store/index";
 
-function* getBars({ data }) {
+function* getbars({ data }) {
     console.log("THIS IS GET BAR SAGA");
-
-    // let token = store.getState().PROFILE.userSession.data;
-    // const headers = {
-    // //   Authorization: `Bearer ${token}`,
-    // // };
-
-    // let store = getStore().getState();
-    // let token = Actions.getUserSession(store).data;
-    // const headers = { Authorization: `Bearer ${token}` };
-
-    // const formData = new FormData();
-    // formData.append("month", data.month);
-    // formData.append("year", data.year);
-    // // formData.append("month", 8);
-    // // formData.append("year", 2020);
+    console.log(data);
     
-    // const { response, error } = yield call(api.getBars, data, headers);
+    let token = store.getState().PROFILE.userSession.data;
+    const headers = {Authorization:`Bearer ${token}`};
+
+    const formData = new FormData();
+    formData.append("month", data.month);
+    formData.append("year", data.year);
+    
+    const { response, error } = yield call(api.get_bars, formData, headers);
+
     
     
-    // if (response && response.data.status === "success") {
-    //     yield put(Actions.getBarsSuccess(response.data));
-    // } else {
-    //     yield put(Actions.getBarsFail(error));
-    // }
+    if (response && response.data.status === "success") {
+        yield put(Actions.get_barsSuccess(response.data));
+
+    } else {
+        yield put(Actions.get_barsFail(error));
+    }
+
+    // console.log(response);
+    // console.log(error);
 
     // console.log("this is getBarsData", response.data[1].budget); 
 }
 
 function* watchGetBars() {
-    yield takeLatest(Actions.GET_BARS, getBars);
+    yield takeLatest(Actions.GET_BARS, getbars);
 }
 
 export default function* submit() {

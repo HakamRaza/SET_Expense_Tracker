@@ -9,7 +9,7 @@ export default function* submit() {
   yield all([
     fork(auth), 
     fork(category), 
-    fork(stats),
     fork(transaction),
+    fork(stats),
   ]);
 }

@@ -3,34 +3,31 @@ import Actions from "../../actions";
 import * as api from "../../api";
 import { store } from "store/index";
 
-function* getOverview({ data }) {
+function* getoverview({ data }) {
     console.log("THIS IS GET OVERVIEW SAGA");
-    // let token = store.getState().PROFILE.userSession.data;
-    // const headers = {
-    //   Authorization: `Bearer ${token}`,
-    // };
 
-    // let store = getStore().getState();
-    // let token = Actions.getUserSession(store).data;
-    // const headers = { Authorization: `Bearer ${token}` };
+    let token = store.getState().PROFILE.userSession.data;
+    const headers = {Authorization:`Bearer ${token}`};
 
-    // const formData = new FormData();
-    // formData.append("month", data.month);
-    // formData.append("year", data.year);
+    const formData = new FormData();
+    formData.append("month", data.month);
+    formData.append("year", data.year);
 
-    // const { response, error } = yield call(api.getOverview, data, headers);
+    const { response, error } = yield call(api.get_overview, formData, headers);
 
-    // if (response && response.data.status === "success") {
-    //     yield put(Actions.getOverviewSuccess(response.data));
-    // } else {
-    //     yield put(Actions.getOverviewFail(error));
-    // }
+    if (response && response.data.status === "success") {
+        yield put(Actions.get_overviewSuccess(response.data));
+        console.log(response.data);
 
-    // console.log("Overview Response",error, response)
+    } else {
+
+        yield put(Actions.get_overviewFail(error));
+    }
+
 }
 
 function* watchGetOverview() {
-    yield takeLatest(Actions.GET_OVERVIEW, getOverview);
+    yield takeLatest(Actions.GET_OVERVIEW, getoverview);
 }
 
 export default function* submit() {

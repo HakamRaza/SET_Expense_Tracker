@@ -34,7 +34,6 @@ class Transactions extends React.Component{
 
             showModalUpdate:false,
             showModalDelete:false,
-
         }
     }
 
@@ -51,14 +50,6 @@ class Transactions extends React.Component{
                 this.setState({getTransaction:getTransactionData.data.data});
                 this.setState({getTransactionAmount:getTransactionData.data});
 
-                // for (let i = 0; i < this.state.getTransaction.length; i++) {
-                //     var totalAmount = parseInt(this.state.getTransaction[i]["amount"]);
-                //     this.setState({totalAmount});
-                // }
-                
-                // console.log(this.state.totalAmount);
-                
-                
             } else if (getTransactionData.error !== null){
 
                 if(getTransactionData.error.data !== null){
