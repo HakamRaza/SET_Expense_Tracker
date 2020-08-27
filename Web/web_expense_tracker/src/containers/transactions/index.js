@@ -19,12 +19,14 @@ class Transactions extends React.Component{
         super(props);
 
         this.state={
+            itemID:"",
             update_category:"",
             update_desc:"",
             update_date:"",
             update_value:0,
 
             getTransaction:[],
+            getTransactionAmount:[],
             getCategories:[],
 
             showModalAlert:false,
@@ -39,16 +41,21 @@ class Transactions extends React.Component{
     }
 
     componentDidUpdate(prevProps){
-        const { getTransactionData } = this.props;
-        const { updateTransactionData } = this.props;
-        const { getCategoriesData } = this.props;
+        const { getTransactionData, updateTransactionData, getCategoriesData } = this.props;
         
         if(prevProps.getTransactionData.isLoading && !getTransactionData.isLoading){
             
             if(getTransactionData.data.status === "success") {
                 
                 this.setState({getTransaction:getTransactionData.data.data});
+                this.setState({getTransactionAmount:getTransactionData.data});
 
+                // for (let i = 0; i < this.state.getTransaction.length; i++) {
+                //     var totalAmount = parseInt(this.state.getTransaction[i]["amount"]);
+                //     this.setState({totalAmount});
+                // }
+                
+                // console.log(this.state.totalAmount);
                 
                 
             } else if (getTransactionData.error !== null){
@@ -64,23 +71,19 @@ class Transactions extends React.Component{
             }
         }
 
-        // console.log(this.state.getTransaction);
+        // console.log(this.state.getTransactionAmount.totalAmount);
 
-        
-        // for (let i = 0; i < this.state.getTransaction; i++) {
-        //     var totalAmount = parseInt(this.state.getTransaction[i]["amount"]);
-        //     this.setState({totalAmount});
-        // }
-        
-        // console.log(this.state.totalAmount);
 
         if(prevProps.updateTransactionData.isLoading && !updateTransactionData.isLoading){
             
             if(updateTransactionData.data.status === "success") {
                 
-                this.setState({getTransaction:updateTransactionData.data.data});
+                this.setState({
+                    showModalAlert:true,
+                    modalTitleAlert: "Success",
+                    modalMsgAlert:"Transaction Update Sucess!",
+                });
 
-                
                 
             } else if (updateTransactionData.error !== null){
 
@@ -89,9 +92,6 @@ class Transactions extends React.Component{
                     modalTitleAlert: "Failed",
                     modalMsgAlert:"Failed to update Transaction List. Please Try Again",
                 });
-                // if(updateTransactionData.error.data !== null){
-                    
-                // }
             }
         }
 
@@ -116,16 +116,50 @@ class Transactions extends React.Component{
     }
     
     // _updateTransaction(itemID){
+    _confirmation(selectID, id){
+        
+        const itemID = id;
+        this.setState({itemID:itemID});
+
+        switch (selectID) {
+            case "update":
+                this.setState({showModalUpdate:true});
+                
+            break;
+            
+            case "delete":
+                this.setState({showModalDelete:true,});
+            break;
+            
+            default:
+                break;
+        }
+    }
+
     _updateTransaction(){
         console.log("Update Transaction Pressed");
-        this.setState({showModalUpdate:true})
+        // console.log(this.state.itemID);
         
+        const { update_category, update_desc, update_date, update_value, itemID} = this.state;
+        
+        const formData={
+            itemID,
+            update_category,
+            update_desc,
+            update_date,
+            update_value
+        }
+        
+        console.log("formdata update ",formData);
+
+        this.props.onUpdateTransaction(formData);
+        this.setState({showModalUpdate:false});
     }
-    
+        
     _deleteTransaction(){
         console.log("Delete Transaction Pressed");
-        this.setState({showModalDelete:true,});
-
+        // console.log(this.state.itemID);
+        
     }
 
     render(){
@@ -155,7 +189,7 @@ class Transactions extends React.Component{
 
                         <Modal.Footer>
                             <Button variant="secondary" onClick={()=>this.setState({showModalDelete:false})}>Close</Button>
-                            <Button variant="danger" onClick={()=>this.setState({showModalDelete:false,})}>Delete</Button>
+                            <Button variant="danger" onClick={()=>this._deleteTransaction()}>Delete</Button>
                         </Modal.Footer>
                     </Modal>
                 </div>)}
@@ -164,7 +198,7 @@ class Transactions extends React.Component{
                     <div>
                     <Modal centered show={true} onHide={()=>this.setState({showModalUpdate:false})}>
                         <Modal.Header closeButton>
-                            <Modal.Title>Update</Modal.Title>
+                        <Modal.Title>Update </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <Form.Group controlId="updateCat">
@@ -185,7 +219,7 @@ class Transactions extends React.Component{
 
                             <Form.Group controlId="updateDate">
                                 <Form.Label>Date :</Form.Label>
-                                <Form.Control required size="sm" type="text" min="2020-01-01" max="2050-01-01" value={this.state.update_date} onChange={(update_date)=> this.setState({update_date: update_date.target.value})}/>
+                                <Form.Control required size="sm" type="date" min="2020-01-01" max="2050-01-01" value={this.state.update_date} onChange={(update_date)=> this.setState({update_date: update_date.target.value})}/>
                             </Form.Group>
 
                             <Form.Group controlId="updateVal">
@@ -194,9 +228,10 @@ class Transactions extends React.Component{
                             </Form.Group>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={()=>this.setState({showModalUpdate:false})}>
-                                Close
-                            </Button>
+
+                            <Button variant="secondary" onClick={()=>this.setState({showModalUpdate:false})}>Close</Button>
+                            <Button variant="success" onClick={()=>this._updateTransaction()}>Save</Button>
+                        
                         </Modal.Footer>
                     </Modal>
                 </div>)}
@@ -210,19 +245,13 @@ class Transactions extends React.Component{
                         <thead>
                             <tr>
                             <th>Total Results <i>(max: 100 results)</i></th>
-                            {/* <th>Total Amount (RM)</th> */}
+                            <th>Total Amount (RM)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td className="trans-col">{this.state.getTransaction.length} Results</td>
-                                {/* <td className="trans-col">$ 
-                                {
-                                    for (let i = 0; i < this.state.getTransaction.length; i++) {
-                                        const element = this.state.getTransaction.amount[i];
-                                    }
-                                }
-                                </td> */}
+                                <td className="trans-col">{this.state.getTransactionAmount.totalAmount}</td>
                             </tr>
                         </tbody>
                     </Table>
@@ -250,11 +279,8 @@ class Transactions extends React.Component{
                                     <td className="trans-col-desc">{item.description}</td>
                                     <td className="trans-col">
                                         <div>
-                                        <IconContext.Provider value={{ className: 'trans-icons' }}>
-                                            {/* <IoIosTrash onClick={()=>this._deleteTransaction(item.id)}/> */}
-                                            <IoIosTrash onClick={()=>this._deleteTransaction()}/>
-                                            <IoMdCreate onClick={()=>this._updateTransaction()}/>
-                                        </IconContext.Provider>
+                                            <Button variant="warning" size="sm" onClick={()=>this._confirmation("update", item.id)}><IoMdCreate/> Edit</Button>{' '}
+                                            <Button variant="danger" size="sm" onClick={()=>this._confirmation("delete", item.id)}><IoIosTrash />Delete</Button>{' '}
                                         </div>
                                     </td>
                                 </tr>
@@ -275,6 +301,8 @@ const mapStateToProps = store => ({
 
 const mapDispatchToProps = {
     onUpdateTransaction: Actions.update_transaction,
+    onGetTransaction: Actions.get_transaction,
+
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(Transactions);
