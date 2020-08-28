@@ -58,13 +58,11 @@ class Dashboard extends React.Component{
             currentYear: yr,
             currentDay: today,
         }, () => {
-            
-            //callback function
-            this._onGetCategoriesBar();
-            this._onGetMonthlyOverview();
-            this._onGetLatestTransaction();
-        });
 
+            //callback function
+            this._onGetMonthlyOverview();
+        });
+        
     }
     
     componentDidUpdate(prevProps){
@@ -78,6 +76,8 @@ class Dashboard extends React.Component{
             if(getBarsData.data.status === "success") {
                 
                 this.setState({barsData: getBarsData.data.barsData});
+                //3
+                this._onGetLatestTransaction();
                 
                 
             } else if (getBarsData.error !== null){
@@ -96,9 +96,6 @@ class Dashboard extends React.Component{
                 
                 this.setState({
 
-                    // budgetData: getOverviewData.data.budgetData,
-                    // expensesData: getOverviewData.data.expensesData,
-                    // totalSavings: getOverviewData.data.totalSavings,
                     budgetData: parseInt(getOverviewData.data.budgetData).toFixed(2),
                     expensesData: parseInt(getOverviewData.data.expensesData).toFixed(2),
                     totalSavings: parseInt(getOverviewData.data.totalSavings).toFixed(2),
@@ -106,7 +103,8 @@ class Dashboard extends React.Component{
                     graphDailyExpense: getOverviewData.data.graphDailyExpense,
                     graphTotalExpense: getOverviewData.data.graphTotalExpense,
                 });
-
+                //2
+                this._onGetCategoriesBar();
                 
             } else if (getOverviewData.error !== null){
                 
@@ -118,6 +116,7 @@ class Dashboard extends React.Component{
             }
         }
 
+        //1
         if(prevProps.getTransactionData.isLoading && !getTransactionData.isLoading){
             
             if(getTransactionData.data.status === "success") {
@@ -273,7 +272,7 @@ class Dashboard extends React.Component{
                         </div>
                         <div className="dash-categ2">
                             {this.state.barsData.map((item) =>(
-                                <CategoriesCard color={item.color} name={item.title} budget={item.budget} expense={item.totalExpense} bal ={(item.budget-item.totalExpense).toFixed(2)}/>
+                                <CategoriesCard key={item.title} color={item.color} name={item.title} budget={item.budget} expense={item.totalExpense} bal ={(item.budget-item.totalExpense).toFixed(2)}/>
                             ))}
                         </div>
                     </div>

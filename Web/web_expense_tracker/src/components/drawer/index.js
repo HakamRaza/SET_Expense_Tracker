@@ -9,6 +9,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 
 
 class Drawer extends React.Component{
@@ -18,6 +19,7 @@ class Drawer extends React.Component{
 
         this.state = {
             showDrawer: false,
+            onLoading: false,
         }
     }
 
@@ -32,10 +34,15 @@ class Drawer extends React.Component{
         
             } else if (getLogoutData.error !== null){
                 alert("Failed To Logout, Please Try Again");
-        }}
+            }
+
+            this.setState({onLoading:false});
+        }
+        
     }
                 
     _onLogout(){
+        this.setState({onLoading:true});
         this.props.onLogout();
     }
 
@@ -58,7 +65,7 @@ class Drawer extends React.Component{
                             <Nav.Link href="/category">Category Settings</Nav.Link>
                             </Nav>
                             <Form inline>
-                                <Button variant="danger" onClick={()=>(this._onLogout())}>Logout</Button>
+                                {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/> Logging Out ...</span>): (<Button variant="danger" onClick={()=>(this._onLogout())}>Logout</Button>)}
                             </Form>
                         </Navbar.Collapse>
                     </Navbar>

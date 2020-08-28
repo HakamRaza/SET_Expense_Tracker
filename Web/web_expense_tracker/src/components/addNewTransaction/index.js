@@ -171,7 +171,7 @@ class AddTransaction extends React.Component{
                             <option value="">- Select Category -</option>
 
                             {this.state.getCategories.map( item=>(
-                                <option value={item.id}>{item.category_title}</option>
+                                <option key={item.id} value={item.id}>{item.category_title}</option>
                             ))}
 
                         </Form.Control>

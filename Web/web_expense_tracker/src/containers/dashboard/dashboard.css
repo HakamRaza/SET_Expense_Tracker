@@ -150,7 +150,7 @@
     }
 
     .dash-categ {
-        min-height: 99.9%;
+        max-height: 99.9%;
     }
     
     .dash-categ2 {

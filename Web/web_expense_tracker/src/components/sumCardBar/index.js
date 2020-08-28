@@ -15,9 +15,8 @@ export default class SumCardBar extends React.Component{
                     <Card.Body>
                     <Card.Text>{this.props.title || ""} :</Card.Text>
                     <Card.Title><b>$ {this.props.left.toFixed(2) || 0}</b></Card.Title>
-
-                    <Card.Text>
-                        <div className="sumc-pie">
+                        <Card.Text>
+                            <div className="sumc-pie">
 
                                 <VictoryPie
                                 style={{data: {stroke: "#005086", strokeWidth: 5},}}
@@ -33,12 +32,11 @@ export default class SumCardBar extends React.Component{
                                     duration: 2000
                                 }}
                                 />
-                        </div>
+                            </div>
+
                             <div className="pie-cent"><p>{this.props.percent}%</p></div>
                             <div className="pie-total"><p> from $ {this.props.total || "0"}</p></div>
-
-                    </Card.Text>
-
+                        </Card.Text>
                     </Card.Body>
                 </Card>
             </div>
