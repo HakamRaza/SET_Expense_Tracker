@@ -2,26 +2,26 @@ import Actions from "../../actions";
 
 const getDefaultState = () => ({ isLoading: false, error: null, data: {} });
 
-function new_category(state, action) {
+function update_category(state, action) {
   if (typeof state === "undefined") {
     return getDefaultState();
   }
 
   switch (action.type) {
-    case Actions.NEW_CATEGORY:
+    case Actions.UPDATE_CATEGORY:
       return {
         isLoading: true,
         error: null,
         data: {},
       };
 
-    case Actions.NEW_CATEGORY_SUCCESS:
+    case Actions.UPDATE_CATEGORY_SUCCESS:
       return {
         isLoading: false,
         error: null,
         data: action.data,
       };
-    case Actions.NEW_CATEGORY_FAIL:
+    case Actions.UPDATE_CATEGORY_FAIL:
       return {
         isLoading: false,
         error: action.error,
@@ -32,4 +32,4 @@ function new_category(state, action) {
   }
 }
 
-export default new_category;
+export default update_category;

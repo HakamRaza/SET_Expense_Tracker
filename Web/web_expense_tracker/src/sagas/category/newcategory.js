@@ -3,41 +3,34 @@ import Actions from "actions";
 import * as api from "api";
 import {store} from "store/index";
 
-function* newCategory({data}) {
+function* new_categories({data}) {
     console.log("THIS IS NEW CATEGORY SAGA");
 
+    let token = store.getState().PROFILE.userSession.data;
+    const headers = {Authorization:`Bearer ${token}`};
+    
     const formData = new FormData();
-    // //db column name  //container form name
-    // formData.append("id",data.id);
-    // console.log("newCAT saga is here", data);
-    // formData.append("category_title", data.category_title);
-    // formData.append("budget", data.budget);
-    // formData.append("color", data.color);
+    formData.append("category_title", data.category_title);
+    formData.append("budget", data.category_budget);
+    formData.append("color", data.category_color);
 
-    // let store = getStore().getState();
-    // let token = Actions.getUserSession(store).data;
-    // const headers ={ Authorization: `Bearer ${token}`};
-
-    // console.log(headers);
-    
-    // const {response, error} = yield call(api.newCategory, formData, headers);
-    // console.log("thi is new category saga" ,response, error);
+    const {response, error} = yield call(api.new_category, formData, headers);
 
     
-    // if(response && response.data.status === "success") {
-    //   yield put(Actions.newCategorySuccess(response.data));
-    //   // yield put(Actions.getAll());
-    // }
-
-    // if(error) {
-    //   yield put(Actions.newCategoryFail(error.response));
-    // }
+    if(response && response.data.status === "success") {
+      yield put(Actions.new_categorySuccess(response.data));
+      console.log("success add");
+      
+    } else {
+      yield put(Actions.new_categoryFail(error.response));
+      console.log("failed add");
+    }
     
 }
 
 function* watchNewCategory() {
   //dispatch action                   function from line 5 from saga file
-    yield takeLatest(Actions.NEW_CATEGORY, newCategory);
+    yield takeLatest(Actions.NEW_CATEGORY, new_categories);
 }
 
 export default function* submit() {

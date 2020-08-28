@@ -2,7 +2,7 @@ import Actions from "../../actions";
 
 const getDefaultState = () => ({ isLoading: false, error: null, data: {} });
 
-function update_category(state, action) {
+function new_category(state, action) {
   if (typeof state === "undefined") {
     return getDefaultState();
   }
@@ -32,4 +32,4 @@ function update_category(state, action) {
   }
 }
 
-export default update_category;
+export default new_category;

@@ -7,32 +7,32 @@ import {store} from "store/index";
 function* updateCategory({data}) {
     console.log("THIS IS UPDATE CATEGORY SAGA");
 
-    // const formData = new FormData();
-    // //db column name  //container form name
-    // // formData.append("id",data.id);
-    // // console.log(data.id);
-    // formData.append("categoryID", data.category_title);
-    // formData.append("updateBudget", data.budget);
-    // formData.append("color", data.color);
+    let token = store.getState().PROFILE.userSession.data;
+    const headers = {Authorization:`Bearer ${token}`};
 
-    // let store = getStore().getState();
-    // let token = Actions.getUserSession(store).data;
-    // const headers ={ Authorization: `Bearer ${token}`};
-
-    // console.log(headers);
+    const formData = new FormData();
+    formData.append("categoryID", data.itemID);
     
-    // const {response, error} = yield call(api.updateCategory, formData, headers);
-    // console.log(response, error);
+    (data.category_title !=="" && formData.append("newTitle", data.category_title));
+    (data.category_budget !=="" && formData.append("newBudget", data.category_budget));
+    (data.category_category_title !=="" && formData.append("newColor", data.category_color));
 
-    
-    // if(response && response.data.status === "success") {
-    //   yield put(Actions.updateCategorySuccess(response.data));
-    //   // yield put(Actions.getAll());
-    // }
+    console.log(data);
 
-    // if(error) {
-    //   yield put(Actions.updateCategoryFail(error.response));
-    // }
+    const { response, error } = yield call(api.update_category, formData, headers);
+
+    // console.log(response);
+    // console.log(error);
+
+      
+    if(response && response.data.status === "success") {
+      yield put(Actions.update_categorySuccess(response.data));
+      console.log("success edit");
+      
+    } else {
+      yield put(Actions.update_categoryFail(error.response));
+      console.log("failed edit");
+    }
     
 }
 

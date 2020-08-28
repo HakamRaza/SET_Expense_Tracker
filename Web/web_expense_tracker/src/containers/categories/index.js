@@ -17,85 +17,23 @@ import { IoIosTrash, IoMdCreate, IoMdAlbums } from "react-icons/io";
 import { Alert } from 'react-bootstrap';
 
 
-const sumCat = [
-    {
-        name:"Food",
-        budget: 800,
-        totalexpense: 400,
-        color:"lightblue",
-    },
 
-    {
-        name:"Drinks & Boba",
-        budget: 300,
-        totalexpense: 150,
-        color:"lightgreen",
-
-    },
-
-    {
-        name:"House Bills",
-        budget: 100,
-        totalexpense: 0,
-        color:"lightblue",
-
-    },
-
-    {
-        name:"Savings",
-        budget: 900,
-        totalexpense: 302.04,
-        color:"lightcoral",
-
-    },
-
-    {
-        name:"Drinks & Boba",
-        budget: 300,
-        totalexpense: 150,
-        color:"lightgreen",
-
-    },
-
-    {
-        name:"House Bills",
-        budget: 100,
-        totalexpense: 0,
-        color:"lightcoral",
-
-    },
-
-    {
-        name:"Savings",
-        budget: 900,
-        totalexpense: 302.04,
-        color:"lightsalmon",
-
-    },
-
-    {
-        name:"Drinks & Boba",
-        budget: 300,
-        totalexpense: 150,
-        color:"yellow",
-
-    },
-
-    {
-        name:"House Bills",
-        budget: 100,
-        totalexpense: 0,
-        color:"limegreen",
-
-    },
-
-    {
-        name:"Savings",
-        budget: 900,
-        totalexpense: 302.04,
-        color:"limegreen",
-
-    },
+const color = [
+"#FFFF33",
+"#FFCC33",
+"#FF9933",
+"#FF6633",
+"#FF3333",
+"#FFFFFF",
+"#FFCCFF",
+"#FF99FF",
+"#CC99FF",
+"#9999FF",
+"#99FF66",
+"#33FF66",
+"#00FF99",
+"#33FFFF",
+"#00CCFF",
 ]
 
 
@@ -147,9 +85,9 @@ class Category extends React.Component{
 
     componentDidUpdate(prevProps){
         
-        // console.log("this is component did update");
+        console.log("this is component did update");
         
-        const { getBarsData, delCategoryData} = this.props;
+        const { getBarsData, delCategoryData, getNewCategoryData, getUpdateCategory } = this.props;
         
         if(prevProps.getBarsData.isLoading && !getBarsData.isLoading){
             
@@ -184,10 +122,52 @@ class Category extends React.Component{
         //         this.setState({
         //             showModalAlert:true,
         //             modalTitleAlert: "Failed",
-        //             modalMsgAlert:"Failed to fetch Delete Category. Please Try Again",
+        //             modalMsgAlert:"Failed to Delete Category. Please Try Again",
         //         });
         //     }
         // }
+        
+        
+        if(prevProps.getNewCategoryData.isLoading && !getNewCategoryData.isLoading){
+            
+            if(getNewCategoryData.data.status === "success") {
+
+                this.setState({
+                    showModalAlert:true,
+                    modalTitleAlert: "Success",
+                    modalMsgAlert:"One New Category Added.",
+                });
+                
+                
+            } else if (getNewCategoryData.error !== null){
+                
+                this.setState({
+                    showModalAlert:true,
+                    modalTitleAlert: "Failed",
+                    modalMsgAlert:"Failed to Add Category. Please Try Again (with different color)",
+                });
+            }
+        }
+
+        if(prevProps.getUpdateCategory.isLoading && !getUpdateCategory.isLoading){
+            
+            if(getUpdateCategory.data.status === "success") {
+                this.setState({
+                    showModalAlert:true,
+                    modalTitleAlert: "Success",
+                    modalMsgAlert:"Changes saved! .",
+                });
+                
+                
+            } else if (getUpdateCategory.error !== null){
+                this.setState({
+                    showModalAlert:true,
+                    modalTitleAlert: "Failed",
+                    modalMsgAlert:"Failed to Edit Category. Please Try Again (with different color)",
+                });
+            }
+        }
+
     }
 
     _confirmation(selectID, id){
@@ -220,21 +200,66 @@ class Category extends React.Component{
     
     _delCategories(){
         console.log("Delete a Category");
-        console.log(this.state.itemID);
+        // console.log(this.state.itemID);
         this.props.onDeleteCategory(this.state.itemID);
-        // this.setState({showDelCat:true});
-        
+
+        this.setState({showModalDelete:false});
+
     }
     
     _editCategories(){
         console.log("Edit a Category");
-        console.log(this.state.itemID);
+        // console.log(this.state.itemID);
         // this.setState({showEditCat:true});
+
+
+        const { itemID, category_title, category_budget, category_color} = this.state;
+
+        if(itemID !=="" || category_title !=="" || category_budget !=="" || category_color !==""){
+            const formData = {
+                itemID,
+                category_title,
+                category_budget, 
+                category_color,
+            }
+    
+            this.props.onUpdateCategory(formData);
+
+        } else {
+
+            this.setState({
+                showModalAlert:true,
+                modalTitleAlert: "Oops",
+                modalMsgAlert:"Please Fill At Least One Forms. Make sure to use different color code.",
+            });
+        }
+
+        this.setState({showModalUpdate:false});
     }
     
     _addCategories(){
         console.log("Add more Categories");
         // this.setState({showAddMore:true});
+        const { itemID, category_title, category_budget, category_color} = this.state;
+
+        if(itemID !=="" && category_title !=="" && category_budget !=="" && category_color !==""){
+            const formData = {
+                category_title,
+                category_budget, 
+                category_color,
+            }
+    
+            this.props.onNewCategory(formData);
+        } else {
+
+            this.setState({
+                showModalAlert:true,
+                modalTitleAlert: "Oops",
+                modalMsgAlert:"Please Fill In all Forms..",
+            });
+        }
+
+        this.setState({showModalAdd:false});
     }
 
     _onGetCategoriesBar(){
@@ -289,23 +314,22 @@ class Category extends React.Component{
                         </Modal.Header>
                         <Modal.Body>
                             <Form.Group controlId="updateTitle">
-                                <Form.Label>Description :</Form.Label>
-                                <Form.Control required size="sm" type="text" pattern=".{1,10}" placeholder="Max 10 Chars"/>
+                                <Form.Label>Title :</Form.Label>
+                                <Form.Control required size="sm" type="text" pattern=".{1,10}" placeholder="Max 10 Chars" onChange={(category_title)=> this.setState({category_title: category_title.target.value})}/>
                             </Form.Group>
 
                             <Form.Group controlId="updateBudget">
                                 <Form.Label>Budget (RM) :</Form.Label>
-                                <Form.Control required size="sm" type="number" min="0" step="0.01" placeholder="Budget Value" />
+                                <Form.Control required size="sm" type="number" min="0" step="0.01" placeholder="Budget Value" onChange={(category_budget)=> this.setState({category_budget: category_budget.target.value})}/>
                             </Form.Group>
 
                             <Form.Group controlId="updateColor">
                             <Form.Label>Color Selection :</Form.Label>
-                            <Form.Control required size="sm" as="select">
-                                <option>Color</option>
-                                <option>Color</option>
-                                <option>Color</option>
-                                <option>Color</option>
-                                <option>Color</option>
+                            <Form.Control required size="sm" as="select" onChange={(category_color)=> this.setState({category_color: category_color.target.value})}>
+                                <option value="">- Choose Color -</option>
+                                {color.map((item)=>(
+                                    <option value={item} style={{backgroundColor:`${item}`}}>{item}</option>
+                                ))}
                                 {/* {this.state.getCategories.map( item=>(
                                     <option value={item.id}>{item.category_title}</option>
                                 ))} */}
@@ -328,23 +352,29 @@ class Category extends React.Component{
                         </Modal.Header>
                         <Modal.Body>
                             <Form.Group controlId="updateTitle">
-                                <Form.Label>Title:</Form.Label>
-                                <Form.Control required size="sm" type="text" pattern=".{1,10}" placeholder="Max 10 Chars"/>
+                                <Form.Label>Title :</Form.Label>
+                                <Form.Control required size="sm" type="text" pattern=".{1,10}" placeholder="Max 10 Chars" onChange={(category_title)=> this.setState({category_title: category_title.target.value})}/>
                             </Form.Group>
 
                             <Form.Group controlId="updateBudget">
                                 <Form.Label>Budget (RM) :</Form.Label>
-                                <Form.Control required size="sm" type="number" min="0" step="0.01" placeholder="Budget Value" />
+                                <Form.Control required size="sm" type="number" min="0" step="0.01" placeholder="Budget Value" onChange={(category_budget)=> this.setState({category_budget: category_budget.target.value})}/>
                             </Form.Group>
 
                             <Form.Group controlId="updateColor">
                             <Form.Label>Color Selection :</Form.Label>
-                            <Form.Control required size="sm" as="select">
-                                <option>Color</option>
-                                <option>Color</option>
-                                <option>Color</option>
-                                <option>Color</option>
-                                <option>Color</option>
+                            <Form.Control required size="sm" as="select" onChange={(category_color)=> this.setState({category_color: category_color.target.value})}>
+                                <option value="">- Choose Color -</option>
+                                {color.map((item)=>(
+                                    <option value={item} style={{backgroundColor:`${item}`}}>{item}</option>
+                                ))}
+                                {/* <option value="green">green</option>
+                                <option value="yellow">yellow</option>
+                                <option value="lightgreen">lightgreen</option>
+                                <option value="blue">blue</option>
+                                <option value="lightblue">lightblue</option>
+                                <option value="coral">coral</option> */}
+
                                 {/* {this.state.getCategories.map( item=>(
                                     <option value={item.id}>{item.category_title}</option>
                                 ))} */}
@@ -395,21 +425,18 @@ class Category extends React.Component{
 }
 
 const mapStateToProps = store => ({
-    // deleteTransactionData: Actions.deleteTransactionData(store),
     getBarsData: Actions.getBarsData(store),
     delCategoryData: Actions.delCategoryData(store),
-    //
-    // getOverviewData: Actions.getOverviewData(store),
-    // getTransactionData: Actions.getTransactionData(store),
+    getNewCategoryData: Actions.getNewCategoryData(store),
+    getUpdateCategory: Actions.getUpdateCategory(store),
 
 });
 
 const mapDispatchToProps = {
-    // onDeleteTransaction: Actions.delete_transaction,
     onGetBarsData: Actions.get_bars,
     onDeleteCategory: Actions.delete_categories,
-    // onGetOverviewData: Actions.get_overview,
-    // onGetTransaction: Actions.get_transaction,
+    onNewCategory: Actions.new_category,
+    onUpdateCategory: Actions.update_category,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Category);

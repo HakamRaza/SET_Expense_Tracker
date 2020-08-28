@@ -5,7 +5,7 @@ import { store } from "store/index";
 
 function* getbars({ data }) {
     console.log("THIS IS GET BAR SAGA");
-    console.log(data);
+    // console.log(data);
     
     let token = store.getState().PROFILE.userSession.data;
     const headers = {Authorization:`Bearer ${token}`};
