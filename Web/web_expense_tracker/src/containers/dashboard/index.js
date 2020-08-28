@@ -47,6 +47,20 @@ class Dashboard extends React.Component{
 
     
     componentDidMount(){
+        console.log("component did mount")
+        const {getUserSession} = this.props;
+
+        if(Object.keys(getUserSession.data).length === 0){
+
+            this.setState({
+                showModalAlert:true,
+                modalTitleAlert: "Unauthorized Login",
+                modalMsgAlert:"Unauthorized",
+                
+            }, () => this.props.history.push("/login"));
+        }
+
+
         const d = new Date();
         const yr = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
         const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
@@ -311,6 +325,7 @@ class Dashboard extends React.Component{
 
 const mapStateToProps = store => ({
     // deleteTransactionData: Actions.deleteTransactionData(store),
+    getUserSession: Actions.getUserSession(store),
     getBarsData: Actions.getBarsData(store),
     getOverviewData: Actions.getOverviewData(store),
     getTransactionData: Actions.getTransactionData(store),
