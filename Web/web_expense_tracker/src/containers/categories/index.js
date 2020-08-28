@@ -4,29 +4,30 @@ import Actions from '../../actions';
 import { connect } from "react-redux";
 
 import Drawer from '../../components/drawer';
+
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
+import Spinner from 'react-bootstrap/Spinner';
 import { IoIosTrash, IoMdCreate, IoMdAlbums } from "react-icons/io";
 
-
 const color = [
-"#FFFF33",
-"#FFCC33",
-"#FF9933",
-"#FF6633",
-"#FF3333",
-"#FFFFFF",
-"#FFCCFF",
-"#FF99FF",
-"#CC99FF",
-"#9999FF",
-"#99FF66",
-"#33FF66",
-"#00FF99",
-"#33FFFF",
-"#00CCFF",
+    "#FFFF33",
+    "#FFCC33",
+    "#FF9933",
+    "#FF6633",
+    "#FF3333",
+    "#FFFFFF",
+    "#FFCCFF",
+    "#FF99FF",
+    "#CC99FF",
+    "#9999FF",
+    "#99FF66",
+    "#33FF66",
+    "#00FF99",
+    "#33FFFF",
+    "#00CCFF",
 ]
 
 
@@ -39,7 +40,6 @@ class Category extends React.Component{
             category_title:"",
             category_budget:"",
             category_color:"",
-
             currentMonth:"",
             currentYear:"",
 
@@ -50,8 +50,9 @@ class Category extends React.Component{
             ModalAlert:false,
             modalTitleAlert:"",
             modalMsgAlert:"",
-
             barsData:[],
+
+            onLoading:false,
         }
     }
 
@@ -102,6 +103,8 @@ class Category extends React.Component{
                     modalMsgAlert:"Failed to fetch Categories Bar List. Please Try Again",
                 });
             }
+            
+            this.setState({onLoading:false});
         }
 
         if(prevProps.getDelCategoryData.isLoading && !getDelCategoryData.isLoading){
@@ -132,7 +135,7 @@ class Category extends React.Component{
         
         
         if(prevProps.getNewCategoryData.isLoading && !getNewCategoryData.isLoading){
-            
+                        
             if(getNewCategoryData.data.status === "success") {
 
                 this.setState({
@@ -161,7 +164,7 @@ class Category extends React.Component{
                 this.setState({
                     showModalAlert:true,
                     modalTitleAlert: "Success",
-                    modalMsgAlert:"Changes saved! .",
+                    modalMsgAlert:"Changes saved !",
                 }, () => {
                     
                     this._onGetCategoriesBar();
@@ -180,7 +183,6 @@ class Category extends React.Component{
     }
 
     _confirmation(selectID, id){
-        
         const itemID = id;
         this.setState({itemID:itemID});
 
@@ -209,18 +211,17 @@ class Category extends React.Component{
     
     _delCategories(){
         // console.log("Delete a Category");
-        // console.log(this.state.itemID);
         this.props.onDeleteCategory(this.state.itemID);
 
-        this.setState({showModalDelete:false});
+        this.setState({
+            onLoading:true,
+            showModalDelete:false
+        });
 
     }
     
     _editCategories(){
         // console.log("Edit a Category");
-        // console.log(this.state.itemID);
-        // this.setState({showEditCat:true});
-
 
         const { itemID, category_title, category_budget, category_color} = this.state;
 
@@ -243,12 +244,16 @@ class Category extends React.Component{
             });
         }
 
-        this.setState({showModalUpdate:false});
+        this.setState({
+            onLoading:true,
+            showModalUpdate:false,
+        });
     }
     
     _addCategories(){
         // console.log("Add more Categories");
-        // this.setState({showAddMore:true});
+        this.setState({onLoading:true});
+
         const { itemID, category_title, category_budget, category_color} = this.state;
 
         if(itemID !=="" && category_title !=="" && category_budget !=="" && category_color !==""){
@@ -280,6 +285,7 @@ class Category extends React.Component{
         }
 
         this.props.onGetBarsData(formData);
+        this.setState({onLoading:true});
     }
 
     render(){
@@ -387,6 +393,15 @@ class Category extends React.Component{
                 </div>)}
                 <div className="cat-cont">
                     <div className="cat-card-cont">
+
+                        <div className="categ-card-cont">
+                            <Card border="primary" style={{ width: '100%', marginTop:10, minHeight:147}}>
+                                <Card.Body style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+                                    {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/>{' '} Processing ...</span>): (<Button variant="primary" size="md" onClick={()=>this._confirmation("add")}><IoMdAlbums /> Add More</Button>)}
+                                </Card.Body>
+                            </Card>
+                        </div>
+
                         {this.state.barsData.map(item=>(
                         <div key={item.id} className="categ-card-cont">
                             <Card border="primary" style={{ width: '100%', marginTop:10, boxShadow:`5px 5px 0px ${item.color}`}}>
@@ -404,14 +419,6 @@ class Category extends React.Component{
                             </Card>
                         </div>
                         ))}
-
-                        <div className="categ-card-cont">
-                            <Card border="primary" style={{ width: '100%', marginTop:10, minHeight:147}}>
-                                <Card.Body style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-                                    <Button variant="primary" size="md" onClick={()=>this._confirmation("add")}><IoMdAlbums /> Add More</Button>
-                                </Card.Body>
-                            </Card>
-                        </div>
 
                     </div>
                 </div>
