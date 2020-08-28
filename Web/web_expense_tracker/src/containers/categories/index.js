@@ -242,7 +242,7 @@ class Category extends React.Component{
                 category_color,
             }
             
-            console.log(formData);
+            // console.log(formData);
     
             this.props.onUpdateCategory(formData);
 
