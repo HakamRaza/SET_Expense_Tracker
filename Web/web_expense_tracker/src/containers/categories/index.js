@@ -337,7 +337,7 @@ class Category extends React.Component{
                             <Form.Control required size="sm" as="select" onChange={(category_color)=> this.setState({category_color: category_color.target.value})}>
                                 <option value="">- Choose Color -</option>
                                 {color.map((item)=>(
-                                    <option value={item} style={{backgroundColor:`${item}`}}>{item}</option>
+                                    <option key={item} value={item} style={{backgroundColor:`${item}`}}>{item}</option>
                                 ))}
                             </Form.Control>
                             </Form.Group>
@@ -388,7 +388,7 @@ class Category extends React.Component{
                 <div className="cat-cont">
                     <div className="cat-card-cont">
                         {this.state.barsData.map(item=>(
-                        <div className="categ-card-cont">
+                        <div key={item.id} className="categ-card-cont">
                             <Card border="primary" style={{ width: '100%', marginTop:10, boxShadow:`5px 5px 0px ${item.color}`}}>
 
                                 <Card.Body>

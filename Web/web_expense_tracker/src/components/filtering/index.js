@@ -203,7 +203,7 @@ class FilterBar extends React.Component{
                                                 <option value="">- Select Category -</option>
 
                                                 {this.state.getCategories.map( item=>(
-                                                    <option value={item.category_title}>{item.category_title}</option>
+                                                    <option key={item.category_title} value={item.category_title}>{item.category_title}</option>
                                                 ))}
                                             </Form.Control>
                                         </Form.Group>

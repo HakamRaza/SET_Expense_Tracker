@@ -22,6 +22,13 @@ class Transactions extends React.Component{
             update_desc:"",
             update_date:"",
             update_value:0,
+
+            temp_category:"",
+            temp_desc:"",
+            temp_date:"",
+            temp_value:0,
+
+
             getTransaction:[],
             getTransactionAmount:[],
             getCategories:[],
@@ -130,19 +137,26 @@ class Transactions extends React.Component{
 
     }
     
-    _confirmation(selectID, id){
+    _confirmation(selectID, item){
         
-        const itemID = id;
+        const itemID = item.id;
         this.setState({itemID:itemID});
-
+        
         switch (selectID) {
             case "update":
-                this.setState({showModalUpdate:true});
-                
+                this.setState({
+                    showModalUpdate:true,
+                    temp_category:item.category_title,
+                    temp_desc: item.description,
+                    temp_date: item.date,
+                    temp_value: item.amount,
+                });
+            
             break;
             
             case "delete":
                 this.setState({showModalDelete:true,});
+
             break;
             
             default:
@@ -213,9 +227,8 @@ class Transactions extends React.Component{
                         <Modal.Body>
                             <Form.Group controlId="updateCat">
                             <Form.Label>Category :</Form.Label>
-                            <Form.Control required size="sm" as="select" onChange={(update_category)=> this.setState({update_category: update_category.target.value})}>
-                                <option value="">- Select Category -</option>
-
+                            <Form.Control required value={this.state.temp_category} size="sm" as="select" onChange={(update_category)=> this.setState({update_category: update_category.target.value})}>
+                                <option value="">Default: {this.state.temp_category}</option>
                                 {this.state.getCategories.map( item=>(
                                     <option key={item.id} value={item.id}>{item.category_title}</option>
                                 ))}
@@ -224,17 +237,38 @@ class Transactions extends React.Component{
 
                             <Form.Group controlId="updateDesc">
                                 <Form.Label>Description :</Form.Label>
-                                <Form.Control required size="sm" type="text" pattern=".{1,25}" placeholder="Max 25 Chars" onChange={(update_desc)=> this.setState({update_desc: update_desc.target.value})}/>
+                                <Form.Control 
+                                required value={this.state.temp_desc} 
+                                size="sm" type="text" pattern=".{1,25}" 
+                                placeholder="Max 25 Chars" 
+                                onChange={(update_desc)=> this.setState({
+                                    update_desc: update_desc.target.value,
+                                    temp_desc: update_desc.target.value,
+                                })}/>
                             </Form.Group>
 
                             <Form.Group controlId="updateDate">
                                 <Form.Label>Date :</Form.Label>
-                                <Form.Control required size="sm" type="date" min="2020-01-01" max="2050-01-01" value={this.state.update_date} onChange={(update_date)=> this.setState({update_date: update_date.target.value})}/>
+                                <Form.Control 
+                                required value={this.state.temp_date}
+                                size="sm" type="date" 
+                                min="2020-01-01" max="2050-01-01" 
+                                onChange={(update_date)=> this.setState({
+                                    update_date: update_date.target.value,
+                                    temp_date: update_date.target.value,
+                                })}/>
                             </Form.Group>
 
                             <Form.Group controlId="updateVal">
                                 <Form.Label>Value (RM) :</Form.Label>
-                                <Form.Control required size="sm" type="number" min="0" step="0.01" placeholder="Transaction Value" onChange={(update_value)=> this.setState({update_value: update_value.target.value})}/>
+                                <Form.Control 
+                                required value={this.state.temp_value}
+                                size="sm" type="number" min="0" step="0.01" 
+                                placeholder="Transaction Value" 
+                                onChange={(update_value)=> this.setState({
+                                    update_value: update_value.target.value,
+                                    temp_value: update_value.target.value,
+                                })}/>
                             </Form.Group>
                         </Modal.Body>
                         <Modal.Footer>
@@ -281,7 +315,7 @@ class Transactions extends React.Component{
                         </thead>
                         <tbody>
                             {this.state.getTransaction.map((item, index)=>(
-                                <tr>
+                                <tr key={index}>
                                     <td>{index+1}</td>
                                     <td className="trans-col">{item.date}</td>
                                     <td className="trans-col">{item.category_title}</td>
@@ -289,8 +323,8 @@ class Transactions extends React.Component{
                                     <td className="trans-col-desc">{item.description}</td>
                                     <td className="trans-col">
                                         <div>
-                                            <Button variant="warning" size="sm" onClick={()=>this._confirmation("update", item.id)}><IoMdCreate/> Edit</Button>{' '}
-                                            <Button variant="danger" size="sm" onClick={()=>this._confirmation("delete", item.id)}><IoIosTrash />Delete</Button>{' '}
+                                            <Button variant="warning" size="sm" onClick={()=>this._confirmation("update", item)}><IoMdCreate/> Edit</Button>{' '}
+                                            <Button variant="danger" size="sm" onClick={()=>this._confirmation("delete", item)}><IoIosTrash />Delete</Button>{' '}
                                         </div>
                                     </td>
                                 </tr>
