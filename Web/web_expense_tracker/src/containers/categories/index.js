@@ -40,6 +40,10 @@ class Category extends React.Component{
             category_title:"",
             category_budget:"",
             category_color:"",
+            temp_title:"",
+            temp_budget:"",
+            temp_color:"",
+
             currentMonth:"",
             currentYear:"",
 
@@ -182,14 +186,19 @@ class Category extends React.Component{
 
     }
 
-    _confirmation(selectID, id){
-        const itemID = id;
+    _confirmation(selectID, item){
+        const itemID = item.id;
         this.setState({itemID:itemID});
 
         switch (selectID) {
             case "update":
+                this.setState({
+                    showModalUpdate:true,
+                    temp_budget: item.budget,
+                    temp_color: item.color,
+                    temp_title: item.title,
+                });
                 this.setState({showModalUpdate:true});
-                // this.setState({showModalUpdate:true});
 
             break;
             
@@ -232,6 +241,8 @@ class Category extends React.Component{
                 category_budget, 
                 category_color,
             }
+            
+            console.log(formData);
     
             this.props.onUpdateCategory(formData);
 
@@ -330,17 +341,40 @@ class Category extends React.Component{
                         <Modal.Body>
                             <Form.Group controlId="updateTitle">
                                 <Form.Label>Title :</Form.Label>
-                                <Form.Control required size="sm" type="text" pattern=".{1,10}" placeholder="Max 10 Chars" onChange={(category_title)=> this.setState({category_title: category_title.target.value})}/>
+                                <Form.Control 
+                                required size="sm" 
+                                type="text" pattern=".{1,10}" 
+                                placeholder="Max 10 Chars" 
+                                value={this.state.temp_title}
+                                onChange={(category_title)=> this.setState({
+                                    category_title: category_title.target.value,
+                                    temp_title: category_title.target.value,
+                                })}/>
                             </Form.Group>
 
                             <Form.Group controlId="updateBudget">
                                 <Form.Label>Budget (RM) :</Form.Label>
-                                <Form.Control required size="sm" type="number" min="0" step="0.01" placeholder="Budget Value" onChange={(category_budget)=> this.setState({category_budget: category_budget.target.value})}/>
+                                <Form.Control 
+                                required size="sm" 
+                                type="number" min="0" step="0.01" 
+                                placeholder="Budget Value"
+                                value={this.state.temp_budget}
+                                onChange={(category_budget)=> this.setState({
+                                    category_budget: category_budget.target.value,
+                                    temp_budget: category_budget.target.value,
+                                })}/>
                             </Form.Group>
 
                             <Form.Group controlId="updateColor">
-                            <Form.Label>Color Selection :</Form.Label>
-                            <Form.Control required size="sm" as="select" onChange={(category_color)=> this.setState({category_color: category_color.target.value})}>
+                            <Form.Label>Color Selected : {this.state.temp_color}</Form.Label>
+                            {/* // */}
+                            <Form.Control 
+                            required size="sm" as="select" 
+                            onChange={(category_color)=> this.setState({
+                                category_color: category_color.target.value,
+                                temp_color: category_color.target.value,
+                            })}>
+
                                 <option value="">- Choose Color -</option>
                                 {color.map((item)=>(
                                     <option key={item} value={item} style={{backgroundColor:`${item}`}}>{item}</option>
@@ -391,6 +425,7 @@ class Category extends React.Component{
                         </Modal.Footer>
                     </Modal>
                 </div>)}
+                
                 <div className="cat-cont">
                     <div className="cat-card-cont">
 
@@ -412,8 +447,8 @@ class Category extends React.Component{
                                     </div>
                                     <div>
                                         <Card.Text>Budget: <b>$ {item.budget.toFixed(2)}</b></Card.Text>
-                                        <Button variant="warning" size="sm" onClick={()=>this._confirmation("update", item.id)}><IoMdCreate/> Edit</Button>{' '}
-                                        <Button variant="danger" size="sm" onClick={()=>this._confirmation("delete", item.id)}><IoIosTrash />Delete</Button>{' '}
+                                        <Button variant="warning" size="sm" onClick={()=>this._confirmation("update", item)}><IoMdCreate/> Edit</Button>{' '}
+                                        <Button variant="danger" size="sm" onClick={()=>this._confirmation("delete", item)}><IoIosTrash />Delete</Button>{' '}
                                     </div>
                                 </Card.Body>
                             </Card>
