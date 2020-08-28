@@ -11,7 +11,7 @@ export default class CategoriesCard extends React.Component{
                     <Card.Body>
                         <div style={{display:'flex', flexDirection:'row', justifyContent:"space-between"}}>
                             <Card.Title><b>{this.props.name || ""} </b></Card.Title>
-                            <Card.Text><b>$ {this.props.bal || 0} </b> left.</Card.Text>
+                            <Card.Text><b style={{color:`${this.props.bal <= 0 ? "red" : "black"}`}}>$ {this.props.bal || 0} </b> left.</Card.Text>
                         </div>
                         <div>
                             <Card.Text>Total Budget: $ {this.props.budget.toFixed(2) || 0}</Card.Text>

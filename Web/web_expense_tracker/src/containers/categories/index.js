@@ -87,7 +87,7 @@ class Category extends React.Component{
         
         console.log("this is component did update");
         
-        const { getBarsData, delCategoryData, getNewCategoryData, getUpdateCategory } = this.props;
+        const { getBarsData, getDelCategoryData, getNewCategoryData, getUpdateCategory } = this.props;
         
         if(prevProps.getBarsData.isLoading && !getBarsData.isLoading){
             
@@ -106,28 +106,28 @@ class Category extends React.Component{
             }
         }
 
-        // if(prevProps.delCategoryData.isLoading && !delCategoryData.isLoading){
+        if(prevProps.getDelCategoryData.isLoading && !getDelCategoryData.isLoading){
 
-        //     console.log("this is del category success component did update");
+            console.log("this is del category success component did update");
             
-        //     // if(delCategoryData.data.status === "success") {
+            if(getDelCategoryData.data.status === "success") {
                 
-        //     //     this.setState({
-        //     //         showModalAlert:true,
-        //     //         modalTitleAlert: "Success",
-        //     //         modalMsgAlert:"One Category Deleted.",
-        //     //     });
+                this.setState({
+                    showModalAlert:true,
+                    modalTitleAlert: "Success",
+                    modalMsgAlert:"One Category Deleted.",
+                });
                 
                 
-        //     // } else if (delCategoryData.error !== null){
+            } else if (getDelCategoryData.error !== null){
                 
-        //     //     this.setState({
-        //     //         showModalAlert:true,
-        //     //         modalTitleAlert: "Failed",
-        //     //         modalMsgAlert:"Failed to Delete Category. Please Try Again",
-        //     //     });
-        //     // }
-        // }
+                this.setState({
+                    showModalAlert:true,
+                    modalTitleAlert: "Failed",
+                    modalMsgAlert:"Failed to Delete Category. Please Try Again",
+                });
+            }
+        }
         
         
         if(prevProps.getNewCategoryData.isLoading && !getNewCategoryData.isLoading){
@@ -415,15 +415,15 @@ class Category extends React.Component{
 
 const mapStateToProps = store => ({
     getBarsData: Actions.getBarsData(store),
-    delCategoryData: Actions.delCategoryData(store),
     getNewCategoryData: Actions.getNewCategoryData(store),
     getUpdateCategory: Actions.getUpdateCategory(store),
+    getDelCategoryData: Actions.getDelCategoryData(store),
 
 });
 
 const mapDispatchToProps = {
     onGetBarsData: Actions.get_bars,
-    onDeleteCategory: Actions.delete_categories,
+    onDeleteCategory: Actions.delete_category,
     onNewCategory: Actions.new_category,
     onUpdateCategory: Actions.update_category,
 };

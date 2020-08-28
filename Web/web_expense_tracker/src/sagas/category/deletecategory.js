@@ -11,18 +11,19 @@ function* delete_category({data}) {
     const headers = {Authorization:`Bearer ${token}`};
     
     const formData = new FormData();
-    formData.append("transactionID", data);
-    const { response, error } = yield call(api.delete_transaction, formData, headers);
+    formData.append("categoryID", data);
+
+    const { response, error } = yield call(api.delete_category, formData, headers);
     
 
     if(response && response.data.status ==="success"){
-      yield put(Actions.delete_categoriesSuccess(response.data));
+      yield put(Actions.delete_categorySuccess(response.data));
 
       console.log("delete success");
     }
 
     if(error) {
-      yield put(Actions.delete_categoriesFail(error.response));
+      yield put(Actions.delete_categoryFail(error.response));
     }
     
 }
