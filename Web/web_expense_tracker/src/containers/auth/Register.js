@@ -173,7 +173,9 @@ class Register extends React.Component{
     }
 }
 
-const mapStateToProps = store => ({getRegisterData: Actions.getRegisterData(store)});
+const mapStateToProps = store => ({
+    getRegisterData: Actions.getRegisterData(store),
+});
 
 const mapDispatchToProps = {onRegister: Actions.register};
 

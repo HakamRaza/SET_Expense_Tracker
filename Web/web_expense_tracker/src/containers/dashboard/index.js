@@ -13,6 +13,7 @@ import SumCardBar from '../../components/sumCardBar';
 import CategoriesCard from '../../components/categoriesCard';
 import TransactionCard from '../../components/transactionCard';
 import AddTransaction from '../../components/addNewTransaction';
+import { Alert } from 'react-bootstrap';
 
 
 class Dashboard extends React.Component{
@@ -47,35 +48,29 @@ class Dashboard extends React.Component{
 
     
     componentDidMount(){
-        console.log("component did mount")
+        
         const {getUserSession} = this.props;
-
-        if(Object.keys(getUserSession.data).length === 0){
-
-            this.setState({
-                showModalAlert:true,
-                modalTitleAlert: "Unauthorized Login",
-                modalMsgAlert:"Unauthorized",
-                
-            }, () => this.props.history.push("/login"));
+        
+        if( Object.keys(getUserSession.data).length == 0){
+            this.props.history.push("/login");
         }
-
 
         const d = new Date();
         const yr = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
         const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
         const dt = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
         const today = `${yr}-${mo}-${dt}`;
-
+        
         this.setState({
             currentMonth: mo,
             currentYear: yr,
             currentDay: today,
         }, () => {
-
+            
             //callback function
             this._onGetMonthlyOverview();
         });
+        
         
     }
     

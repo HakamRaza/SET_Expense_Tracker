@@ -33,6 +33,15 @@ class Transactions extends React.Component{
         }
     }
 
+    componentDidMount(){
+        
+        const {getUserSession} = this.props;
+        
+        if( Object.keys(getUserSession.data).length == 0){
+            this.props.history.push("/login");
+        }
+    }
+
     componentDidUpdate(prevProps){
         
         const { getTransactionData, updateTransactionData, getCategoriesData, deleteTransactionData } = this.props;
@@ -295,9 +304,9 @@ class Transactions extends React.Component{
 }
 
 const mapStateToProps = store => ({
+    getUserSession: Actions.getUserSession(store),
     getCategoriesData: Actions.getCategoriesData(store),
     getTransactionData: Actions.getTransactionData(store),
-    
     updateTransactionData: Actions.updateTransactionData(store),
     deleteTransactionData: Actions.deleteTransactionData(store),
 });

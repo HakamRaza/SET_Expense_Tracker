@@ -29,7 +29,14 @@ class Login extends React.Component{
     }
     
     componentDidMount(){
-        Actions.resetUserSession();
+        // Actions.resetUserSession();
+
+        const {getUserSession} = this.props;
+
+        if( Object.keys(getUserSession.data).length !== 0){
+            
+            this.props.history.push("/dashboard");
+        }
     }
 
     componentDidUpdate(prevProps){
@@ -137,7 +144,10 @@ class Login extends React.Component{
     }
 }
 
-const mapStateToProps = store => ({getLoginData: Actions.getLoginData(store)});
+const mapStateToProps = store => ({
+    getUserSession: Actions.getUserSession(store),
+    getLoginData: Actions.getLoginData(store),
+});
 const mapDispatchToProps = {onLogin: Actions.login};
 
 export default connect(mapStateToProps,mapDispatchToProps)(Login);
