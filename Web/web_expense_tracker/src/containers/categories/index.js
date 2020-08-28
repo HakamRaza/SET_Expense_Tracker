@@ -3,19 +3,12 @@ import './categories.css';
 import Actions from '../../actions';
 import { connect } from "react-redux";
 
-
 import Drawer from '../../components/drawer';
-// import CategoriesCard from '../../components/categoriesCard';
-
-// import { IconContext } from "react-icons";
-// import Modal from '../../components/modal';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import { IoIosTrash, IoMdCreate, IoMdAlbums } from "react-icons/io";
-import { Alert } from 'react-bootstrap';
-
 
 
 const color = [
@@ -77,15 +70,13 @@ class Category extends React.Component{
             
             //callback function
             this._onGetCategoriesBar();
-            // this._onGetMonthlyOverview();
-            // this._onGetLatestTransaction();
         });
 
     }
 
     componentDidUpdate(prevProps){
         
-        console.log("this is component did update");
+        // console.log("this is component did update");
         
         const { getBarsData, getDelCategoryData, getNewCategoryData, getUpdateCategory } = this.props;
         
@@ -108,7 +99,7 @@ class Category extends React.Component{
 
         if(prevProps.getDelCategoryData.isLoading && !getDelCategoryData.isLoading){
 
-            console.log("this is del category success component did update");
+            // console.log("this is del category success component did update");
             
             if(getDelCategoryData.data.status === "success") {
                 
@@ -116,6 +107,9 @@ class Category extends React.Component{
                     showModalAlert:true,
                     modalTitleAlert: "Success",
                     modalMsgAlert:"One Category Deleted.",
+                }, () => {
+                    
+                    this._onGetCategoriesBar();
                 });
                 
                 
@@ -138,6 +132,9 @@ class Category extends React.Component{
                     showModalAlert:true,
                     modalTitleAlert: "Success",
                     modalMsgAlert:"One New Category Added.",
+                }, () => {
+                   
+                    this._onGetCategoriesBar();
                 });
                 
                 
@@ -158,6 +155,9 @@ class Category extends React.Component{
                     showModalAlert:true,
                     modalTitleAlert: "Success",
                     modalMsgAlert:"Changes saved! .",
+                }, () => {
+                    
+                    this._onGetCategoriesBar();
                 });
                 
                 
@@ -201,7 +201,7 @@ class Category extends React.Component{
 
     
     _delCategories(){
-        console.log("Delete a Category");
+        // console.log("Delete a Category");
         // console.log(this.state.itemID);
         this.props.onDeleteCategory(this.state.itemID);
 
@@ -210,7 +210,7 @@ class Category extends React.Component{
     }
     
     _editCategories(){
-        console.log("Edit a Category");
+        // console.log("Edit a Category");
         // console.log(this.state.itemID);
         // this.setState({showEditCat:true});
 
@@ -240,7 +240,7 @@ class Category extends React.Component{
     }
     
     _addCategories(){
-        console.log("Add more Categories");
+        // console.log("Add more Categories");
         // this.setState({showAddMore:true});
         const { itemID, category_title, category_budget, category_color} = this.state;
 

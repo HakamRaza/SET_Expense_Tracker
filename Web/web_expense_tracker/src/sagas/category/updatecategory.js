@@ -17,8 +17,6 @@ function* updateCategory({data}) {
     (data.category_budget !=="" && formData.append("newBudget", data.category_budget));
     (data.category_category_title !=="" && formData.append("newColor", data.category_color));
 
-    console.log(data);
-
     const { response, error } = yield call(api.update_category, formData, headers);
 
     // console.log(response);
@@ -27,11 +25,11 @@ function* updateCategory({data}) {
       
     if(response && response.data.status === "success") {
       yield put(Actions.update_categorySuccess(response.data));
-      console.log("success edit");
+      // console.log("success edit");
       
     } else {
       yield put(Actions.update_categoryFail(error.response));
-      console.log("failed edit");
+      // console.log("failed edit");
     }
     
 }

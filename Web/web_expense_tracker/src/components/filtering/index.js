@@ -11,7 +11,6 @@ import Spinner from 'react-bootstrap/Spinner';
 import Modal from 'react-bootstrap/Modal'
 
 
-
 class FilterBar extends React.Component{
     constructor(props){
         super(props);
@@ -24,12 +23,9 @@ class FilterBar extends React.Component{
             maxPrice:"",
             description:"",
             categoryName:"",
-
             onLoading:false,
             buttonValid:false,
             getCategories:[],
-            // getTransaction:[],
-
             showModal:false,
             modalTitle:"",
             modalMsg:"",
@@ -45,13 +41,8 @@ class FilterBar extends React.Component{
             var mxp = document.getElementById('mxp').validity.valid;
             var keyw = document.getElementById('keyw').validity.valid;
             var catname = document.getElementById('catname').validity.valid;
-
             var valid = sdate && edate && mnp && mxp && keyw && catname;
-            console.log(sdate, edate, mnp, mxp, keyw, catname);
-        
             this.setState({buttonValid: !valid});
-            // console.log("form status", mail, pass);
-            // console.log("sum", mail && pass);
         }
         
         
@@ -97,7 +88,6 @@ class FilterBar extends React.Component{
             }
 
             this.props.onGetTransaction(formData);
-            console.log("search button press");
             
         } else {
 
@@ -111,8 +101,7 @@ class FilterBar extends React.Component{
     }
 
     componentDidUpdate(prevProps){
-        const { getCategoriesData } = this.props;
-        const { getTransactionData } = this.props;
+        const { getCategoriesData, getTransactionData, updateTransactionData, deleteTransactionData } = this.props;
         
         if(prevProps.getCategoriesData.isLoading && !getCategoriesData.isLoading){
             this.setState({onLoading:false});
@@ -120,6 +109,7 @@ class FilterBar extends React.Component{
             if(getCategoriesData.data.status === "success") {
                 
                 this.setState({getCategories:getCategoriesData.data.categoryList});
+
                 
             } else if (getCategoriesData.error !== null){
 
@@ -135,24 +125,16 @@ class FilterBar extends React.Component{
         }
 
         if(prevProps.getTransactionData.isLoading && !getTransactionData.isLoading){
-            this.setState({onLoading:false});
             
-            // if(getTransactionData.data.status === "success") {
-                
-            //     this.setState({getTransaction:getTransactionData.data.data});
+            this.setState({onLoading:false});
+        }
 
-                
-            // } else if (getTransactionData.error !== null){
+        if(prevProps.updateTransactionData.isLoading && !updateTransactionData.isLoading){
+            this._submitGetTransaction();
+        }
 
-            //     if(getTransactionData.error.data !== null){
-                    
-            //         this.setState({
-            //             showModal:true,
-            //             modalTitle: "Failed",
-            //             modalMsg:"Failed to fetch Transaction List. Please Try Again",
-            //         });
-            //     }
-            // }
+        if(prevProps.deleteTransactionData.isLoading && !deleteTransactionData.isLoading){
+            this._submitGetTransaction();
         }
 
     }
@@ -235,8 +217,6 @@ class FilterBar extends React.Component{
                     </Card>
                 </Accordion>
 
-
-
                 </div>
             </div>
         );
@@ -246,6 +226,8 @@ class FilterBar extends React.Component{
 const mapStateToProps = store => ({
     getCategoriesData: Actions.getCategoriesData(store),
     getTransactionData: Actions.getTransactionData(store),
+    updateTransactionData: Actions.updateTransactionData(store),
+    deleteTransactionData: Actions.deleteTransactionData(store),
 });
 
 const mapDispatchToProps = {

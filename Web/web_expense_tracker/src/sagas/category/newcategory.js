@@ -19,11 +19,9 @@ function* new_categories({data}) {
     
     if(response && response.data.status === "success") {
       yield put(Actions.new_categorySuccess(response.data));
-      console.log("success add");
       
     } else {
       yield put(Actions.new_categoryFail(error.response));
-      console.log("failed add");
     }
     
 }

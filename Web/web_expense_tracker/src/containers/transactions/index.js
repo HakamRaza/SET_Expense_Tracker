@@ -1,12 +1,11 @@
 import React from 'react';
+import './transaction.css';
 import Drawer from '../../components/drawer';
 import Actions from '../../actions';
 import { connect } from "react-redux";
 
-// import Sidebar from '../../components/sidebar';
 import FilterBar from '../../components/filtering';
 import Table from 'react-bootstrap/Table';
-import './transaction.css';
 import { IoIosTrash, IoMdCreate } from "react-icons/io";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -23,15 +22,12 @@ class Transactions extends React.Component{
             update_desc:"",
             update_date:"",
             update_value:0,
-
             getTransaction:[],
             getTransactionAmount:[],
             getCategories:[],
-
             showModalAlert:false,
             modalTitleAlert:"",
             modalMsgAlert:"",
-
             showModalUpdate:false,
             showModalDelete:false,
         }
@@ -40,8 +36,6 @@ class Transactions extends React.Component{
     componentDidUpdate(prevProps){
         
         const { getTransactionData, updateTransactionData, getCategoriesData, deleteTransactionData } = this.props;
-        console.log("this is component did update");
-        console.log(prevProps);
         
         if(prevProps.getTransactionData.isLoading && !getTransactionData.isLoading){
             
@@ -49,6 +43,7 @@ class Transactions extends React.Component{
                 
                 this.setState({getTransaction:getTransactionData.data.data});
                 this.setState({getTransactionAmount:getTransactionData.data});
+
 
             } else if (getTransactionData.error !== null){
 
@@ -74,7 +69,6 @@ class Transactions extends React.Component{
                     modalMsgAlert:"Transaction Update Sucess!",
                 });
 
-                
             } else if (updateTransactionData.error !== null){
 
                 this.setState({
@@ -127,7 +121,6 @@ class Transactions extends React.Component{
 
     }
     
-    // _updateTransaction(itemID){
     _confirmation(selectID, id){
         
         const itemID = id;
@@ -149,8 +142,6 @@ class Transactions extends React.Component{
     }
 
     _updateTransaction(){
-        console.log("Update Transaction Pressed");
-        // console.log(this.state.itemID);
         
         const { update_category, update_desc, update_date, update_value, itemID} = this.state;
         
@@ -162,15 +153,11 @@ class Transactions extends React.Component{
             update_value
         }
         
-        console.log("formdata update ",formData);
-
         this.props.onUpdateTransaction(formData);
         this.setState({showModalUpdate:false});
     }
     
     _deleteTransaction(){
-        console.log("Delete Transaction Pressed");
-        // console.log(this.state.itemID);
         
         this.props.onDeleteTransaction(this.state.itemID)
         this.setState({showModalDelete:false});
@@ -221,7 +208,7 @@ class Transactions extends React.Component{
                                 <option value="">- Select Category -</option>
 
                                 {this.state.getCategories.map( item=>(
-                                    <option value={item.id}>{item.category_title}</option>
+                                    <option key={item.id} value={item.id}>{item.category_title}</option>
                                 ))}
                             </Form.Control>
                             </Form.Group>
@@ -310,6 +297,7 @@ class Transactions extends React.Component{
 const mapStateToProps = store => ({
     getCategoriesData: Actions.getCategoriesData(store),
     getTransactionData: Actions.getTransactionData(store),
+    
     updateTransactionData: Actions.updateTransactionData(store),
     deleteTransactionData: Actions.deleteTransactionData(store),
 });

@@ -40,30 +40,17 @@ class Register extends React.Component{
             this.setState({onLoading:false});
             
             if(getRegisterData.data.status === "success") {
+
                 alert("Registration Success! Please Log In");
                 this.props.history.push("/login");
-                
-                // this.setState({
-                //     showAlert: true,
-                //     alertMsg: "Registration Success! Redirecting You To Login Page..",
-                //     alertVar:"info",
-                // });
-                
-                // setTimeout(() => {
-                //     //token already get when register, direct push to dash also can
-                //     this.props.history.push("/login");
-                // }, 1800);
                 
             } else if (getRegisterData.error !== null){
                 
                 this.setState({
                     showAlert: true,
-                     alertMsg: getRegisterData.error.data.error,
-                    // alertMsg: "Registration Failed, Please Try Again",
+                    alertMsg: getRegisterData.error.data.error,
                     alertVar:"danger",
                 });
-                
-                // console.log("this is error",getRegisterData.error.data.error);
             }
         }
     }
@@ -73,7 +60,6 @@ class Register extends React.Component{
         var pass = document.getElementById('formBasicPassword').validity.valid;
         var pass2 = document.getElementById('formBasicPassword2').validity.valid;
         var valid = mail && pass && pass2;
-
         // console.log("form status", mail, pass, pass2);
         // console.log("sum", mail && pass && pass2);
         
@@ -94,7 +80,6 @@ class Register extends React.Component{
                     password_conf,
                 }
         
-                // console.log("register", formData);
                 this.props.onRegister(formData);
 
             } else {

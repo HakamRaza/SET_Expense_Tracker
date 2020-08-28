@@ -20,9 +20,6 @@ function* update_transaction({ data }) {
     
     const { response, error } = yield call(api.update_transaction, formData, headers);
 
-    console.log(response);
-    console.log(error);
-
     if (response && response.data.status === "success"){
       //same in action
       yield put(Actions.update_transactionSuccess(response.data));

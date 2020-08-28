@@ -1,12 +1,10 @@
 import React from 'react';
-import './addnewtrans.css';
 import Actions from '../../actions';
 import { connect } from "react-redux";
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
-// import { Alert } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal'
 
 
@@ -20,11 +18,9 @@ class AddTransaction extends React.Component{
             // trans_date: new Date().toISOString().substring(0, 10),
             trans_date:"",
             trans_value:0,
-
             buttonValid: true,
             onLoading: false,
             getCategories:[],
-
             showModal:false,
             modalTitle:"",
             modalMsg:"",
@@ -54,9 +50,6 @@ class AddTransaction extends React.Component{
         const cdt = `${yr}-${mo}-${dt}`;
         this.setState({trans_date: cdt })
 
-        // console.log(`${yr}-${mo}-${dt}`);
-        // console.log(new Date().toISOString());
-        
         //get categories
         this.props.onGetCategories();
     }
@@ -76,21 +69,12 @@ class AddTransaction extends React.Component{
 
                 if(getCategoriesData.error.status !== null){
                     
-                //     this.setState({
-                //         showModal:true,
-                //         modalTitle: "Failed",
-                //         modalMsg:getCategoriesData.data.status,
-                //     });
-
-                // } else {
-                    
                     this.setState({
                         showModal:true,
                         modalTitle: "Failed",
                         modalMsg:"Failed to get Categories List",
                     });
                 }
-                // Alert('Oops, failed to retrieve Categories List');
             }
 
             this.setState({onLoading:false});
@@ -109,7 +93,7 @@ class AddTransaction extends React.Component{
                 
             } else if (getNewTransactionData.error !== null){
 
-                console.log(getNewTransactionData.error.data.error);
+                // console.log(getNewTransactionData.error.data.error);
 
                 if(getNewTransactionData.error.data.error !== null){
                     
@@ -127,13 +111,10 @@ class AddTransaction extends React.Component{
                         modalMsg:"Failed to record new Transaction"
                     });
                 }
-
-                // Alert('Oops, failed to record new Transaction');
             }
 
             this.setState({onLoading:false});
         }
-        // console.log(this.state.getCategories);
     }
 
     _submitNewTransaction(){
@@ -150,8 +131,6 @@ class AddTransaction extends React.Component{
                 trans_value,
             }
 
-            // console.log('formdata add trans', formData);
-            // this.props.onAddTransaction(formData);
             this.props.onNewTransaction(formData);
 
         } else {
@@ -160,7 +139,6 @@ class AddTransaction extends React.Component{
                 modalTitle: "Oops..",
                 modalMsg:"Make sure to fill up all the items",
             });
-            // Alert("Oops, make sure to fill all the items")
         }
     }
 
