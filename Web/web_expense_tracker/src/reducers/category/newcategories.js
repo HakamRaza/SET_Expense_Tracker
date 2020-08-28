@@ -8,20 +8,20 @@ function new_category(state, action) {
   }
 
   switch (action.type) {
-    case Actions.UPDATE_CATEGORY:
+    case Actions.NEW_CATEGORY:
       return {
         isLoading: true,
         error: null,
         data: {},
       };
 
-    case Actions.UPDATE_CATEGORY_SUCCESS:
+    case Actions.NEW_CATEGORY_SUCCESS:
       return {
         isLoading: false,
         error: null,
         data: action.data,
       };
-    case Actions.UPDATE_CATEGORY_FAIL:
+    case Actions.NEW_CATEGORY_FAIL:
       return {
         isLoading: false,
         error: action.error,

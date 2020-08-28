@@ -107,24 +107,26 @@ class Category extends React.Component{
         }
 
         // if(prevProps.delCategoryData.isLoading && !delCategoryData.isLoading){
+
+        //     console.log("this is del category success component did update");
             
-        //     if(delCategoryData.data.status === "success") {
+        //     // if(delCategoryData.data.status === "success") {
                 
-        //         this.setState({
-        //             showModalAlert:true,
-        //             modalTitleAlert: "Success",
-        //             modalMsgAlert:"One Category Deleted.",
-        //         });
+        //     //     this.setState({
+        //     //         showModalAlert:true,
+        //     //         modalTitleAlert: "Success",
+        //     //         modalMsgAlert:"One Category Deleted.",
+        //     //     });
                 
                 
-        //     } else if (delCategoryData.error !== null){
+        //     // } else if (delCategoryData.error !== null){
                 
-        //         this.setState({
-        //             showModalAlert:true,
-        //             modalTitleAlert: "Failed",
-        //             modalMsgAlert:"Failed to Delete Category. Please Try Again",
-        //         });
-        //     }
+        //     //     this.setState({
+        //     //         showModalAlert:true,
+        //     //         modalTitleAlert: "Failed",
+        //     //         modalMsgAlert:"Failed to Delete Category. Please Try Again",
+        //     //     });
+        //     // }
         // }
         
         
@@ -144,7 +146,7 @@ class Category extends React.Component{
                 this.setState({
                     showModalAlert:true,
                     modalTitleAlert: "Failed",
-                    modalMsgAlert:"Failed to Add Category. Please Try Again (with different color)",
+                    modalMsgAlert:"Failed to Add Category. Either You Have Reached Max 10 Categories or Same Color Code Used",
                 });
             }
         }
@@ -330,9 +332,6 @@ class Category extends React.Component{
                                 {color.map((item)=>(
                                     <option value={item} style={{backgroundColor:`${item}`}}>{item}</option>
                                 ))}
-                                {/* {this.state.getCategories.map( item=>(
-                                    <option value={item.id}>{item.category_title}</option>
-                                ))} */}
                             </Form.Control>
                             </Form.Group>
                         </Modal.Body>
@@ -368,16 +367,6 @@ class Category extends React.Component{
                                 {color.map((item)=>(
                                     <option value={item} style={{backgroundColor:`${item}`}}>{item}</option>
                                 ))}
-                                {/* <option value="green">green</option>
-                                <option value="yellow">yellow</option>
-                                <option value="lightgreen">lightgreen</option>
-                                <option value="blue">blue</option>
-                                <option value="lightblue">lightblue</option>
-                                <option value="coral">coral</option> */}
-
-                                {/* {this.state.getCategories.map( item=>(
-                                    <option value={item.id}>{item.category_title}</option>
-                                ))} */}
                             </Form.Control>
                             </Form.Group>
                         </Modal.Body>

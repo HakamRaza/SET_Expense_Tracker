@@ -7,7 +7,6 @@ import {store} from "store/index";
 function* delete_category({data}) {
     console.log("THIS IS DELETE CATEGORY SAGA");
 
-    
     let token = store.getState().PROFILE.userSession.data;
     const headers = {Authorization:`Bearer ${token}`};
     
@@ -19,7 +18,7 @@ function* delete_category({data}) {
     if(response && response.data.status ==="success"){
       yield put(Actions.delete_categoriesSuccess(response.data));
 
-      console.log("saga success");
+      console.log("delete success");
     }
 
     if(error) {
