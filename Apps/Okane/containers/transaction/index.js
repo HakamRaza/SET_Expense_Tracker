@@ -1,12 +1,12 @@
 import React from "react";
-import {View, Text, ScrollView, TouchableOpacity, TouchableHighlight, Modal} from "react-native";
+import {View, Text, ScrollView, TouchableOpacity, Alert, Modal, FlatList} from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import RNPickerSelect from 'react-native-picker-select';
-import {Picker} from '@react-native-community/picker';
-import {DropDown} from "react-native-material-dropdown"
+import { SwipeListView } from 'react-native-swipe-list-view';
+
 
 import TransactionRecord from "components/transactionRecord";
 import ValueInputField from "components/valueInput";
@@ -21,19 +21,20 @@ class Transaction extends React.Component{
         super(props);
         this.state = {
             modalVisible: false,
+            editModalVisible: false,
             amount: "",
             description:"",
             date: new Date(),
             mode: 'date',
             selectedDate: moment().format("DD-MM-YYYY"),
-            selectedDateforDTP: "",
+            selectedDateforDTP: new Date(),
             show:false,
             DDCategoryList:[],
             TransactionHistory:[],
             category_id:"",
             month:8,
             year: 2020,
-
+            AllTransactionData:[],
         }
     }
 
@@ -51,6 +52,16 @@ class Transaction extends React.Component{
         this.setState({show:false});
     }
 
+    onNewTransDonePressed(){
+        const data = {
+            category_id:this.state.category_id,
+            description:this.state.description,
+            amount: this.state.amount,
+            date: moment(this.state.selectedDateforDTP).format("YYYY-MM-DD")
+        };
+        this.props.onNewTransaction(data);
+    }
+
     componentDidMount(){
         this.props.onGetCategories();   
         const data={
@@ -61,7 +72,7 @@ class Transaction extends React.Component{
     }
 
     componentDidUpdate(prevProps){
-        const{getCategoryData, getTransactionData} = this.props;
+        const{getCategoryData, getTransactionData, getNewTransactionData} = this.props;
 
         if(prevProps.getCategoryData.isLoading && !getCategoryData.isLoading){
             if(getCategoryData.data.status === "success"){
@@ -69,27 +80,59 @@ class Transaction extends React.Component{
                 this.setState({DDCategoryList:getCategoryData.data.categoryList});
             }
         }
-        if(prevProps.getTransactionData.isLoading && !getTransactionData.isLoading){
-            if(getTransactionData.data.status === "success"){
-                console.log("this is TransactionData didupdate", getTransactionData.data)
-                this.setState({TransactionHistory:getTransactionData.data.categoryList});
+        // if(prevProps.getTransactionData.isLoading && !getTransactionData.isLoading){
+        //     if(getTransactionData.data.status === "success"){
+        //         console.log("this is TransactionData didupdate", getTransactionData.data)
+        //         this.setState({TransactionHistory:getTransactionData.data.categoryList});
+        //     }
+        // }
+
+
+        if (prevProps.getTransactionData.isLoading && !getTransactionData.isLoading) {
+            console.log("this is AllTransactionData Latest @ container", this.state.AllTransactionData);
+            this.setState({AllTransactionData:getTransactionData.data.data}, 
+                () => {
+                    console.log("this is AllTransactionDataLatest @ container", this.state.AllTransactionData);
+                }
+            );
+            console.log("this is getTransactionData @ container", getTransactionData.data.data);   
+            
+        }
+
+        if (prevProps.getNewTransactionData.isLoading && !getNewTransactionData.isLoading) {
+            // console.log("prevProps", prevProps.getNewTransactionData.isLoading);
+            // console.log("latest props", getNewTransactionData.isLoading);
+            console.log("this is new cat", getNewTransactionData.data);
+            if(Object.keys(getNewTransactionData.data).length !== 0 &&
+            getNewTransactionData.data !== null) {
+         
+                Alert.alert("Success", "New Transaction added successfully", [
+                    {
+                        text:'To Transaction',
+                        onPress:() => { console.log("AHHHHH", this.state.month, this.state.year);
+                                        this.setState({modalVisible: !this.state.modalVisible})
+                                        const data ={ 
+                                                        month: this.state.month,
+                                                        year: this.state.year
+                                                    }
+                                        this.props.onGetTransactions(data);
+                        }
+                    },
+                ]
+                );
+                
+            } else if(getNewTransactionData.error !== null) { 
+                Alert.alert("Failed", "Please fill in all the fields")
             }
         }
     }
 
     render(){
 
-        const {modalVisible} = this.state;
+        const {modalVisible, editModalVisible} = this.state;
         return(
             <View style={{backgroundColor: "white"}}>
-                <View>
-                    <TouchableOpacity style={styles.monthYearPickerHolder}
-                                // onPress={()=>this.setState({show:true})}
-                                onPress={()=>this.setState({showDateFilter:true})}
-                            >
-                        <Text style={{fontSize:18}}>{this.state.language}</Text>
-                    </TouchableOpacity>
-                </View> 
+                
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -193,7 +236,125 @@ class Transaction extends React.Component{
                             <SubmitButton
                                 buttonTitle="Done"
                                 submitButtonText="Done"
-                                navigate = {()=>this.setModalVisible(!modalVisible)}
+                                navigate = {()=>this.onNewTransDonePressed()}
+                                // navigate = {()=>this.setModalVisible(!modalVisible)}
+                            />
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={editModalVisible}
+                    onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                    }}
+                >
+                    <View style={styles.centeredView} >
+                        <View style={styles.modalView}>
+                            <View style={styles.modalHeader}>
+                                <Text style={styles.modalTitle}>Edit Transaction</Text>
+
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        this.setState({editModalVisible:!editModalVisible});
+                                        console.log("close-cross");
+                                    }}>
+                                    <Ionicons 
+                                    name={"ios-close"} 
+                                    size={40} 
+                                    color={"rgb(0,163,255)"}
+                                    style={styles.closeButton}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                            <TouchableOpacity style={{
+                                        borderWidth:1, 
+                                        borderColor:"black",
+                                        borderRadius:25,
+                                        width: 250,
+                                        height: 50,
+                                        paddingHorizontal: 30,
+                                        marginBottom: 20,
+                                        backgroundColor:"white",
+                                        justifyContent:"center"
+                                        }}
+                                        onPress={()=>this.setState({show:true})}
+                                    ><Text>{this.state.selectedDate}</Text>
+                            </TouchableOpacity>
+                                    
+                                <DateTimePicker
+                                    value={this.state.selectedDateforDTP}
+                                    isVisible={this.state.show}
+                                    mode={this.state.mode}
+                                    onConfirm={this.handleDatePicked}
+                                    onCancel={this.hideDateTimePicker}
+                                    // style={{backgroundColor:"black"}}
+                                    // onChange={()=>console.log(date)}
+                                    // onChange={(event, a)=>
+                                    //     { 
+                                    //         console.log(selectedDate);
+                                    //         this.setState({selectedDate: moment(a).format("DD-MM-YYYY, h:mm:ss a"), show:false});
+                                    //     }}
+                                /> 
+                            <ValueInputField
+                            inputTitle="Description"
+                            inputPlaceHolder="Something"
+                            inputType="default"
+                            abc={(description)=>this.setState({description})}
+                            />
+                            <ValueInputField
+                            inputTitle="Amount"
+                            inputPlaceHolder="0.00"
+                            inputType="numeric"
+                            abc={(amount)=>this.setState({amount})}
+                            />
+
+                            <View style={{width:"100%", alignItems:"flex-start",paddingHorizontal: 30, marginBottom:15}}>
+                                <Text style={styles.title}>Category</Text>
+
+                                <TouchableOpacity
+                                    style={{
+                                        width: 250,
+                                        height: 50,
+                                        justifyContent:"center",
+                                        paddingHorizontal: 30,
+                                        marginVertical:15,
+                                        borderColor: "black",
+                                        borderWidth:1,
+                                        borderRadius: 25,
+                                        overflow: "hidden",
+                                        shadowOpacity:0.2,
+                                        // shadowColor: "black",
+                                        shadowRadius:5,
+                                        shadowOffset:{
+                                            height: 2,
+                                            width:2 },
+
+                                    }}>
+                                    <RNPickerSelect
+                                        onValueChange={(value)=>this.setState({category_id:value})}
+                                        items = {this.state.DDCategoryList.map((category) => 
+                                            ({
+                                                label: category.category_title,
+                                                value: category.id,
+                                            }))}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                            <SubmitButton
+                                buttonTitle="Done"
+                                submitButtonText="Done"
+                                navigate = {()=>this.onNewTransDonePressed()}
+                                // navigate = {()=>this.setModalVisible(!modalVisible)}
+                            />
+
+                            <SubmitButton
+                                buttonTitle="Delete"
+                                submitButtonText="Delete"
+                                color="#FF0000"
+                                navigate = {()=>this.onEditCatDeletePressed()}
                             />
                         </View>
                     </View>
@@ -204,11 +365,52 @@ class Transaction extends React.Component{
                         itemName="Chicken Burger and Nasi "
                         itemPrice={5.60}
                         category="Food"
-                        dateCreated="7 Aug 2020"
+                        dateCreated="2020-08-17"
                         color="orange"
                     />
 
+                    <SwipeListView
+                        data={this.state.AllTransactionData}
+                        // onPress={()=> item.id}
+                        renderItem = {({item}) =>(
+                        
+                           
+                            <TouchableOpacity 
+                            onPress={() =>  this.setState({ 
+                                editModalVisible: true, 
+                                // item.description
+                                // item.amount
+                                // item.category_title
+                                // item.color
+                                })}
+                            >
+                                <TransactionRecord
+                                    itemName={item.description}
+                                    itemPrice={item.amount}
+                                    category={item.category_title}
+                                    dateCreated={item.date}
+                                    color={item.color}
+                                    // color="orange"
+                                />
+                            </TouchableOpacity>
+                        
+                        )}
+                        renderHiddenItem={ ({item}) => (
+                            <View style={styles.rowBack}>
+                            <TouchableOpacity
+                                    style={styles.backLeftBtn}
+                                    onPress= {()=> this.onDeleteCategoryPressed(item.id)}>
+                                    <Text style={{fontWeight:"bold"}}>Delete</Text>
+                            </TouchableOpacity>
+                            </View>
+                        )}
 
+                        leftOpenValue={75}
+                        stopLeftSwipe={80}
+
+                        numColumns={1}
+                    />
+                    
 
                 </ScrollView>
                 <TouchableOpacity style={styles.addButton} onPress={() => {this.setModalVisible(true)}}>
@@ -273,7 +475,7 @@ addButton: {
     },
     modalView: {
       width:"100%",
-      height:"90%",
+      height:"95%",
     //   height:450,
       backgroundColor: "white",
       borderTopLeftRadius: 20,
@@ -298,16 +500,42 @@ addButton: {
     modalText: {
       marginBottom: 15,
       textAlign: "center"
-    }
+    },
+
+    rowBack:{
+        width: "100%",
+        height:"100%",
+        borderRadius: 5,
+        flexDirection:"row",
+        alignItems:"center",
+        justifyContent:"space-between",
+        position: "absolute",
+        zIndex:-1,
+    },
+
+    backLeftBtn: {
+        alignItems: 'flex-start',
+        bottom: 0,
+        justifyContent: 'center',
+        position: 'absolute',
+        top: 0,
+        width: 85,
+        paddingLeft: 20,
+        backgroundColor: "crimson",
+        borderWidth:1
+    },
 };
 
 const mapStateToProps = (store) => ({
     getCategoryData: Actions.getGetCategoryData(store),
     getTransactionData: Actions.getGetTransactionData(store),
+    getNewTransactionData: Actions.getNewTransactionData(store),
+
 });
 
 const mapDispatchToProps = {
     onGetCategories: Actions.getCategory,
     onGetTransactions: Actions.getTransaction,
+    onNewTransaction: Actions.newTransaction,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Transaction);

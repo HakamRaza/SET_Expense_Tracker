@@ -8,17 +8,19 @@ class TransactionRecord extends React.Component{
         return(
                 <View style={{backgroundColor:"white",height: 80, flexDirection: "row",justifyContent:"flex-start", borderWidth:0.5, 
                 borderColor: "grey",}}>
-                    <View style={{backgroundColor: this.props.color, width: 10}}></View>
-                    <View style={{flexDirection:"column", justifyContent:"space-evenly"}}>
-                        <View style={styles.upperContent}> 
-                            <Text style={styles.textUpperSec}>{this.props.itemName}</Text>
-                            <Text style={styles.textUpperSec}>-RM{this.props.itemPrice}</Text>
+                    <View style={{backgroundColor: this.props.color, width: 10, borderWidth:1, borderColor:"grey"}}></View>
+                    <View style={{ flex:1, flexDirection:'row', alignItems:"center", justifyContent:'space-between', paddingHorizontal:10}}>
+                        <View>
+                        <Text style={styles.textUpperSec}>{this.props.itemName}</Text>
+                        <Text>Category: {this.props.category}</Text>
                         </View>
-                        <View style={styles.bottomContent}>
-                            <Text style={styles.textBottomSec}>Category: {this.props.category}</Text>
-                            <Text style={styles.textBottomSec}>{this.props.dateCreated}</Text>
+                        <View>
+                        <Text style={styles.textUpperSec}>-RM{parseFloat(this.props.itemPrice).toFixed(2)}</Text>
+                        <Text style={styles.textBottomSec}>{this.props.dateCreated}</Text>
                         </View>
                     </View>
+
+                   
                     
                 </View>
         )
@@ -50,6 +52,7 @@ const styles = {
 
     textBottomSec: {
         fontSize: 14,
+        textAlign:'right'
     },
 
 

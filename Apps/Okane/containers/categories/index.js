@@ -36,7 +36,11 @@ class Categories extends React.Component{
             selectedColor: "",
             month:8,
             year: 2020,
-            AllBarsData: []
+            AllBarsData: [],
+            categoryTitleEdit:"",
+            categoryBudgetEdit:"",
+            categoryIdEdit:"",
+            categoryIdColor:"",
         }
     }
 
@@ -44,9 +48,9 @@ class Categories extends React.Component{
         this.setState({ modalVisible: visible });
       }
 
-    setEditModalVisible = (visible) => {
-        this.setState({ editModalVisible: visible });
-      }
+    // setEditModalVisible = (visible) => {
+    //     this.setState({ editModalVisible: visible });
+    //   }
 
     onNewCatDonePressed(){
         const data = {
@@ -69,7 +73,7 @@ class Categories extends React.Component{
     }
 
     onDeleteCategoryPressed(id){
-        console.log(this.state.taskList.id);
+        // console.log(this.state.AllBarsData.id);
         this.props.onDeleteCategory(id);
     }
 
@@ -91,15 +95,23 @@ class Categories extends React.Component{
             console.log("this is new cat", getNewCategoryData.data);
             if(Object.keys(getNewCategoryData.data).length !== 0 &&
             getNewCategoryData.data !== null) {
-                const data ={ 
-                    month: this.state.month,
-                    year: this.state.year
-                }
-                this.props.onGetBars(data);
-                Alert.alert("Success", "New Category has been created", [
+                // const data ={ 
+                //     month: this.state.month,
+                //     year: this.state.year
+                // }
+                // this.props.onGetBars(data);
+                Alert.alert("Success", "New Category added successfully", [
                     {
                         text:'To Categories',
                         // onPress:() => this.setModalVisible(!modalVisible),
+                        onPress:() => { console.log("AHHHHH", this.state.month, this.state.year);
+                                        this.setState({modalVisible: !this.state.modalVisible})
+                                        const data ={ 
+                                                        month: this.state.month,
+                                                        year: this.state.year
+                                                    }
+                                            this.props.onGetBars(data);
+                                        }
                     },
                 ]
                 );
@@ -110,11 +122,10 @@ class Categories extends React.Component{
         }
 
         if (prevProps.getGetBarsData.isLoading && !getGetBarsData.isLoading) {
-            // console.log("prevProps", prevProps.getGetBarsData.isLoading);
-            // console.log("latest props", getGetBarsData.isLoading);
             this.setState({AllBarsData:getGetBarsData.data.barsData}, 
                 () => {
                     console.log("this is AllBarsData @ container", this.state.AllBarsData);
+                    
                 }
             );
             console.log("this is getGetBarsData @ container", getGetBarsData.data.barsData);   
@@ -133,10 +144,10 @@ class Categories extends React.Component{
         //     //     this.setState({ refreshing: false})
         //     //    console.log("dash updagte", getDeleteCategoryData.data[0])
         //     if(getDeleteCategoryData.data.status === "success"){
-        //         Alert.alert("Success", "Your Task has been deleted", [
+        //         Alert.alert("Success", "This category has been deleted", [
         //             {
         //                 text:'To Dash',
-        //                 onPress:() => this.props.navigation.navigate("BottomTab"),
+        //                 // onPress:() => this.props.navigation.navigate("BottomTab"),
         //             },
         //             ]
         //         );
@@ -146,8 +157,10 @@ class Categories extends React.Component{
 
     render(){
 
+        // const { modalVisible } = this.state;
         const { modalVisible, editModalVisible } = this.state;
 
+// 
         return(
             <View>
                 <View>
@@ -165,7 +178,7 @@ class Categories extends React.Component{
                         Monthly Expenses Breakdown
                     </Text>
                     <VictoryPie
-                        width={300}
+                        width={400}
                         height={300}
                         colorScale={this.props.getGetPieData.data.colorData}
                         data={this.props.getGetPieData.data.pieData}    
@@ -187,8 +200,18 @@ class Categories extends React.Component{
                     onPress={()=> item.id}
                     renderItem = {({item}) =>(
                     
-                        <TouchableOpacity onPress={() => {this.setEditModalVisible(true), }}>
+                        // <TouchableOpacity onPress={() => this.setEditModalVisible(true)}>
+                        <TouchableOpacity 
+                        onPress={() =>  this.setState({ 
+                            editModalVisible: true, 
+                            categoryTitleEdit: item.title, 
+                            categoryBudgetEdit: item.budget,
+                            categoryIdEdit: item.id,
+                            categoryIdColor: item.color
+                            })}
+                        >
                             <BudgetBarCategories 
+                                catergoryId={item.id}
                                 barTitle={item.title}
                                 balance={item.budget-item.totalExpense}
                                 barBackgroundColor={item.color}
@@ -267,44 +290,67 @@ class Categories extends React.Component{
                             inputType="numeric"
                             abc={(budget)=>this.setState({budget})}
                             />
+                            <View>
+                                <Text style={styles.modalText}>Color</Text>
+                                <View >
+                                    <View style={{flexDirection: "row" , marginBottom: 10 }}>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FFFF33"}); console.log("color here")}}>
+                                            <ColorBox color="#FFFF33" selected={this.state.selectedColor} />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FFCC33" })}}>
+                                            <ColorBox color="#FFCC33" selected={this.state.selectedColor}/>
+                                            {/* <ColorBox color="#F4A261" selected={this.state.selectedColor==="#F4A261"? true: false}/> */}
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FF9933" })}}>
+                                            <ColorBox color="#FF9933" selected={this.state.selectedColor}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FF6633" })}}>
+                                            <ColorBox color="#FF6633" selected={this.state.selectedColor}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FF3333" })}}>
+                                            <ColorBox color="#FF3333" selected={this.state.selectedColor}/>     
+                                        </TouchableOpacity>
+                                    </View>
 
-                            <Text>Color</Text>
+                                    <View style={{flexDirection: "row", marginBottom: 10 }}>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FFFFFF"}); console.log("color here")}}>
+                                            <ColorBox color="#FFFFFF" selected={this.state.selectedColor} />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FFCCFF" })}}>
+                                            <ColorBox color="#FFCCFF" selected={this.state.selectedColor}/> 
+                                            {/* <ColorBox color="#F4A261" selected={this.state.selectedColor==="#F4A261"? true: false}/> */}
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FF99FF" })}}>
+                                            <ColorBox color="#FF99FF" selected={this.state.selectedColor}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#CC99FF" })}}>
+                                            <ColorBox color="#CC99FF" selected={this.state.selectedColor}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#9999FF" })}}>
+                                            <ColorBox color="#9999FF" selected={this.state.selectedColor}/>     
+                                        </TouchableOpacity>
+                                    </View>
 
-                            <View style={{flexDirection: "row" }}>
-                                <TouchableOpacity onPress={() => {this.setState({selectedColor:"#F1D302"}); console.log("color here")}}>
-                                    <ColorBox color="#F1D302" selected={this.state.selectedColor} />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {this.setState({selectedColor:"#F4A261" })}}>
-                                    <ColorBox color="#F4A261" selected={this.state.selectedColor}/>
-                                    {/* <ColorBox color="#F4A261" selected={this.state.selectedColor==="#F4A261"? true: false}/> */}
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {this.setState({selectedColor:"#EA526F" })}}>
-                                    <ColorBox color="#EA526F" selected={this.state.selectedColor}/>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {this.setState({selectedColor:"#AAFCB8" })}}>
-                                    <ColorBox color="#AAFCB8" selected={this.state.selectedColor}/>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {this.setState({selectedColor:"#53D8FB" })}}>
-                                    <ColorBox color="#53D8FB" selected={this.state.selectedColor}/>     
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{flexDirection: "row" ,marginBottom: 10}}>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#33FFFF"}); console.log("color here")}}>
-                                        <ColorBox color="#33FFFF" selected={this.state.selectedColor} />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FF66CC" })}}>
-                                        <ColorBox color="#FF66CC" selected={this.state.selectedColor}/>
-                                        {/* <ColorBox color="#F4A261" selected={this.state.selectedColor==="#F4A261"? true: false}/> */}
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#F3E6E3" })}}>
-                                        <ColorBox color="#F3E6E3" selected={this.state.selectedColor}/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#66FF99" })}}>
-                                        <ColorBox color="#66FF99" selected={this.state.selectedColor}/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#33CCFF" })}}>
-                                        <ColorBox color="#33CCFF" selected={this.state.selectedColor}/>     
-                                    </TouchableOpacity>
+                                    <View style={{flexDirection: "row" ,marginBottom: 10}}>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#99FF66"}); console.log("color here")}}>
+                                            <ColorBox color="#99FF66" selected={this.state.selectedColor} />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#33FF66" })}}>
+                                            <ColorBox color="#33FF66" selected={this.state.selectedColor}/> 
+                                            {/* <ColorBox color="#F4A261" selected={this.state.selectedColor==="#F4A261"? true: false}/> */}
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#00FF99" })}}>
+                                            <ColorBox color="#00FF99" selected={this.state.selectedColor}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#33FFFF" })}}>
+                                            <ColorBox color="#33FFFF" selected={this.state.selectedColor}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#00CCFF" })}}>
+                                            <ColorBox color="#00CCFF" selected={this.state.selectedColor}/>     
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+
                             </View>
                             <SubmitButton
                                 buttonTitle="Done"
@@ -314,7 +360,7 @@ class Categories extends React.Component{
                         </View>
                     </View>
                 </Modal>
-                <Modal
+                 <Modal
                     animationType="slide"
                     transparent={true}
                     visible={editModalVisible}
@@ -329,7 +375,7 @@ class Categories extends React.Component{
 
                                 <TouchableOpacity
                                     onPress={() => {
-                                        this.setEditModalVisible(!editModalVisible);
+                                        this.setState({editModalVisible:!editModalVisible});
                                         console.log("close-cross");
                                     }}
                                     >
@@ -344,74 +390,78 @@ class Categories extends React.Component{
                             </View>
                             <ValueInputField
                             inputTitle="Name"
-                        
-                            inputPlaceHolder={this.props.onPress.title}
+                            inputPlaceHolder={this.state.categoryTitleEdit}
                             inputType="default"
                             abc={(category_title)=>this.setState({category_title})}
                             />
                             <ValueInputField
                             inputTitle="Budget Allocation"
-                            inputPlaceHolder="0.00"
+                            inputPlaceHolder= "0.00"
                             inputType="numeric"
                             abc={(budget)=>this.setState({budget})}
                             />
 
-                            <Text>Color</Text>
-                            <View style={{ backgroundColor:"red"}}>
-                                <View style={{flexDirection: "row" , marginBottom: 10 }}>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#F1D302"}); console.log("color here")}}>
-                                        <ColorBox color="#F1D302" selected={this.state.selectedColor} />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#F4A261" })}}>
-                                        <ColorBox color="#F4A261" selected={this.state.selectedColor}/>
-                                        {/* <ColorBox color="#F4A261" selected={this.state.selectedColor==="#F4A261"? true: false}/> */}
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#EA526F" })}}>
-                                        <ColorBox color="#EA526F" selected={this.state.selectedColor}/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#AAFCB8" })}}>
-                                        <ColorBox color="#AAFCB8" selected={this.state.selectedColor}/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#53D8FB" })}}>
-                                        <ColorBox color="#53D8FB" selected={this.state.selectedColor}/>     
-                                    </TouchableOpacity>
+                            <View>
+                                <Text style={styles.modalText}>Color</Text>
+                                <View >
+                                    <View style={{flexDirection: "row" , marginBottom: 10 }}>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FFFF33"}); console.log("color here")}}>
+                                            <ColorBox color="#FFFF33" selected={this.state.selectedColor} />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FFCC33" })}}>
+                                            <ColorBox color="#FFCC33" selected={this.state.selectedColor}/>
+                                            {/* <ColorBox color="#F4A261" selected={this.state.selectedColor==="#F4A261"? true: false}/> */}
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FF9933" })}}>
+                                            <ColorBox color="#FF9933" selected={this.state.selectedColor}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FF6633" })}}>
+                                            <ColorBox color="#FF6633" selected={this.state.selectedColor}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FF3333" })}}>
+                                            <ColorBox color="#FF3333" selected={this.state.selectedColor}/>     
+                                        </TouchableOpacity>
+                                    </View>
+
+                                    <View style={{flexDirection: "row", marginBottom: 10 }}>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FFFFFF"}); console.log("color here")}}>
+                                            <ColorBox color="#FFFFFF" selected={this.state.selectedColor} />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FFCCFF" })}}>
+                                            <ColorBox color="#FFCCFF" selected={this.state.selectedColor}/> 
+                                            {/* <ColorBox color="#F4A261" selected={this.state.selectedColor==="#F4A261"? true: false}/> */}
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FF99FF" })}}>
+                                            <ColorBox color="#FF99FF" selected={this.state.selectedColor}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#CC99FF" })}}>
+                                            <ColorBox color="#CC99FF" selected={this.state.selectedColor}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#9999FF" })}}>
+                                            <ColorBox color="#9999FF" selected={this.state.selectedColor}/>     
+                                        </TouchableOpacity>
+                                    </View>
+
+                                    <View style={{flexDirection: "row" ,marginBottom: 10}}>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#99FF66"}); console.log("color here")}}>
+                                            <ColorBox color="#99FF66" selected={this.state.selectedColor} />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#33FF66" })}}>
+                                            <ColorBox color="#33FF66" selected={this.state.selectedColor}/> 
+                                            {/* <ColorBox color="#F4A261" selected={this.state.selectedColor==="#F4A261"? true: false}/> */}
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#00FF99" })}}>
+                                            <ColorBox color="#00FF99" selected={this.state.selectedColor}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#33FFFF" })}}>
+                                            <ColorBox color="#33FFFF" selected={this.state.selectedColor}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {this.setState({selectedColor:"#00CCFF" })}}>
+                                            <ColorBox color="#00CCFF" selected={this.state.selectedColor}/>     
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
-                                <View style={{flexDirection: "row", marginBottom: 10 }}>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#F1D302"}); console.log("color here")}}>
-                                        <ColorBox color="#F1D302" selected={this.state.selectedColor} />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#F4A261" })}}>
-                                        <ColorBox color="#F4A261" selected={this.state.selectedColor}/>
-                                        {/* <ColorBox color="#F4A261" selected={this.state.selectedColor==="#F4A261"? true: false}/> */}
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#EA526F" })}}>
-                                        <ColorBox color="#EA526F" selected={this.state.selectedColor}/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#AAFCB8" })}}>
-                                        <ColorBox color="#AAFCB8" selected={this.state.selectedColor}/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#53D8FB" })}}>
-                                        <ColorBox color="#53D8FB" selected={this.state.selectedColor}/>     
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={{flexDirection: "row" ,marginBottom: 10}}>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FFC1F3"}); console.log("color here")}}>
-                                        <ColorBox color="#FFC1F3" selected={this.state.selectedColor} />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#CFFFFE" })}}>
-                                        <ColorBox color="#CFFFFE" selected={this.state.selectedColor}/>
-                                        {/* <ColorBox color="#F4A261" selected={this.state.selectedColor==="#F4A261"? true: false}/> */}
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#F3E6E3" })}}>
-                                        <ColorBox color="#F3E6E3" selected={this.state.selectedColor}/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#FBE2E5" })}}>
-                                        <ColorBox color="#FBE2E5" selected={this.state.selectedColor}/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {this.setState({selectedColor:"#DBE3E5" })}}>
-                                        <ColorBox color="#DBE3E5" selected={this.state.selectedColor}/>     
-                                    </TouchableOpacity>
-                                </View>
+
                             </View>
 
 
@@ -430,7 +480,7 @@ class Categories extends React.Component{
                             />
                         </View>
                     </View>
-                </Modal>
+                </Modal> 
             </View>
         )
     }
@@ -444,12 +494,6 @@ const styles = StyleSheet.create({
       backgroundColor: "#f5fcff"
     },
 
-    linearGradient: {
-        flex: 1,
-        paddingLeft: 15,
-        paddingRight: 15,
-        borderRadius: 5
-      },
 
     monthYearPickerHolder:{
         borderWidth:0.5, 
@@ -546,10 +590,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center"
       },
-      modalText: {
-        marginBottom: 15,
-        textAlign: "center"
-      }
   });
 
 const mapStateToProps = (store) => ({

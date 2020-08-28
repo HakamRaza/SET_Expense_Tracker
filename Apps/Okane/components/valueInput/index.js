@@ -27,6 +27,7 @@ class ValueInputField extends React.Component{
                 keyboardType={this.props.inputType || "default"}
                 secureTextEntry={this.props.inputSecure && this.state.viewPassword}
                 onChangeText={this.props.abc}
+                value={this.props.inputValue}
                 />
     
                 {this.props.showHide && (

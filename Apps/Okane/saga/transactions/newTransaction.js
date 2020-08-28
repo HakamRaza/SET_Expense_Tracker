@@ -1,19 +1,23 @@
 import { takeLatest, call, all, fork, put } from "redux-saga/effects";
 import Actions from "../../actions";
 import * as api from "../../api";
-import { store } from 'store/index';
+// import { store } from 'store/index';
+import { getStore } from "../../store/configureStore";
+
 
 
 function* newTransaction({ data }) {
   console.log("THIS IS NEW TRANSACTION SAGA");
   
   const formData = new FormData();
-  formData.append("category_id", data.trans_category);
-  formData.append("description", data.trans_desc);
-  formData.append("amount", data.trans_value);
-  formData.append("date", data.trans_date);
+  formData.append("category_id", data.category_id);
+  formData.append("description", data.description);
+  formData.append("amount", data.amount);
+  formData.append("date", data.date);
 
-  let token = store.getState().PROFILE.userSession.data;
+  let store = getStore().getState();
+  let token = Actions.getUserSession(store).data;
+
   const headers = {Authorization:`Bearer ${token}`};
     
   const { response, error } = yield call(api.newTransaction, formData, headers);
@@ -26,11 +30,9 @@ function* newTransaction({ data }) {
         yield put(Actions.newTransactionSuccess(response.data));
         console.log("yeyyy");
 
-    } else if (response && response.data.status === "failed"){
-
-        yield put(Actions.newTransactionFail(response.data));
-        
-    } else if (error){
+    }   
+    
+    if (error){
 
         yield put(Actions.newTransactionFail(error.response));
     }

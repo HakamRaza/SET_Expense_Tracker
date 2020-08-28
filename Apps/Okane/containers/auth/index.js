@@ -184,7 +184,6 @@ class Auth extends React.Component{
                             />
                         </View>
 
-                        <Text><a>Return to Log In</a></Text>
 
                     </View>
                 )}

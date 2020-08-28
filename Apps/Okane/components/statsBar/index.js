@@ -11,7 +11,7 @@ class StatsBar extends React.Component{
             <View style={[styles.statsBarHolder, {backgroundColor:this.props.color}]}>
             {/* // <View style={[styles.statsBarHolder, {backgroundColor:{this.props.barBackgroundColor}}]}> */}
                 <Text style={styles.barTitle}>{this.props.barTitle}</Text>
-                <Text style={styles.barAmount}>RM {this.props.barAmount}</Text>
+                <Text style={styles.barAmount}>$ {this.props.barAmount.toFixed(2)}</Text>
             </View>
         )
     }

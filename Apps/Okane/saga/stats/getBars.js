@@ -13,7 +13,7 @@ function* getBars({ data }) {
     let store = getStore().getState();
     let token = Actions.getUserSession(store).data;
     const headers = { Authorization: `Bearer ${token}` };
-    console.log("get bars data", data)
+    console.log("get bars data", data.month)
     const formData = new FormData();
     formData.append("month", data.month);
     formData.append("year", data.year);

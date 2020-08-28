@@ -14,7 +14,7 @@ export const newTransaction = data => ({
     data: data,
 })
 
-export const newTransactionSucess= data => ({
+export const newTransactionSuccess= data => ({
     type: NEW_TRANSACTION_SUCCESS,
     data: data,
 })

@@ -8,20 +8,20 @@ function getTransaction(state, action) {
   }
 
   switch (action.type) {
-    case Actions.GET_TRANSACTION:
+    case Actions.GET_TRANSACTIONS:
       return {
         isLoading: true,
         error: null,
         data: {},
       };
 
-    case Actions.GET_TRANSACTION_SUCCESS:
+    case Actions.GET_TRANSACTIONS_SUCCESS:
       return {
         isLoading: false,
         error: null,
         data: action.data,
       };
-    case Actions.GET_TRANSACTION_FAIL:
+    case Actions.GET_TRANSACTIONS_FAIL:
       return {
         isLoading: false,
         error: action.error,

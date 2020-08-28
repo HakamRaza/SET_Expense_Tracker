@@ -94,12 +94,12 @@ class Overview extends React.Component{
             this.setState({show:true});
 
         } else {
-            this.setState({show:false}, () => {
-                console.log("AHHHHH", this.state.month, this.state.year);
-                const data ={ 
-                    month: this.state.month,
-                    year: this.state.year
-                }
+            this.setState({show:false}, 
+                () => { console.log("AHHHHH", this.state.month, this.state.year);
+                    	const data ={ 
+                                        month: this.state.month,
+                                        year: this.state.year
+                                    }
                 this.props.onGetOverview(data);
             });
         }
@@ -136,7 +136,7 @@ class Overview extends React.Component{
                                 onPress={()=>this.monthYearSelected()}
                             >
                         {/* <Text style={{fontSize:18}}>{this.state.currDate.toUTCString()}</Text> */}
-                        <Text style={{fontSize:18}}>{moment(this.state.currDate).format("MM/YYYY")}</Text>
+                        <Text style={{fontSize:18}}>{moment(this.state.currDate).format("MMM YYYY")}</Text>
                     </TouchableOpacity>
 
                 </View> 
@@ -187,17 +187,18 @@ class Overview extends React.Component{
                 <ScrollView contentContainerStyle={{alignItems:"center"}} >
                 {/* <ScrollView style={{ flex:1, alignItems:"center"}} > */}
                 {
-                    (this.props.getOverviewData.data.budgetData && this.props.getOverviewData.data.totalSavings !== null && this.props.getOverviewData.data.expensesData !== null ) && (
+    
+                    (this.props.getOverviewData.data.budgetData  && this.props.getOverviewData.data.totalSavings !== null && this.props.getOverviewData.data.expensesData !== null ) && (
                         <View>
                         <StatsBar
                         barTitle="Savings" 
                         barAmount={this.props.getOverviewData.data.totalSavings}
-                        color="#33FF99"
+                        color="#66FFFF"
                         />
                         <StatsBar 
                         barTitle="Expenses"
                         barAmount={this.props.getOverviewData.data.expensesData}
-                        color="#FF0033"
+                        color="#FF3333"
                         />
                         <BudgetBarOverview
                         barTitle="Budget"
@@ -212,9 +213,9 @@ class Overview extends React.Component{
                         Monthly Expenses Chart
                     </Text>
                     <VictoryChart 
-                        height={350}  
+                        height={280}  
                         width={350} 
-                        domain={{y:[0,3000]}}
+                        // domain={{y:[0,this.props.getOverviewData.data.budgetData]}}
                         style={{tickLabels:{angle:90}}}
                     >
                             <VictoryLine
@@ -244,9 +245,9 @@ class Overview extends React.Component{
 
                             data={this.props.getOverviewData.data.graphBudget}/>
                         </VictoryChart>
-
+                        <View style={{height:100}}></View>
                 </ScrollView>
-                <TouchableOpacity style={styles.addButton}>
+                {/* <TouchableOpacity style={styles.addButton}>
 
                     <Ionicons 
                     name={"ios-add-circle-outline"} 
@@ -254,7 +255,7 @@ class Overview extends React.Component{
                     color={"white"}
                     />
 
-                </TouchableOpacity>   
+                </TouchableOpacity>    */}
             </View>
         )
     }

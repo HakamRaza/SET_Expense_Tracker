@@ -20,7 +20,7 @@ import fetchApi from "./helper";
     return fetchApi("post", "api/delete_transaction", data, headers);
   };
   export const getTransaction = (data, headers) => {
-    return fetchApi("get", "api/get_transaction", data, headers);
+    return fetchApi("post", "api/get_transactions", data, headers);
   };
 
 //category

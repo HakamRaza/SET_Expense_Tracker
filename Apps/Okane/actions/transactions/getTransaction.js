@@ -13,7 +13,7 @@ export const getTransaction = data => ({
     data: data,
 })
 
-export const getTransactionSucess= data => ({
+export const getTransactionSuccess= data => ({
     type: GET_TRANSACTIONS_SUCCESS,
     data: data,
 })

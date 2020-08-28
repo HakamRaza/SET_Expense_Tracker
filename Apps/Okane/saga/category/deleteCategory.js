@@ -6,25 +6,26 @@ import {getStore} from "../../store/configureStore";
 
 //{data} destucture the data so we can avoid a step of console.log(data.data)
 function* deleteCategory({data}) {
+  console.log("this is deleteCAT SAGA");
 
-    let store = getStore().getState();
-    let token = Actions.getUserSession(store).data;
-    const headers ={ Authorization: `Bearer ${token}`};
+    // let store = getStore().getState();
+    // let token = Actions.getUserSession(store).data;
+    // const headers ={ Authorization: `Bearer ${token}`};
 
-    const formData = new FormData();
-    formData.append("id",data);
+    // const formData = new FormData();
+    // formData.append("categoryID",data);
     
-    const {response, error} = yield call(api.deleteCategory, formData, headers);
-    console.log(response, error);
+    // const {response, error} = yield call(api.deleteCategory, formData, headers);
+    // console.log(response, error);
 
-    if(response && response.data.status ==="success"){
-      yield put(Actions.deleteCategorySucccess(response.data));
-      // yield put(Actions.getAll());
-    }
+    // if(response && response.data.status ==="success"){
+    //   yield put(Actions.deleteCategorySucccess(response.data));
+    //   // yield put(Actions.getAll());
+    // }
 
-    if(error) {
-      yield put(Actions.deleteCategoryFail(error.response));
-    }
+    // if(error) {
+    //   yield put(Actions.deleteCategoryFail(error));
+    // }
     
 }
 

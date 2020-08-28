@@ -10,10 +10,11 @@ class SubmitButton extends React.Component{
                 disabled={this.props.loading}
             >
 
-            {this.props.loading?
+            {/* {this.props.loading?
             (<ActivityIndicator size="small" color="rgb(0, 150, 0)" />
-            ):(<Text style={{fontWeight:"bold", color: "white"}}>{this.props.submitButtonText}</Text>
-            )}
+            ):(
+                )} */}
+                <Text style={{fontWeight:"bold", color: "white"}}>{this.props.submitButtonText}</Text>
             </TouchableOpacity>
         )
     }
