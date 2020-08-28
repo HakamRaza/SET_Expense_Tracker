@@ -8,11 +8,11 @@ import Col from 'react-bootstrap/Col';
 import { VictoryPie} from 'victory';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 
 import Drawer from '../../components/drawer';
 import SumCardBar from '../../components/sumCardBar';
 import SumCard from '../../components/sumCard';
-import { wait } from '@testing-library/react';
 
 const month = [
     "Jan",
@@ -49,6 +49,7 @@ class PieChart extends React.Component{
 
             piecolorData:[],
             pieData:[],
+            onLoading:false,
 
         }
     }
@@ -79,6 +80,7 @@ class PieChart extends React.Component{
         const { getPieData, getOverviewData } = this.props;
         
         if(prevProps.getOverviewData.isLoading && !getOverviewData.isLoading){
+            this.setState({onLoading:false});
             
             if(getOverviewData.data.status === "success") {
                 
@@ -118,8 +120,10 @@ class PieChart extends React.Component{
                 this.setState({
                     showModalAlert:true,
                     modalTitleAlert: "Failed",
-                    modalMsgAlert:"Failed to Pie Chart Data or Data Not Exist. Please Try Again",
+                    modalMsgAlert:"Failed to Fetch Data or Data Does Not Exist",
                 });
+
+                this.setState({onLoading:false});
             }
         }
     }
@@ -153,6 +157,7 @@ class PieChart extends React.Component{
 
     _onSubmitMonthSummary(){
         // this._onGetMonthlyOverview();
+        this.setState({onLoading:true});
         this._onGetMonthlyPieChart();
 
     }
@@ -169,7 +174,7 @@ class PieChart extends React.Component{
                         <Modal.Body>{this.state.modalMsgAlert}</Modal.Body>
 
                         <Modal.Footer>
-                            <Button variant="primary" onClick={()=>this.setState({showModalAlert:false})}>OK</Button>
+                            <Button variant="secondary" onClick={()=>this.setState({showModalAlert:false})}>Close</Button>
                         </Modal.Footer>
                     </Modal>
                 </div>)}
@@ -202,13 +207,13 @@ class PieChart extends React.Component{
                         </Form.Group>
                         </Col>
                         <Col>
-                            <Button variant="primary" size="sm" onClick={()=>this._onSubmitMonthSummary()}>Submit</Button>
+                            {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/> Loading Data ...</span>): (<Button variant="primary" size="sm" onClick={()=>this._onSubmitMonthSummary()}>Submit</Button>)}
                         </Col>
                     </Form.Row>
 
                 </div>
                 <br/>
-                <p>Chart :</p>
+                <p>Expenses Pie Chart :</p>
                 <div className="pipg-holder">
                     <div>
                         <div className="piepg-pie">
