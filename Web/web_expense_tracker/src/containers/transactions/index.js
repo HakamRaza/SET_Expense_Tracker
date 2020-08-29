@@ -324,7 +324,7 @@ class Transactions extends React.Component{
                                     <td className="trans-col">
                                         <div>
                                             <Button variant="warning" size="sm" onClick={()=>this._confirmation("update", item)}><IoMdCreate/> Edit</Button>{' '}
-                                            <Button variant="danger" size="sm" onClick={()=>this._confirmation("delete", item)}><IoIosTrash />Delete</Button>{' '}
+                                            <Button variant="danger" size="sm" onClick={()=>this._confirmation("delete", item)}><IoIosTrash /> Del</Button>{' '}
                                         </div>
                                     </td>
                                 </tr>

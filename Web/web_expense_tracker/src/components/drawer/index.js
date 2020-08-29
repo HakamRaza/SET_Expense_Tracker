@@ -29,7 +29,7 @@ class Drawer extends React.Component{
         if(prevProps.getLogoutData.isLoading && !getLogoutData.isLoading){
             
             if(getLogoutData.data.status === "success") {        
-                alert("Logout Success");
+                // alert("Logout Success");
                 this.props.history.push("/login");
         
             } else if (getLogoutData.error !== null){

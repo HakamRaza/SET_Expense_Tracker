@@ -78,7 +78,7 @@ class Dashboard extends React.Component{
         
         // console.log("this is component did update");
         
-        const { getBarsData, getOverviewData, getTransactionData } = this.props;
+        const { getBarsData, getOverviewData, getTransactionData, getNewTransactionData } = this.props;
         
         if(prevProps.getBarsData.isLoading && !getBarsData.isLoading){
             
@@ -125,7 +125,6 @@ class Dashboard extends React.Component{
             }
         }
 
-        //1
         if(prevProps.getTransactionData.isLoading && !getTransactionData.isLoading){
             
             if(getTransactionData.data.status === "success") {
@@ -146,6 +145,13 @@ class Dashboard extends React.Component{
         }
 
         // console.log(this.state.todayTransaction);
+
+        if(prevProps.getNewTransactionData.isLoading && !getNewTransactionData.isLoading){
+
+            if(getNewTransactionData.data.status === "success") {
+                this._onGetCategoriesBar();
+            }
+        }
     }
     
     
@@ -324,6 +330,7 @@ const mapStateToProps = store => ({
     getBarsData: Actions.getBarsData(store),
     getOverviewData: Actions.getOverviewData(store),
     getTransactionData: Actions.getTransactionData(store),
+    getNewTransactionData: Actions.newTransactionData(store),
 
 });
 
