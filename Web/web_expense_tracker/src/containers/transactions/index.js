@@ -5,6 +5,7 @@ import Actions from '../../actions';
 import { connect } from "react-redux";
 
 import FilterBar from '../../components/filtering';
+import AddTransButton from '../../components/addTransactionBut';
 import Table from 'react-bootstrap/Table';
 import { IoIosTrash, IoMdCreate } from "react-icons/io";
 import Modal from 'react-bootstrap/Modal';
@@ -51,7 +52,7 @@ class Transactions extends React.Component{
 
     componentDidUpdate(prevProps){
         
-        const { getTransactionData, updateTransactionData, getCategoriesData, deleteTransactionData } = this.props;
+        const { getTransactionData, updateTransactionData, getCategoriesData, deleteTransactionData} = this.props;
         
         if(prevProps.getTransactionData.isLoading && !getTransactionData.isLoading){
             
@@ -222,7 +223,7 @@ class Transactions extends React.Component{
                     <div>
                     <Modal centered show={true} onHide={()=>this.setState({showModalUpdate:false})}>
                         <Modal.Header closeButton>
-                        <Modal.Title>Update </Modal.Title>
+                        <Modal.Title>Update Transaction</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <Form.Group controlId="updateCat">
@@ -332,6 +333,7 @@ class Transactions extends React.Component{
                         </tbody>
                     </Table>
                 </div>
+                <AddTransButton/>
             </div>
         );
     }

@@ -1,14 +1,14 @@
 import React from 'react';
 import Actions from '../../actions';
 import { connect } from "react-redux";
-
+import './addTransBut.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
 import Modal from 'react-bootstrap/Modal'
 
 
-class AddTransaction extends React.Component{
+class AddTransButton extends React.Component{
     constructor(){
         super();
 
@@ -22,6 +22,7 @@ class AddTransaction extends React.Component{
             onLoading: false,
             getCategories:[],
             showModal:false,
+            showModalAdd: false,
             modalTitle:"",
             modalMsg:"",
 
@@ -55,10 +56,13 @@ class AddTransaction extends React.Component{
     }
 
     componentDidUpdate(prevProps){
+
         const { getCategoriesData, getNewTransactionData } = this.props;
         
         
         if(prevProps.getCategoriesData.isLoading && !getCategoriesData.isLoading){
+            
+            this.setState({onLoading:false});
             
             if(getCategoriesData.data.status === "success") {
                 
@@ -76,14 +80,16 @@ class AddTransaction extends React.Component{
                 }
             }
 
-            this.setState({onLoading:false});
         }
         
         if(prevProps.getNewTransactionData.isLoading && !getNewTransactionData.isLoading){
             
+            this.setState({onLoading:false});
+
             if(getNewTransactionData.data.status === "success") {
 
                 this.setState({
+                    showModalAdd:false,
                     showModal:true,
                     modalTitle: "Success!",
                     modalMsg:"New Transaction Added."
@@ -97,6 +103,7 @@ class AddTransaction extends React.Component{
                 if(getNewTransactionData.error.data.error !== null){
                     
                     this.setState({
+                        showModalAdd:false,
                         showModal:true,
                         modalTitle: "Failed",
                         modalMsg:getNewTransactionData.error.data.error
@@ -105,6 +112,7 @@ class AddTransaction extends React.Component{
                 } else {
                     
                     this.setState({
+                        showModalAdd:false,
                         showModal:true,
                         modalTitle: "Failed",
                         modalMsg:"Failed to record new Transaction"
@@ -112,7 +120,6 @@ class AddTransaction extends React.Component{
                 }
             }
 
-            this.setState({onLoading:false});
         }
     }
 
@@ -131,6 +138,7 @@ class AddTransaction extends React.Component{
             }
 
             this.props.onNewTransaction(formData);
+            // console.log(formData);
 
         } else {
             this.setState({
@@ -144,6 +152,7 @@ class AddTransaction extends React.Component{
     render(){
         return(
             <div>
+                <div className="addButton" onClick={()=>this.setState({showModalAdd:true})}>+</div>
                 {<div>
                     <Modal show={this.state.showModal} onHide={()=>this.setState({showModal:false})}>
                         <Modal.Header closeButton>
@@ -159,42 +168,55 @@ class AddTransaction extends React.Component{
                     </Modal>
                 </div>}
 
-                {/* <h3 onClick={()=>this.setState({showModal:true})}>Show Modal</h3> */}
+                {this.state.showModalAdd && (
+                    <div>
+                    <Modal centered show={true} onHide={()=>this.setState({showModalAdd:false})}>
+                        <Modal.Header closeButton>
+                        <Modal.Title>Add Category :</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
 
-                <Form onChange={()=>(this._checkFormValidity())}>
-                    <fieldset disabled={this.state.onLoading}>
+                            <Form onChange={()=>(this._checkFormValidity())}>
+                                <fieldset disabled={this.state.onLoading}>
 
-                    <Form.Group controlId="selectCat">
-                        <Form.Label>Category :</Form.Label>
-                        <Form.Control required size="sm" as="select" onChange={(trans_category)=> this.setState({trans_category: trans_category.target.value})}>
-                            <option value="">- Select Category -</option>
+                                <Form.Group controlId="selectCat">
+                                    <Form.Label>Add New Transaction :</Form.Label>
+                                    <Form.Control required size="sm" as="select" onChange={(trans_category)=> this.setState({trans_category: trans_category.target.value})}>
+                                        <option value="">- Select Category -</option>
 
-                            {this.state.getCategories.map( item=>(
-                                <option key={item.id} value={item.id}>{item.category_title}</option>
-                            ))}
+                                        {this.state.getCategories.map( item=>(
+                                            <option key={item.id} value={item.id}>{item.category_title}</option>
+                                        ))}
 
-                        </Form.Control>
-                    </Form.Group>
+                                    </Form.Control>
+                                </Form.Group>
 
-                    <Form.Group controlId="selectDesc">
-                        <Form.Label>Description :</Form.Label>
-                        <Form.Control required size="sm" type="text" pattern=".{1,25}" placeholder="Max 25 Chars" onChange={(trans_desc)=> this.setState({trans_desc: trans_desc.target.value})}/>
-                    </Form.Group>
+                                <Form.Group controlId="selectDesc">
+                                    <Form.Label>Description :</Form.Label>
+                                    <Form.Control required size="sm" type="text" pattern=".{1,25}" placeholder="Max 25 Chars" onChange={(trans_desc)=> this.setState({trans_desc: trans_desc.target.value})}/>
+                                </Form.Group>
 
-                    <Form.Group controlId="selectDate">
-                        <Form.Label>Date :</Form.Label>
-                        <Form.Control required size="sm" type="date" min="2020-01-01" max="2050-01-01" value={this.state.trans_date} onChange={(trans_date)=> this.setState({trans_date: trans_date.target.value})}/>
-                    </Form.Group>
+                                <Form.Group controlId="selectDate">
+                                    <Form.Label>Date :</Form.Label>
+                                    <Form.Control required size="sm" type="date" min="2020-01-01" max="2050-01-01" value={this.state.trans_date} onChange={(trans_date)=> this.setState({trans_date: trans_date.target.value})}/>
+                                </Form.Group>
 
-                    <Form.Group controlId="selectVal">
-                        <Form.Label>Value (RM) :</Form.Label>
-                        <Form.Control required size="sm" type="number" min="0" step="0.01" placeholder="Transaction Value" onChange={(trans_value)=> this.setState({trans_value: trans_value.target.value})}/>
-                    </Form.Group>
+                                <Form.Group controlId="selectVal">
+                                    <Form.Label>Value (RM) :</Form.Label>
+                                    <Form.Control required size="sm" type="number" min="0" step="0.01" placeholder="Transaction Value" onChange={(trans_value)=> this.setState({trans_value: trans_value.target.value})}/>
+                                </Form.Group>
 
-                    {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/> Saving ...</span>): (<Button variant="primary" disabled={this.state.buttonValid} onClick={()=>(this._submitNewTransaction())}>ADD NEW</Button>)}
-                    
-                    </fieldset>
-                </Form>
+                                
+                                </fieldset>
+                            </Form>
+                        </Modal.Body>
+                        <Modal.Footer>
+
+                            <Button variant="secondary" onClick={()=>this.setState({showModalAdd:false})}>Close</Button>
+                            {this.state.onLoading ? (<span><Spinner animation="border" size="sm"/> Saving ...</span>): (<Button variant="primary" disabled={this.state.buttonValid} onClick={()=>(this._submitNewTransaction())}>ADD NEW</Button>)}
+                        </Modal.Footer>
+                    </Modal>
+                </div>)}
 
             </div>
         );
@@ -214,4 +236,4 @@ const mapDispatchToProps = {
     onNewTransaction: Actions.new_transaction,
 };
 
-export default connect(mapStateToProps,mapDispatchToProps)(AddTransaction);
+export default connect(mapStateToProps,mapDispatchToProps)(AddTransButton);

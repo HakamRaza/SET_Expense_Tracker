@@ -101,7 +101,7 @@ class FilterBar extends React.Component{
     }
 
     componentDidUpdate(prevProps){
-        const { getCategoriesData, getTransactionData, updateTransactionData, deleteTransactionData } = this.props;
+        const { getCategoriesData, getTransactionData, updateTransactionData, deleteTransactionData, getNewTransactionData } = this.props;
         
         if(prevProps.getCategoriesData.isLoading && !getCategoriesData.isLoading){
             this.setState({onLoading:false});
@@ -134,6 +134,10 @@ class FilterBar extends React.Component{
         }
 
         if(prevProps.deleteTransactionData.isLoading && !deleteTransactionData.isLoading){
+            this._submitGetTransaction();
+        }
+
+        if(prevProps.getNewTransactionData.isLoading && !getNewTransactionData.isLoading){
             this._submitGetTransaction();
         }
 
@@ -228,6 +232,8 @@ const mapStateToProps = store => ({
     getTransactionData: Actions.getTransactionData(store),
     updateTransactionData: Actions.updateTransactionData(store),
     deleteTransactionData: Actions.deleteTransactionData(store),
+    getNewTransactionData: Actions.newTransactionData(store),
+
 });
 
 const mapDispatchToProps = {

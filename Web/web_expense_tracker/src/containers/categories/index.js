@@ -390,6 +390,7 @@ class Category extends React.Component{
                         </Modal.Footer>
                     </Modal>
                 </div>)}
+                
                 {this.state.showModalAdd && (
                     <div>
                     <Modal centered show={true} onHide={()=>this.setState({showModalAdd:false})}>
