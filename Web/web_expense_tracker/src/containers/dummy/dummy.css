@@ -21,6 +21,17 @@ a {
     align-items: center;
 }
 
+#apps-wrap {
+    height: 100%;
+    min-height: 600px;
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 
 #about-item {
     padding: 1em;
@@ -31,6 +42,31 @@ a {
     text-align: left;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;
+}
+
+#apps-text {
+    text-align: left;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: black;
+}
+
+.carousel {
+    width: 300px;
+    height: 400px;
+    background-color: #3190b51f;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.carousel-item {
+    left: 40px;
+}
+
+.carousel-img {
+    width: auto;
+    height: 380px;
+    background-color: grey;
+    border-radius: 10px;
 }
 
 #about-text h1{

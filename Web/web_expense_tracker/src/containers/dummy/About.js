@@ -1,6 +1,6 @@
 import React from 'react';
 import './dummy.css';
-import Contact from './Contact';
+import Apps from './Apps';
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card'
 
@@ -18,10 +18,10 @@ export default class About extends React.Component {
                             <br/>
                             <p><i>A Leader in Expense Tracking Innovation</i></p>
                             <div style={{textAlign:"justify"}}>
-                                <p><b>Okane</b> was founded in 1985 and began publishing software for the Apple Macintosh. Its first product in 1985 was MacAuto, an automotive logbook. In the years to follow, it released FolderJump, FetchIt and KopyKat. Three very popular utilities for the Macintosh.
+                                <p><b>Okane</b> was founded in 2020 and Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
                                 <br/></p>
                                 <p>
-                                In 1997, Okane released version 5 of MoreInfo, which was to become the best selling version of the software.  MoreInfo continues to be sold today to loyal Newton users.
+                                In July 2020, Okane released version 1.0 of Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
                                 <br/></p>
                                 
                                 <Accordion>
@@ -32,10 +32,10 @@ export default class About extends React.Component {
                                         <Accordion.Collapse eventKey="0">
                                             <Card.Body>
                                             <p>
-                                            In  of 1998, Okane released its first Palm application, TravelTracker. Since then, TravelTracker has been updated numerous times, the current version being 4. TravelTracker continues to be a popular product and is used by travelers throughout the world.
+                                            In  of 1998, Okane released its first At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet continues to be a popular product and is used by travelers throughout the world.
                                             <br/></p>
                                             <p>
-                                            On July 11, 2008, Okane released its first product for the iPhone, TravelTracker.  Inspired by the Palm OS version, the iPhone version is even more powerful and comprehensive than the popular Palm OS version.
+                                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
                                             <br/></p>
                                             <p>
                                             Okane prides itself it providing great products along with great customer service. We appreciate comments and feedback from all our customers.</p>
@@ -49,7 +49,8 @@ export default class About extends React.Component {
 
                     </div>
                 </div>
-                <Contact/>
+                {/* <Contact/> */}
+                <Apps/>
             </div>
         );
     }
