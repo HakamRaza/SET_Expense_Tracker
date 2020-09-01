@@ -1,0 +1,13 @@
+.tc-holder1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.tc-holder3 {
+    position: absolute;
+    top: 3px;
+    left: 5px;
+    font-size: 10px;
+    color: rgba(110, 110, 110, 0.65)
+}

@@ -1,0 +1,21 @@
+.sumc-pie {
+    position: absolute;
+    top: 7px;
+    right: 3px;
+    width: 100px;
+    height: 100px;
+}
+
+.pie-cent {
+    position: absolute;
+    top: 40%;
+    right: 29px;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.pie-total {
+    position: absolute;
+    top: 72%;
+    left: 82px;
+}

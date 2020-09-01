@@ -1,0 +1,23 @@
+.filter-cont {
+    padding: 1em;
+}
+
+.filter-holder {
+    display: grid;
+    grid-gap: 1em;
+}
+
+
+@media (min-width:500px){
+    .filter-holder {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+
+@media (min-width:900px){
+    .filter-holder {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

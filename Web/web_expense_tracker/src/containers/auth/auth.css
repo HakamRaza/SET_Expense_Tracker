@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+.auth {
+    padding: 7em 1em 0 1em;
+    margin: 0 auto;
+    font-family: 'Montserrat', sans-serif;
+    max-width: 1000px;
+    height: 100%;
+}
+
+.auth-card, .reg-card {
+    color: #18A0FB;
+}
+
+.reg-card p {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 2em;
+}
+
+.auth-card p {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 2em;
+}
+
+.auth-bgp, .auth-bgp-reg {
+    padding: 1em 0;
+    margin: 20px auto;
+    min-width: 300px;
+    max-width: 380px;
+    min-height: 200px;
+    max-height: 400px;
+
+    border-radius: 10px;
+    box-shadow: 0 0 15px #318fb5;
+}
+
+.auth-bgp {
+    background-size: cover;
+    padding: 1em 1em;
+    font-size: 1em;
+}
+
+.auth-input {
+    position: relative;
+}
+
+
+.auth-icons {
+    font-size: 1.2em;
+    color: #318fb5;
+    position: absolute;
+    top: 40px;
+    left: 7px;
+    z-index: 1;
+}
+
+.auth-icons-pass {
+    font-size: 1.2em;
+    color: #318fb5;
+    position: absolute;
+    top: 68px;
+    right: 0px;
+}
+
+
+
+@media (min-device-width: 1000px){
+    .auth-card {
+        height: 400px;
+        background-image: url('./bgc-login-bg.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+    
+    .reg-card {
+        height: 400px;
+        background-image: url('./bgc-register-bg.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+
+}

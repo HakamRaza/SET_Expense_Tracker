@@ -1,0 +1,31 @@
+.header-logo {
+    width: 60px;
+    height: 40px;
+    background-image: url('../../images/okane-logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.drawer-cont {
+    /* height: 65px; */
+    width: 100%;
+    /* padding: 10px; */
+    font-size: 15px;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    background-color: white;
+    border-bottom: 2px solid #318fb5;
+}
+
+#basic-navbar-nav {
+    padding-top: 10px;
+    padding-left: 50px;
+}
+
+.navbar {
+    background-color: white;
+
+}

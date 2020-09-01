@@ -1,0 +1,164 @@
+.dash-container {
+    /* height: 1200px; */
+    padding: 6em 1em 0 1em;
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto auto;
+    grid-gap: 1rem;
+    font-size: small;
+    max-width: 1100px;
+    margin: 0 auto;
+
+    grid-template-areas:
+    'addtran'
+    'graph'
+    'expsum'
+    'categ'
+    'latran'
+    ;
+
+}
+
+.dash-lngr {
+    width: 100%;
+    grid-area: graph;
+    padding: 1em;
+    border: 1px solid skyblue;
+    box-shadow: 4px 4px 0px #318fb5;
+
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    border-radius: 10px;
+
+}
+
+.dash-sum {
+    grid-area: expsum;
+    padding: 1em;
+    border: 1px solid skyblue;
+    box-shadow: 4px 4px 0px #318fb5;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 1s;
+}
+
+.dash-sum2 {
+    display: grid;
+    justify-items: center;
+    grid-gap: 1em;
+}
+
+.dash-categ {
+    grid-area: categ;
+    padding: 1em;
+    border: 1px solid skyblue;
+    box-shadow: 4px 4px 0px #318fb5;
+    border-radius: 10px;
+    max-height: 410px;
+    overflow: scroll;
+    transition: all 1s;
+}
+
+.dash-categ2 {
+    display: grid;
+    justify-items: center;
+    grid-gap: 1em;
+}
+
+
+.dash-latest {
+    grid-area: latran;
+    padding: 1em;
+    overflow: scroll;
+    border: 1px solid skyblue;
+    box-shadow: 4px 4px 0px #318fb5;
+    border-radius: 10px;
+    max-height: 300px;
+    transition: all 1s;
+
+}
+
+.dash-latest-trans {
+    display: grid;
+    justify-items: center;
+    grid-gap: 1em;
+}
+
+.dash-add {
+    grid-area: addtran;
+    padding: 1em;
+    overflow: scroll;
+    border: 1px solid skyblue;
+    box-shadow: 4px 4px 0px #318fb5;
+    border-radius: 10px;
+    max-height: 410px;
+    transition: all 1s;
+}
+
+.dash-add-trans {
+    display: grid;
+    justify-items: center;
+    grid-gap: 1em;
+}
+
+@media (min-device-width: 800px){
+    .dash-container {
+        grid-template-columns: 1fr 1fr; 
+        grid-template-rows: auto auto auto;
+        
+        grid-template-areas:
+        'graph expsum'
+        'categ addtran'
+        'latran latran'
+        ;
+    }
+    
+    .dash-categ2 {
+        grid-template-columns: 1fr;
+    }
+    
+    .dash-latest-trans {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    
+}
+
+
+@media (min-device-width: 1000px){
+    .dash-container {
+        grid-template-columns: 1fr 0.5fr; 
+        grid-template-rows: auto auto auto auto;
+        
+        grid-template-areas:
+        'graph categ'
+        'expsum categ'
+        'addtran categ'
+        'latran categ'
+        ;
+    }
+    
+    .dash-sum {
+        max-height: 450px;
+    }
+
+    .dash-sum2 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .dash-categ {
+        max-height: 99.9%;
+    }
+    
+    .dash-categ2 {
+        grid-template-columns: 1fr;
+    }
+    
+    .dash-latest-trans {
+        grid-template-rows: 1fr 1fr;
+    }
+}
+

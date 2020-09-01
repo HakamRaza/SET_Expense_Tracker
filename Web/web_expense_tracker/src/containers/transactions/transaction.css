@@ -1,0 +1,15 @@
+.latest-trans {
+    margin: 0 auto;
+    padding: 6em 1em;
+    max-width: 900px;
+}
+
+.trans-col, .trans-col-desc {
+    min-width: 80px;
+    text-align: right;
+}
+
+.trans-icons {
+    font-size: 1em;
+    margin: 10px 5px;
+}
